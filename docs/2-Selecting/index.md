@@ -1,17 +1,17 @@
-
 ---
 title: Selecting
+weight: 1
 ---
 
 Go back to [home]({{ site.baseurl }})
 
-# Overview
+## Overview
 You utilize geomorphic indicator variables to select from the [regional database](https://github.com/natalie-kramer/GeomorphicUpscale/blob/master/Database/Database_reachcharacteristics.csv)  analogue reaches of River Styles (Brierly and Fryiers, 2005) that you define for your network of interest. For the Asotin example, we used the criterion in this [River Styles geoindicator table](https://github.com/natalie-kramer/GeomorphicUpscale/tree/master/docs/assets/AsotinGeoindicators.png) to help us make our selections.
 
 ## Step 1. Define river styles on your network
 Categorize your network into similar reach types or process domains and characterize bounds of indicator variables for each reach type. The geoindicators that are available to use are summarized below. The categorical variables describe the predominant character of the reach for each of the variables. The continuous variables were chosen for their ease of acquisition as well as for their general geomorphic importance.  contains these data for each stream in the database. 
 
-### <u>Continuous Variables </u>
+### <u>Continuous Variables</u>
 - **Gradient** ratio elevation drop over distance 
 - **LWfreq** frequency of large wood in #/100m stream length
 - **Braid** Braiding Index as total channel length over just the main channel length

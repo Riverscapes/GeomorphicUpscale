@@ -1,6 +1,6 @@
-
 ---
 title: Geomorphic Upscaling
+weight: 1
 ---
 
 Go back to [home]({{ site.baseurl }})
@@ -28,10 +28,10 @@ This is flat table which has a row for every stream segment on the basin network
  - *ConditionScenario*: Optional restoration condition scenarios. One field for each scenario.  You can name them whatever you want.
 
 Except for the condition scenarios, these field names are used as defaults in scripts. So, it is easier to keep them names as above, but you can pass variables to allow for different field names.
- 
+
 - #### Local directory path to [GeomorphicUpscale](https://github.com/natalie-kramer/GeomorphicUpscale)  ####
 The scripts call R code housed in the [scripts subfolder](https://github.com/natalie-kramer/GeomorphicUpscale/tree/master/scripts) and the [Database subfolder](https://github.com/natalie-kramer/GeomorphicUpscale/tree/master/Database). The database includes, for each site, a [table of geoindicators](https://github.com/natalie-kramer/GeomorphicUpscale/tree/master/Database/Database_reachcharacteristics.csv), [geomorphic unit maps](https://github.com/natalie-kramer/GeomorphicUpscale/Database/Maps.7z), and [summaries](https://github.com/natalie-kramer/GeomorphicUpscale/tree/master/Database/Metrics) of [PyGUT mappings](http://gut.riverscapes.xyz/) of geomorphic landforms and fish modelling results for Steelhead and Chinook. Summaries were done at the reach scale as well as the geomorphic unit scale. The summaries summaries were generated using the [Supporting RTools associated with PyGUT](https://github.com/Riverscapes/pyGUT/tree/master/SupportingTools/RScripts/Development). We provide [documentation on the database](familiarizing.md), which is helpful understand what is available for analysis within in the database.
- 
+
 ## Step 2: Define user variables
 
 ### Needed for estimates of assemblages, fish and upscale ###
@@ -58,7 +58,7 @@ You only need to specify the following variables if they differ from the default
 - *widthcol*: column header name for estimates of bankful width in network input file. Default: "bf.width.m"
 - *condinit*: initial condition of reach segment in network input file. Default: "Condition0"
 - *RScol*: column header name for RiverStyle code in network input file. Should match river style codes provided in selections and braid.index files. Default: "RS"
- 
+
 ## Step 3: Estimate assemblages an review output
 
 Once your inputs and variables have been set and run, you can estimate assemblages by sourcing [*assemblage.R*](https://github.com/natalie-kramer/GeomorphicUpscale/tree/master/scripts/assemblage.R) in the [*UpscaleWrapper.R*](https://github.com/natalie-kramer/GeomorphicUpscale/tree/master/UpscaleWrapper.R) 
