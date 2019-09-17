@@ -1,5 +1,5 @@
 ---
-title: Selecting
+title: Selection and Review
 weight: 30
 ---
 
@@ -44,11 +44,7 @@ Once you have your lists of selections for each of reach types and conditions, i
 You will want to throw out any sites within each grouping that don't fit before moving on to estimating geomorphic assemblages. If the selections just seem off as a whole or you would like greater numbers, you will want to go back and revise your initial selection. If the streams from the database just don't seem like good analogues, then be aware that the geomorphic assemblage estimates may not reflect reality for your situation. You may consider just upscaling the reaches where the selections decently the mimic geomorphic character of your reaches. When you are happy with your *selection.csv* file you are ready to move on!
 
 ## What's next?
-Once you are happy with your selections and they are saved in your local project directory within an Inputs folder (see example data [*selections.csv*](https://github.com/natalie-kramer/GeomorphicUpscale/blob/master/AsotinUpscaleExample/Inputs/selections.csv)) You are now ready to [Upscale](upscaling.md) using your selections output.
+Once you are happy with your selections and they are saved in your local project directory within an Inputs folder (see example data [*selections.csv*](https://github.com/natalie-kramer/GeomorphicUpscale/blob/master/AsotinUpscaleExample/Inputs/selections.csv)).
 
-Go to the [next step](upscaling.md).
-
-## References
-
-Brierley, G.J. and Fryirs, K.A. 2005. Geomorphology and River Management: Applications of the River Styles Framework. Blackwell Publications, Oxford, UK.
+Go to the [next step](({{ site.baseurl }}/upscale))
 

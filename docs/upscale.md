@@ -88,5 +88,5 @@ Once you have run both your estimates, you can get upscaled estimates by sourcin
 
 
 ## What's next?
-You are now ready to analyze your results and decide if they make any sense. Good luck!  Check out our full write up of our [example]() from the Asotin Basin.
+You are now ready to analyze your results and decide if they make any sense. Good luck!  Check out our full write up of our [example]({{ site.baseurl }}/example) from the Asotin Basin.
 
