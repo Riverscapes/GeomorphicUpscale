@@ -8,11 +8,11 @@ Welcome to Geomorphic Upscale. This site provides documentation for how to upsca
 
 The basic process is:
 
-1. [Familiarize](familiarizing.md)  yourself with the base dataset to make sure that the stream characteristics in your network are similar to those in the base database.. 
-2. [Select and Review](selecting.md) similar sites based on River Style geoindicators using [RSselection.R]()
-3. [Upscale](upscaling.md) geomorphic assemblages and responses by geomorphic using [UpscaleWrapper.R]()
+1. [Familiarize](1-Familiarizing/index)  yourself with the base dataset to make sure that the stream characteristics in your network are similar to those in the base database.. 
+2. [Select and Review](2-Selecting/index) similar sites based on River Style geoindicators using [RSselection.R]()
+3. [Upscale](3-Estimating/index)  geomorphic assemblages and responses by geomorphic using [UpscaleWrapper.R]()
 
-We document an [example](example.md) for the Asotin Basin for your reference.
+We document an [example](4-Example/index) for the Asotin Basin for your reference.
 
 *The website is still under construction but will be fully populated shortly.  In the meantime, if you have questions or want to run the code, please contact Natalie Kramer (n.kramer.anderson@gmail.com).*
 
