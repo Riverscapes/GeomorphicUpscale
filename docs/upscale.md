@@ -1,11 +1,9 @@
 ---
 title: Geomorphic Upscaling
-weight: 1
+weight: 60
 ---
 
-Go back to [home]({{ site.baseurl }})
-
-# Overview
+## Overview
 The geomorphic upscale empirically estimates geomorphic assemblages and modelling responses for each River Style and Condition variants in your network and then upscales responses onto the entire network using your River Styles designations and Condition scenarios. [*UpscaleWrapper.R*](https://github.com/natalie-kramer/GeomorphicUpscale/tree/master/UpscaleWrapper.R) is the user editable file from which the upscale is run. 
 
 ## Step 1: Create and point to your inputs
@@ -92,5 +90,3 @@ Once you have run both your estimates, you can get upscaled estimates by sourcin
 ## What's next?
 You are now ready to analyze your results and decide if they make any sense. Good luck!  Check out our full write up of our [example]() from the Asotin Basin.
 
-
-Go back to [home]({{ site.baseurl }})
