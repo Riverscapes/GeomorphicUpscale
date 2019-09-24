@@ -92,7 +92,7 @@ FCmod=data%>%
          & (Sinuosity<1.3 & Sinuosity>1.04) 
  
          & (LWfreq < 60  | is.na(LWfreq))
-  )%>%mutate(RS="FC", Condition="mod")
+  )%>%mutate(RS="FC", Condition="moderate")
 FCmod
 summary(FCmod)
 length(FCmod[,1]) #19
@@ -142,7 +142,7 @@ AFmod=data%>%
 
     & ((LWfreq < 60 & LWfreq > 10)| is.na(LWfreq))
    # & ((LWfreq < 60 | is.na(LWfreq)))
-  )%>%mutate(RS="AF", Condition="mod")
+  )%>%mutate(RS="AF", Condition="moderate")
 AFmod
 summary(AFmod)
 length(AFmod[,1]) #12
@@ -194,7 +194,7 @@ PCmod=data%>%
     & (Bedform=="Plane-Bed"| Bedform=="Pool-Riffle")  
     & (Sinuosity>1.1 & Sinuosity<1.5) 
     & ((LWfreq>10 & LWfreq<60) | is.na(LWfreq))
-  )%>%mutate(RS="PC", Condition="mod")
+  )%>%mutate(RS="PC", Condition="moderate")
 PCmod
 summary(PCmod)
 length(PCmod[,1]) #16
@@ -246,7 +246,7 @@ WAmod=data%>%
     & (Sinuosity>1.2 & Sinuosity<1.3) 
   #  & ((LWfreq < 60 & LWfreq>1) | is.na(LWfreq))
     & ((LWfreq < 60) | is.na(LWfreq))
-  )%>%mutate(RS="WA", Condition="mod")
+  )%>%mutate(RS="WA", Condition="moderate")
 WAmod
 summary(WAmod)
 length(WAmod[,1]) #9
@@ -294,7 +294,7 @@ CVmod=data%>%
     & Bedform!="Plane-Bed" 
     & Sinuosity<1.1 
     & ((LWfreq<60) | is.na(LWfreq))
-)%>%mutate(RS="CV", Condition="mod")
+)%>%mutate(RS="CV", Condition="moderate")
 CVmod
 summary(CVmod)
 length(CVmod[,1]) #10
@@ -347,6 +347,32 @@ if(file.exists(INdir)==F)(dir.create(INdir))
 
 write.csv(selections, paste(INdir, "\\", selectionfilename, ".csv",  sep=""), row.names=F) 
 
+###########################################################
+###Copy Maps corresponding to selections for review
+###########################################################
+
+MAPrepo=paste(GUPdir, "Database\\Maps", sep="\\")
+
+#set directory where selections .csv is housed
+INdir=paste(PROJdir, "Inputs", sep="\\")
+if(file.exists(INdir)==F)(dir.create(INdir))
+
+##read in selections generated from RSselection.R
+selections=read.csv(paste(INdir, "\\", selectionfilename, ".csv",  sep=""))
+
+##specify output directory
+OUTdir=paste(INdir, "Maps", sep="\\")
+if(file.exists(OUTdir)==F){dir.create(OUTdir)}
+
+##specify variables used in script
+
+layer="Tier3_InChannel"
+RScolname="RScond"
+idcolname="visit"
+idcolname2=NA
+
+#soruce the geomorphic MapsbyRSselection from where it is locally saved.
+source(paste(GUPdir, "\\scripts\\MapsbyRSselection.R", sep=""))
 
 
        
