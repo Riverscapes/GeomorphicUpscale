@@ -39,9 +39,9 @@ gu.levels=c("Pocket Pool","Pool", "Pond",
          "Glide-Run", "Transition", "Bank")
 
 
-condition.fill = c(
-            'good' = "green" ,
-            'mod' = 'yellow', 
-            'poor' = "red")
+condition.fill = c('poor' = '#ff0000', 
+                   'moderate' = '#ffff00', 
+                   'good' = '#38a800', 
+                   'intact' = '#005ce6')
 
-condition.levels=c("poor", "mod", "good")
+condition.levels = c('poor', 'moderate', 'good', 'intact')
