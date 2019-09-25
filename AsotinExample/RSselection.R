@@ -5,152 +5,132 @@
 #Last Updated Aug 14, 2019
 
 
-
 # To do -------------------------------------------------------------------
 
 #Update database_reachcharacteristics to include Karen's sites'
 
-###########################################################
-#Dependencies
-###########################################################
-library(dplyr)
 
-###########################################################
-#Define User File Path Directories and Create Projec Directory
-###########################################################
+# Set required paths ---------------------------
 
-#User defined project directories Location
-PROJdir="E:\\GitHub\\GeomorphicUpscale\\AsotinExample"
+# User defined project directory path
+proj.dir = "C:/Anabranch/UpperSalmon/wrk_Data/temp/GeomorphicUpscale-master/AsotinExample"
 
-#Specify directory path to the downloaded Git Repo
-GUPdir="E:\\GitHub\\GeomorphicUpscale"
+# Specify directory path to the downloaded Git repository
+repo.dir = "C:/Anabranch/UpperSalmon/wrk_Data/temp/GeomorphicUpscale-master"
 
+# Load required packages ---------------------------
+library(tidyverse)
 
-#read in data--------------------
+# read in data--------------------
+data.in = read_csv(file.path(repo.dir, "Database\\Database_ReachCharacteristics.csv"))
+head(data.in) # print first few rows of look-up table
 
+# Make selections for each river style and type --------------------
 
-###########################################################
-#Reads in specified data and defines script locations
-###########################################################
-#reads in database of reach variables.
-data1=read.csv(paste(GUPdir, "Database\\Database_reachcharacteristics.csv", sep="\\"))
-head(data1) #preview the top of teh database.
+# Manually edit these to match criteria in your selection criteria look up table
+# This is a template which provides you with maximum flexibility to select as stringently or as un stringent as you desire. 
+# The trick is to not be too restrictive so that you end up with a large enough pool of sites to acquire a good empirical estimate, 
+# while not so restrictive that you end up with sites that don't look like your defined River Style.
 
-#Make selections--------------------
+# Before makeing individual selections for diferent river styles, you can eliminate certain type streams from the entire pool of database streams
 
-
-###########################################################
-#Select River Styles empirical subsets using geoindicators
-###########################################################
-#selections for each river style and type.  Manually edit these to match criteria in your selection
-#criteria look up table.  sorry this isn't more automated. But, this is a template which provides you
-#with maximum flexibility to select as stringently or as un stringent as you desire. The trick is
-#The trick is not to be too restrictive so that you end up with a large enough pool of sites 
-#to acquire a good empirical estimate, but not so restrictive that you end up with sites that 
-#don't look like your defined River Style.
-
-#
-#Before makeing individual selections for diferent river styles, you can eliminate certain type streams from the entire pool of database streams
-
-sandystreams=data1%>%
-  filter(Sndf>50)
+sandystreams = data.in %>%
+  filter(Sndf > 50)
 sandystreams #this search will eliminate four reaches visits 820,1971,2288,3975
 
-data=data1%>%
-  filter(Sndf<50)
+data = data.in %>%
+  filter(Sndf < 50)
 
-#Example selection options.  You won't use all available selection options, just the geo indicators that 
-#give you the best subset for your river style type. Comment out any that you don't have data for or don't want to use. This might be iterative 
-#because you want enough data to give you an adequate subset, but not too general that the streams found aren't representative of your river style and condition.
+# Example selection options.  You won't use all available selection options, just the geo indicators that 
+# give you the best subset for your river style type. Comment out any that you don't have data for or don't want to use. This might be iterative 
+# because you want enough data to give you an adequate subset, but not too general that the streams found aren't representative of your river style and condition.
 
-#Keep your River Style codes, short and easy to understand.  These will be carried through as the label identifier used for each River style
-#if it has a condition varient add it after the code as "good" "moderate" or "poor" all in lower case.
+# Keep your River Style codes, short and easy to understand.  These will be carried through as the label identifier used for each River style
+# if it has a condition varient add it after the code as "good" "moderate" or "poor" all in lower case.
 
 
 # Fan Controlled-poor (FC poor) -----------------------------------------------------
-FCpoor=data1%>%
-  filter(((Gradient < 3.5 & Gradient>1)|Gradient==1)
-         & Confinement!="UCV" 
-         & Threads=="Single" 
-         & Bedform=="Plane-Bed"
-         & Sinuosity<1.1 
-         & (LWfreq < 30 | is.na(LWfreq))
-         
-  )%>%
-  mutate(RS="FC", Condition="poor")
+FCpoor = data.in %>%
+  filter(((Gradient < 3.5 & Gradient >= 1))
+         & Confinement != "UCV" 
+         & Threads == "Single" 
+         & Bedform == "Plane-Bed"
+         & Sinuosity < 1.1 
+         & (LWfreq < 30 | is.na(LWfreq)))%>%
+  mutate(RS = "FC", Condition = "poor")
+
 FCpoor
 summary(FCpoor)
-length(FCpoor[,1]) #10
+nrow(FCpoor)
 
-# Fan Controlled-mod (FC mod)-----------------------------------------------------
 
-FCmod=data%>%
-  filter(((Gradient < 3.5 & Gradient>1)|Gradient==1)
-         & Confinement!="UCV" 
-         & Threads=="Single" 
-         & (Bedform=="Plane-Bed"| Bedform=="Pool-Riffle")  
-         & (Sinuosity<1.3 & Sinuosity>1.04) 
- 
-         & (LWfreq < 60  | is.na(LWfreq))
-  )%>%mutate(RS="FC", Condition="moderate")
-FCmod
-summary(FCmod)
-length(FCmod[,1]) #19
+# Fan Controlled-moderate (FC moderate)-----------------------------------------------------
+
+FCmoderate = data %>%
+  filter(((Gradient < 3.5 & Gradient>=1))
+         & Confinement != "UCV" 
+         & Threads == "Single" 
+         & (Bedform == "Plane-Bed"| Bedform == "Pool-Riffle")  
+         & (Sinuosity < 1.3 & Sinuosity > 1.04) 
+         & (LWfreq < 60  | is.na(LWfreq)))%>%
+  mutate(RS = "FC", Condition = "moderate")
+
+FCmoderate
+summary(FCmoderate)
+nrow(FCmoderate)
 
 # Fan Controlled-good (FC good) -----------------------------------------------------
+FCgood = data %>%
+  filter(((Gradient < 3.5 & Gradient >= 1))
+         & Confinement != "UCV" 
+         & Threads != "Multi" 
+         & Bedform != "Plane-Bed"
+         & (Sinuosity < 1.5 & Sinuosity > 1.1) 
+         & (LWfreq > 10 | is.na(LWfreq)))%>%
+  mutate(RS = "FC", Condition = "good")
 
-
-FCgood=data%>%
-  filter(((Gradient < 3.5 & Gradient>1)|Gradient==1)
-         & Confinement!="UCV" 
-         & Threads!="Multi" 
-         & Bedform!="Plane-Bed"
-         & (Sinuosity<1.5 & Sinuosity>1.1) 
-         & (LWfreq > 10 | is.na(LWfreq))
-  )%>%mutate(RS="FC", Condition="good")
 FCgood
 summary(FCgood)
-length(FCgood[,1]) #5
-
-
+nrow(FCgood)
 
 
 # Alluvial Fan-poor (AF poor) -----------------------------------------------------
 
-AFpoor=data%>%
+AFpoor = data %>%
   filter(
     Gradient < 3  
-    & Confinement!="CV"  
-    & Threads=="Single" 
-    & Bedform=="Plane-Bed" 
-    & Sinuosity<1.2
-    & (LWfreq < 30 | is.na(LWfreq))
-  )%>%mutate(RS="AF", Condition="poor")
+    & Confinement != "CV"  
+    & Threads == "Single" 
+    & Bedform == "Plane-Bed" 
+    & Sinuosity < 1.2
+    & (LWfreq < 30 | is.na(LWfreq))) %>%
+  mutate(RS = "AF", Condition = "poor")
+
 AFpoor
 summary(AFpoor)
-length(AFpoor[,1]) #19
+nrow(AFpoor)
 
-# Alluvial Fan-mod (AF mod) -----------------------------------------------------
 
-AFmod=data%>%
+# Alluvial Fan-moderate (AF moderate) -----------------------------------------------------
+
+AFmoderate = data %>%
   filter(
     Gradient < 3 
-    & Confinement!="CV"  
-    & (Threads=="Single" | Threads=="Transitional")
-    & Bedform=="Plane-Bed" 
-    & Sinuosity<1.3
+    & Confinement != "CV"  
+    & (Threads == "Single" | Threads == "Transitional")
+    & Bedform == "Plane-Bed" 
+    & Sinuosity < 1.3
+    & ((LWfreq < 60 & LWfreq > 10)| is.na(LWfreq))) %>%
+  mutate(RS = "AF", Condition = "moderate")
 
-    & ((LWfreq < 60 & LWfreq > 10)| is.na(LWfreq))
-   # & ((LWfreq < 60 | is.na(LWfreq)))
-  )%>%mutate(RS="AF", Condition="moderate")
-AFmod
-summary(AFmod)
-length(AFmod[,1]) #12
+AFmoderate
+summary(AFmoderate)
+nrow(AFmoderate)
 
 
 # Alluvial Fan-good (AF good) -----------------------------------------------------
 
-AFgood=data%>%
+AFgood = data %>%
   filter(
     Gradient < 3 
     & (Threads=="Single" | Threads=="Transitional" | Threads=="Multi")
@@ -158,221 +138,205 @@ AFgood=data%>%
     & (Bedform=="Plane-Bed" | Bedform=="Pool-Riffle")
     & (Sinuosity<1.5 & Sinuosity >1.1)
     & Confinement!="CV" 
-    & (LWfreq > 20| is.na(LWfreq))
-  )%>%mutate(RS="AF", Condition="good")
+    & (LWfreq > 20| is.na(LWfreq))) %>%
+  mutate(RS = "AF", Condition = "good")
+
 AFgood
 summary(AFgood)
-length(AFgood[,1]) #18
-
-
-
-
+nrow(AFgood)
 
 
 # Planform Controlled-poor (PC poor) -----------------------------------------------------
-PCpoor=data%>%
+PCpoor = data %>%
   filter(
     Gradient < 2.5  
-    & Confinement!="CV"
-    & Threads=="Single" 
-    & Bedform=="Plane-Bed" 
-    & Sinuosity<1.1 
-    & (LWfreq<30| is.na(LWfreq))
-  )%>%mutate(RS="PC", Condition="poor")
+    & Confinement != "CV"
+    & Threads == "Single" 
+    & Bedform == "Plane-Bed" 
+    & Sinuosity < 1.1 
+    & (LWfreq < 30 | is.na(LWfreq))) %>%
+  mutate(RS = "PC", Condition = "poor")
+
 PCpoor
 summary(PCpoor)
-length(PCpoor[,1]) #16
+nrow(PCpoor)
 
 
-# Planform Controlled-mod (PC mod) -----------------------------------------------------
+# Planform Controlled-moderate (PC moderate) -----------------------------------------------------
 
-PCmod=data%>%
+PCmoderate = data %>%
   filter(
     Gradient < 2.5 
-    & Confinement!="CV" 
-    & (Threads=="Single" | Threads=="Transitional")
-    & (Bedform=="Plane-Bed"| Bedform=="Pool-Riffle")  
-    & (Sinuosity>1.1 & Sinuosity<1.5) 
-    & ((LWfreq>10 & LWfreq<60) | is.na(LWfreq))
-  )%>%mutate(RS="PC", Condition="moderate")
-PCmod
-summary(PCmod)
-length(PCmod[,1]) #16
+    & Confinement != "CV" 
+    & (Threads == "Single" | Threads == "Transitional")
+    & (Bedform == "Plane-Bed"| Bedform == "Pool-Riffle")  
+    & (Sinuosity > 1.1 & Sinuosity < 1.5) 
+    & ((LWfreq > 10 & LWfreq < 60) | is.na(LWfreq))) %>%
+  mutate(RS = "PC", Condition = "moderate")
 
-#PCmodsum=percAreasummary(PCmod)
-#PCmodsum$RScond="PC mod"
-#head(PCmodsum)
+PCmoderate
+summary(PCmoderate)
+nrow(PCmoderate)
 
 
 # Planform Controlled-good (PC good) -----------------------------------------------------
-PCgood=data%>%
+
+PCgood = data%>%
   filter(
     Gradient < 2.5 
-    & Confinement!="CV"
-    & (Threads=="Single" | Threads=="Transitional"| Threads=="Multi")
-    & Bedform=="Pool-Riffle"
-    & (Sinuosity<1.5 & Sinuosity>1.1) 
-    &((LWfreq>20) | is.na(LWfreq))
-  )%>%mutate(RS="PC", Condition="good")
+    & Confinement != "CV"
+    & (Threads == "Single" | Threads=="Transitional"| Threads=="Multi")
+    & Bedform == "Pool-Riffle"
+    & (Sinuosity < 1.5 & Sinuosity > 1.1) 
+    &((LWfreq > 20) | is.na(LWfreq))) %>%
+  mutate(RS = "PC", Condition = "good")
+
 PCgood
 summary(PCgood)
-length(PCgood[,1]) #13
+nrow(PCgood)
 
 
 # Wandering-poor (WA poor) -----------------------------------------------------
 
-WApoor=data%>%
+WApoor = data %>%
   filter(
     Gradient < 2  
-    & Confinement!="CV"
-    & Threads=="Single"
-    & Bedform=="Plane-Bed" 
-    & Sinuosity<1.2
-    & (LWfreq < 30 | is.na(LWfreq))
-  )%>%mutate(RS="WA", Condition="poor")
+    & Confinement != "CV"
+    & Threads == "Single"
+    & Bedform == "Plane-Bed" 
+    & Sinuosity < 1.2
+    & (LWfreq < 30 | is.na(LWfreq))) %>%
+  mutate(RS = "WA", Condition = "poor")
+
 WApoor
 summary(WApoor)
-length(WApoor[,1]) #18
+nrow(WApoor)
 
 
-# Wandering-mod (WA mod) -----------------------------------------------------
+# Wandering-moderate (WA moderate) -----------------------------------------------------
 
-WAmod=data%>%
+WAmoderate = data %>%
   filter(
     Gradient < 2 
-    & Confinement!="CV" 
-    & (Threads=="Single" | Threads=="Transitional")
-    & (Bedform=="Pool-Riffle" | Bedform=="Plane-Bed") 
-    & (Sinuosity>1.2 & Sinuosity<1.3) 
-  #  & ((LWfreq < 60 & LWfreq>1) | is.na(LWfreq))
-    & ((LWfreq < 60) | is.na(LWfreq))
-  )%>%mutate(RS="WA", Condition="moderate")
-WAmod
-summary(WAmod)
-length(WAmod[,1]) #9
+    & Confinement != "CV" 
+    & (Threads == "Single" | Threads == "Transitional")
+    & (Bedform == "Pool-Riffle" | Bedform == "Plane-Bed") 
+    & (Sinuosity > 1.2 & Sinuosity < 1.3) 
+    & ((LWfreq < 60) | is.na(LWfreq))) %>%
+  mutate(RS= "WA" , Condition = "moderate")
+
+WAmoderate
+summary(WAmoderate)
+nrow(WAmoderate)
 
 
 # Wandering-good (WA good) -----------------------------------------------------
-WAgood=data%>%
+
+WAgood = data %>%
   filter(
     Gradient < 2 
-    & Confinement!="CV" 
-    & Threads!="Single" 
-    & Bedform!="Plane-Bed"
-    & (Sinuosity>1.1 & Sinuosity<1.5)
-    & ((LWfreq>20) | is.na(LWfreq))
-  )%>%mutate(RS="WA", Condition="good")
+    & Confinement != "CV" 
+    & Threads != "Single" 
+    & Bedform != "Plane-Bed"
+    & (Sinuosity > 1.1 & Sinuosity < 1.5)
+    & ((LWfreq > 20) | is.na(LWfreq))) %>%
+  mutate(RS = "WA", Condition = "good")
+
 WAgood
 summary(WAgood)
-length(WAgood[,1]) #6
-
+nrow(WAgood)
 
 
 # Confined Valley-poor (CV poor) -----------------------------------------------------
 
-CVpoor=data%>%
+CVpoor = data %>%
   filter(
-    (Gradient >2 & Gradient <6)
-    & Confinement=="CV" 
-    & Threads=="Single" 
-    & (Bedform=="Plane-Bed"| Bedform=="Rapid") 
-    & Sinuosity<1.1
-    & ((LWfreq<30) | is.na(LWfreq))
-  )%>%mutate(RS="CV", Condition="poor")
+    (Gradient > 2 & Gradient < 6)
+    & Confinement == "CV" 
+    & Threads == "Single" 
+    & (Bedform == "Plane-Bed"| Bedform == "Rapid") 
+    & Sinuosity < 1.1
+    & ((LWfreq < 30) | is.na(LWfreq))) %>%
+  mutate(RS = "CV", Condition = "poor")
+
 CVpoor
 summary(CVpoor)
-length(CVpoor[,1]) #5
+nrow(CVpoor)
 
 
+# Confined Valley-moderate (CV moderate)-----------------------------------------------------
 
-# Confined Valley-mod (CV mod)-----------------------------------------------------
-CVmod=data%>%
+CVmoderate = data %>%
   filter(
-    (Gradient>2 & Gradient<6)
-    & Confinement=="CV" 
-    & Threads=="Single" 
-    & Bedform!="Plane-Bed" 
-    & Sinuosity<1.1 
-    & ((LWfreq<60) | is.na(LWfreq))
-)%>%mutate(RS="CV", Condition="moderate")
-CVmod
-summary(CVmod)
-length(CVmod[,1]) #10
+    (Gradient > 2 & Gradient < 6)
+    & Confinement == "CV" 
+    & Threads == "Single" 
+    & Bedform != "Plane-Bed" 
+    & Sinuosity < 1.1 
+    & ((LWfreq < 60) | is.na(LWfreq))) %>%
+  mutate(RS = "CV", Condition = "moderate")
 
+CVmoderate
+summary(CVmoderate)
+nrow(CVmoderate)
 
 
 # Confined Valley-(CV good) -----------------------------------------------------
 
-CVgood=data%>%
+CVgood = data %>%
   filter(
-    (Gradient>2 & Gradient<6)
-    & Threads!="Multi" 
-    & Bedform!="Plane-Bed" 
-    & Sinuosity<1.2 
-    & Confinement=="CV" 
-    & ((LWfreq>10) | is.na(LWfreq))
-  )%>%mutate(RS="CV", Condition="good")
+    (Gradient > 2 & Gradient < 6)
+    & Threads != "Multi" 
+    & Bedform != "Plane-Bed" 
+    & Sinuosity < 1.2 
+    & Confinement == "CV" 
+    & ((LWfreq > 10) | is.na(LWfreq))) %>%
+  mutate(RS = "CV", Condition = "good")
+
 CVgood
 summary(CVgood)
-length(CVgood[,1]) #10
+nrow(CVgood)
 
 
+# Combine selections into single dataset and save output --------------------
+
+# combine selections into single df
+selections = rbind(FCpoor,FCmoderate, FCgood, 
+                 AFpoor,AFmoderate, AFgood,
+                 PCpoor,PCmoderate, PCgood, 
+                 WApoor, WAmoderate, WAgood,
+                 CVpoor, CVmoderate, CVgood) %>%
+  mutate(RSCond = paste(RS, Condition, sep = ""))
+
+# print sample size summary
+selections %>% group_by(RS, Condition) %>% count()
+
+# create inputs folder if doesn't already exist
+input.dir = file.path(proj.dir, "Inputs")
+if(!file.exists(input.dir)){dir.create(input.dir)}
+
+selection.filename = "Selections.csv"
+write_csv(selections, file.path(input.dir, selection.filename), col_names = TRUE) 
 
 
+# Copy maps corresponding to selections for review --------------------
 
+# specify output directory
+selection.maps.dir = file.path(proj.dir, "Outputs/Selections/Maps")
 
+# create output directory if it doesn't exist
+if(!file.exists(selection.maps.dir)){dir.create(selection.maps.dir, recursive = TRUE)}
 
-#Combining a visit list --------------------
+# delete any existing files in Output from previous runs
+unlink(paste(selection.maps.dir, "\\*", sep = ""), recursive = T)
 
-
-###########################################################
-#Combine selectiosn into one dataset and export to .csv
-###########################################################
-
-#combine your selections above into one dataset
-selections=rbind(FCpoor,FCmod, FCgood, 
-                 AFpoor,AFmod, AFgood,
-                 PCpoor,PCmod, PCgood, 
-                 WApoor, WAmod, WAgood,
-                 CVpoor, CVmod, CVgood)%>%
-  mutate(RScond=paste(RS, Condition, sep=""))
-
-#prints sample size summary
-selections%>%group_by(RS, Condition)%>%count()
-
-selectionfilename="selections"
-
-INdir=paste(PROJdir, "Inputs", sep="\\")
-if(file.exists(INdir)==F)(dir.create(INdir))
-
-write.csv(selections, paste(INdir, "\\", selectionfilename, ".csv",  sep=""), row.names=F) 
-
-###########################################################
-###Copy Maps corresponding to selections for review
-###########################################################
-
-MAPrepo=paste(GUPdir, "Database\\Maps", sep="\\")
-
-#set directory where selections .csv is housed
-INdir=paste(PROJdir, "Inputs", sep="\\")
-if(file.exists(INdir)==F)(dir.create(INdir))
-
-##read in selections generated from RSselection.R
-selections=read.csv(paste(INdir, "\\", selectionfilename, ".csv",  sep=""))
-
-##specify output directory
-OUTdir=paste(INdir, "Maps", sep="\\")
-if(file.exists(OUTdir)==F){dir.create(OUTdir)}
-
-##specify variables used in script
-
-layer="Tier3_InChannel"
-RScolname="RScond"
-idcolname="visit"
-idcolname2=NA
+# specify location of maps from database
+repo.maps.dir = file.path(repo.dir, "Database/Maps")  
 
 #soruce the geomorphic MapsbyRSselection from where it is locally saved.
-source(paste(GUPdir, "\\scripts\\MapsbyRSselection.R", sep=""))
+source(file.path(repo.dir, "scripts/selection.maps.R"))
 
+selection.maps(id.name = "visit.id", pool.by = "RS")
+selection.maps(id.name = "visit.id", pool.by = "RSCond")
 
        
