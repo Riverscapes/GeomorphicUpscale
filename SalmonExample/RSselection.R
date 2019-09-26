@@ -1,8 +1,8 @@
 #This script uses information within ReachSelectionCriteria.csv to select reaches within the GUT database
 #that match geomorphically to specified geomorphic indicator characteristics. 
 
-#Natalie Kramer (n.kramer.anderson@gmail.com)
-#Last Updated Aug 14, 2019
+#Joe Wheaton (joe.wheaton@usu.edu)
+#Last Updated Sep 26, 2019
 
 
 # To do -------------------------------------------------------------------
@@ -49,51 +49,397 @@ data = data.in %>%
 # if it has a condition varient add it after the code as "good" "moderate" or "poor" all in lower case.
 
 
-# Fan Controlled-poor (FC poor) -----------------------------------------------------
-FCpoor = data.in %>%
+# Updating to Chris's Six Reach Types (Wandering_Gravel, Planform_Controlled, Margin_Controlled, Conf_Floodplain, Conf_Bedrock, and AlluvialFan)
+
+
+#--*----**------------------------------------
+#### Wandering Reach Types
+# Wandering-poor (WA poor) -----------------------------------------------------
+
+WApoor = data %>%
+  filter(
+    Gradient < 2  
+    & Confinement != "CV"
+    & Threads == "Single"
+    & Bedform == "Plane-Bed" 
+    & Sinuosity < 1.2
+    & (LWfreq < 30 | is.na(LWfreq))) %>%
+  mutate(RS = "WA", Condition = "poor")
+
+WApoor
+summary(WApoor)
+nrow(WApoor)
+
+
+# Wandering-moderate (WA moderate) -----------------------------------------------------
+
+WAmoderate = data %>%
+  filter(
+    Gradient < 2 
+    & Confinement != "CV" 
+    & (Threads == "Single" | Threads == "Transitional")
+    & (Bedform == "Pool-Riffle" | Bedform == "Plane-Bed") 
+    & (Sinuosity > 1.2 & Sinuosity < 1.3) 
+    & ((LWfreq < 60) | is.na(LWfreq))) %>%
+  mutate(RS= "WA" , Condition = "moderate")
+
+WAmoderate
+summary(WAmoderate)
+nrow(WAmoderate)
+
+# Wandering-good (WA good) -----------------------------------------------------
+
+WAgood = data %>%
+  filter(
+    Gradient < 2 
+    & Confinement != "CV" 
+    & Threads != "Single" 
+    & Bedform != "Plane-Bed"
+    & (Sinuosity > 1.1 & Sinuosity < 1.5)
+    & ((LWfreq > 20) | is.na(LWfreq))) %>%
+  mutate(RS = "WA", Condition = "good")
+
+WAgood
+summary(WAgood)
+nrow(WAgood)
+
+# Wandering-intact (WA intact) -----------------------------------------------------
+
+WAintact = data %>%
+  filter(
+    Gradient < 2 
+    & Confinement != "CV" 
+    & Threads != "Single" 
+    & Bedform != "Plane-Bed"
+    & (Sinuosity > 1.1 & Sinuosity < 1.5)
+    & ((LWfreq > 20) | is.na(LWfreq))) %>%
+  mutate(RS = "WA", Condition = "intact")
+
+WAintact
+summary(WAintact)
+nrow(WAintact)
+
+#--*----**------------------------------------
+#### Planform Controlled Reach Types
+# Planform Controlled-poor (PC poor) -----------------------------------------------------
+PCpoor = data %>%
+  filter(
+    Gradient < 2.5  
+    & Confinement != "CV"
+    & Threads == "Single" 
+    & Bedform == "Plane-Bed" 
+    & Sinuosity < 1.1 
+    & (LWfreq < 30 | is.na(LWfreq))) %>%
+  mutate(RS = "PC", Condition = "poor")
+
+PCpoor
+summary(PCpoor)
+nrow(PCpoor)
+
+
+# Planform Controlled-moderate (PC moderate) -----------------------------------------------------
+
+PCmoderate = data %>%
+  filter(
+    Gradient < 2.5 
+    & Confinement != "CV" 
+    & (Threads == "Single" | Threads == "Transitional")
+    & (Bedform == "Plane-Bed"| Bedform == "Pool-Riffle")  
+    & (Sinuosity > 1.1 & Sinuosity < 1.5) 
+    & ((LWfreq > 10 & LWfreq < 60) | is.na(LWfreq))) %>%
+  mutate(RS = "PC", Condition = "moderate")
+
+PCmoderate
+summary(PCmoderate)
+nrow(PCmoderate)
+
+
+# Planform Controlled-good (PC good) -----------------------------------------------------
+
+PCgood = data%>%
+  filter(
+    Gradient < 2.5 
+    & Confinement != "CV"
+    & (Threads == "Single" | Threads=="Transitional"| Threads=="Multi")
+    & Bedform == "Pool-Riffle"
+    & (Sinuosity < 1.5 & Sinuosity > 1.1) 
+    &((LWfreq > 20) | is.na(LWfreq))) %>%
+  mutate(RS = "PC", Condition = "good")
+
+PCgood
+summary(PCgood)
+nrow(PCgood)
+
+# Planform Controlled-intact (PC intact) -----------------------------------------------------
+
+PCintact = data%>%
+  filter(
+    Gradient < 2.5 
+    & Confinement != "CV"
+    & (Threads == "Single" | Threads=="Transitional"| Threads=="Multi")
+    & Bedform == "Pool-Riffle"
+    & (Sinuosity < 1.5 & Sinuosity > 1.1) 
+    &((LWfreq > 20) | is.na(LWfreq))) %>%
+  mutate(RS = "PC", Condition = "intact")
+
+PCintact
+summary(PCintact)
+nrow(PCintact)
+
+#--*----**------------------------------------
+#### NA - These are primiarily Step-Cascade and Conf_Bedrock. These seem to be ones that Chris missed (n=48 small reaches in Upper Salmon)
+
+# NA-poor (NA poor) -----------------------------------------------------
+
+NApoor = data %>%
+  filter(
+    (Gradient > 2 & Gradient < 6)
+    & Confinement == "CV" 
+    & Threads == "Single" 
+    & (Bedform == "Plane-Bed"| Bedform == "Rapid") 
+    & Sinuosity < 1.1
+    & ((LWfreq < 30) | is.na(LWfreq))) %>%
+  mutate(RS = "NA", Condition = "poor")
+
+NApoor
+summary(NApoor)
+nrow(NApoor)
+
+
+# NA-moderate (NA moderate)-----------------------------------------------------
+
+NAmoderate = data %>%
+  filter(
+    (Gradient > 2 & Gradient < 6)
+    & Confinement == "CV" 
+    & Threads == "Single" 
+    & Bedform != "Plane-Bed" 
+    & Sinuosity < 1.1 
+    & ((LWfreq < 60) | is.na(LWfreq))) %>%
+  mutate(RS = "NA", Condition = "moderate")
+
+NAmoderate
+summary(NAmoderate)
+nrow(NAmoderate)
+
+
+# NA- Good(NA good) -----------------------------------------------------
+
+NAgood = data %>%
+  filter(
+    (Gradient > 2 & Gradient < 6)
+    & Threads != "Multi" 
+    & Bedform != "Plane-Bed" 
+    & Sinuosity < 1.2 
+    & Confinement == "CV" 
+    & ((LWfreq > 10) | is.na(LWfreq))) %>%
+  mutate(RS = "NA", Condition = "good")
+
+NAgood
+summary(NAgood)
+nrow(NAgood)
+
+# NA- Intact(NA intact) -----------------------------------------------------
+
+NAintact = data %>%
+  filter(
+    (Gradient > 2 & Gradient < 6)
+    & Threads != "Multi" 
+    & Bedform != "Plane-Bed" 
+    & Sinuosity < 1.2 
+    & Confinement == "CV" 
+    & ((LWfreq > 10) | is.na(LWfreq))) %>%
+  mutate(RS = "NA", Condition = "intact")
+
+NAintact
+summary(NAintact)
+nrow(NAintact)
+
+#--*----**------------------------------------
+#### Margin Controlled Reach Types
+# Margin Controlled-poor (MC poor) -----------------------------------------------------
+MCpoor = data.in %>%
   filter(((Gradient < 3.5 & Gradient >= 1))
          & Confinement != "UCV" 
          & Threads == "Single" 
          & Bedform == "Plane-Bed"
          & Sinuosity < 1.1 
          & (LWfreq < 30 | is.na(LWfreq)))%>%
-  mutate(RS = "FC", Condition = "poor")
+  mutate(RS = "MC", Condition = "poor")
 
-FCpoor
-summary(FCpoor)
-nrow(FCpoor)
+MCpoor
+summary(MCpoor)
+nrow(MCpoor)
 
 
-# Fan Controlled-moderate (FC moderate)-----------------------------------------------------
 
-FCmoderate = data %>%
+# Margin Controlled-moderate (MC moderate)-----------------------------------------------------
+
+MCmoderate = data %>%
   filter(((Gradient < 3.5 & Gradient>=1))
          & Confinement != "UCV" 
          & Threads == "Single" 
          & (Bedform == "Plane-Bed"| Bedform == "Pool-Riffle")  
          & (Sinuosity < 1.3 & Sinuosity > 1.04) 
          & (LWfreq < 60  | is.na(LWfreq)))%>%
-  mutate(RS = "FC", Condition = "moderate")
+  mutate(RS = "MC", Condition = "moderate")
 
-FCmoderate
-summary(FCmoderate)
-nrow(FCmoderate)
+MCmoderate
+summary(MCmoderate)
+nrow(MCmoderate)
 
-# Fan Controlled-good (FC good) -----------------------------------------------------
-FCgood = data %>%
+# Margin Controlled-good (MC good) -----------------------------------------------------
+MCgood = data %>%
   filter(((Gradient < 3.5 & Gradient >= 1))
          & Confinement != "UCV" 
          & Threads != "Multi" 
          & Bedform != "Plane-Bed"
          & (Sinuosity < 1.5 & Sinuosity > 1.1) 
          & (LWfreq > 10 | is.na(LWfreq)))%>%
-  mutate(RS = "FC", Condition = "good")
+  mutate(RS = "MC", Condition = "good")
 
-FCgood
-summary(FCgood)
-nrow(FCgood)
+MCgood
+summary(MCgood)
+nrow(MCgood)
+
+# Margin Controlled-intact (MC intact) -----------------------------------------------------
+MCintact = data %>%
+  filter(((Gradient < 3.5 & Gradient >= 1))
+         & Confinement != "UCV" 
+         & Threads != "Multi" 
+         & Bedform != "Plane-Bed"
+         & (Sinuosity < 1.5 & Sinuosity > 1.1) 
+         & (LWfreq > 10 | is.na(LWfreq)))%>%
+  mutate(RS = "MC", Condition = "intact")
+
+MCintact
+summary(MCintact)
+nrow(MCintact)
+
+#--*----**------------------------------------
+#### Confined Floodplain Reach Types
+# Confined Floodplain-poor (MC poor) -----------------------------------------------------
+CFpoor = data.in %>%
+  filter(((Gradient < 3.5 & Gradient >= 1))
+         & Confinement != "UCV" 
+         & Threads == "Single" 
+         & Bedform == "Plane-Bed"
+         & Sinuosity < 1.1 
+         & (LWfreq < 30 | is.na(LWfreq)))%>%
+  mutate(RS = "CF", Condition = "poor")
+
+CFpoor
+summary(CFpoor)
+nrow(CFpoor)
 
 
+
+# Confined Floodplain-moderate (CF moderate)-----------------------------------------------------
+
+CFmoderate = data %>%
+  filter(((Gradient < 3.5 & Gradient>=1))
+         & Confinement != "UCV" 
+         & Threads == "Single" 
+         & (Bedform == "Plane-Bed"| Bedform == "Pool-Riffle")  
+         & (Sinuosity < 1.3 & Sinuosity > 1.04) 
+         & (LWfreq < 60  | is.na(LWfreq)))%>%
+  mutate(RS = "CF", Condition = "moderate")
+
+CFmoderate
+summary(CFmoderate)
+nrow(CFmoderate)
+
+# Confined Floodplain-good (CF good) -----------------------------------------------------
+CFgood = data %>%
+  filter(((Gradient < 3.5 & Gradient >= 1))
+         & Confinement != "UCV" 
+         & Threads != "Multi" 
+         & Bedform != "Plane-Bed"
+         & (Sinuosity < 1.5 & Sinuosity > 1.1) 
+         & (LWfreq > 10 | is.na(LWfreq)))%>%
+  mutate(RS = "CF", Condition = "good")
+
+CFgood
+summary(CFgood)
+nrow(CFgood)
+
+# Confined Floodplain-intact (CF intact) -----------------------------------------------------
+CFintact = data %>%
+  filter(((Gradient < 3.5 & Gradient >= 1))
+         & Confinement != "UCV" 
+         & Threads != "Multi" 
+         & Bedform != "Plane-Bed"
+         & (Sinuosity < 1.5 & Sinuosity > 1.1) 
+         & (LWfreq > 10 | is.na(LWfreq)))%>%
+  mutate(RS = "CF", Condition = "intact")
+
+CFintact
+summary(CFintact)
+nrow(CFintact)
+
+#--*----**------------------------------------
+#### Confined Bedrock Reach Types
+# Confined Bedrock-poor (MC poor) -----------------------------------------------------
+CBpoor = data.in %>%
+  filter(((Gradient < 3.5 & Gradient >= 1))
+         & Confinement != "UCV" 
+         & Threads == "Single" 
+         & Bedform == "Plane-Bed"
+         & Sinuosity < 1.1 
+         & (LWfreq < 30 | is.na(LWfreq)))%>%
+  mutate(RS = "CB", Condition = "poor")
+
+CBpoor
+summary(CBpoor)
+nrow(CBpoor)
+
+
+
+# Confined Bedrock-moderate (CB moderate)-----------------------------------------------------
+
+CBmoderate = data %>%
+  filter(((Gradient < 3.5 & Gradient>=1))
+         & Confinement != "UCV" 
+         & Threads == "Single" 
+         & (Bedform == "Plane-Bed"| Bedform == "Pool-Riffle")  
+         & (Sinuosity < 1.3 & Sinuosity > 1.04) 
+         & (LWfreq < 60  | is.na(LWfreq)))%>%
+  mutate(RS = "CB", Condition = "moderate")
+
+CBmoderate
+summary(CBmoderate)
+nrow(CBmoderate)
+
+# Confined Bedrock-good (CB good) -----------------------------------------------------
+CBgood = data %>%
+  filter(((Gradient < 3.5 & Gradient >= 1))
+         & Confinement != "UCV" 
+         & Threads != "Multi" 
+         & Bedform != "Plane-Bed"
+         & (Sinuosity < 1.5 & Sinuosity > 1.1) 
+         & (LWfreq > 10 | is.na(LWfreq)))%>%
+  mutate(RS = "CB", Condition = "good")
+
+CBgood
+summary(CBgood)
+nrow(CBgood)
+
+# Confined Bedrock-intact (CB intact) -----------------------------------------------------
+CBintact = data %>%
+  filter(((Gradient < 3.5 & Gradient >= 1))
+         & Confinement != "UCV" 
+         & Threads != "Multi" 
+         & Bedform != "Plane-Bed"
+         & (Sinuosity < 1.5 & Sinuosity > 1.1) 
+         & (LWfreq > 10 | is.na(LWfreq)))%>%
+  mutate(RS = "CB", Condition = "intact")
+
+CBintact
+summary(CBintact)
+nrow(CBintact)
+
+#--*----**------------------------------------
+#### Alluvial Fan Reach Types
 # Alluvial Fan-poor (AF poor) -----------------------------------------------------
 
 AFpoor = data %>%
@@ -145,157 +491,22 @@ AFgood
 summary(AFgood)
 nrow(AFgood)
 
+# Alluvial Fan-intact (AF intact) -----------------------------------------------------
+AFintact = data %>%
+  filter(((Gradient < 3.5 & Gradient >= 1))
+         & Confinement != "UCV" 
+         & Threads != "Multi" 
+         & Bedform != "Plane-Bed"
+         & (Sinuosity < 1.5 & Sinuosity > 1.1) 
+         & (LWfreq > 10 | is.na(LWfreq)))%>%
+  mutate(RS = "AF", Condition = "intact")
 
-# Planform Controlled-poor (PC poor) -----------------------------------------------------
-PCpoor = data %>%
-  filter(
-    Gradient < 2.5  
-    & Confinement != "CV"
-    & Threads == "Single" 
-    & Bedform == "Plane-Bed" 
-    & Sinuosity < 1.1 
-    & (LWfreq < 30 | is.na(LWfreq))) %>%
-  mutate(RS = "PC", Condition = "poor")
-
-PCpoor
-summary(PCpoor)
-nrow(PCpoor)
+AFintact
+summary(AFintact)
+nrow(AFintact)
 
 
-# Planform Controlled-moderate (PC moderate) -----------------------------------------------------
 
-PCmoderate = data %>%
-  filter(
-    Gradient < 2.5 
-    & Confinement != "CV" 
-    & (Threads == "Single" | Threads == "Transitional")
-    & (Bedform == "Plane-Bed"| Bedform == "Pool-Riffle")  
-    & (Sinuosity > 1.1 & Sinuosity < 1.5) 
-    & ((LWfreq > 10 & LWfreq < 60) | is.na(LWfreq))) %>%
-  mutate(RS = "PC", Condition = "moderate")
-
-PCmoderate
-summary(PCmoderate)
-nrow(PCmoderate)
-
-
-# Planform Controlled-good (PC good) -----------------------------------------------------
-
-PCgood = data%>%
-  filter(
-    Gradient < 2.5 
-    & Confinement != "CV"
-    & (Threads == "Single" | Threads=="Transitional"| Threads=="Multi")
-    & Bedform == "Pool-Riffle"
-    & (Sinuosity < 1.5 & Sinuosity > 1.1) 
-    &((LWfreq > 20) | is.na(LWfreq))) %>%
-  mutate(RS = "PC", Condition = "good")
-
-PCgood
-summary(PCgood)
-nrow(PCgood)
-
-
-# Wandering-poor (WA poor) -----------------------------------------------------
-
-WApoor = data %>%
-  filter(
-    Gradient < 2  
-    & Confinement != "CV"
-    & Threads == "Single"
-    & Bedform == "Plane-Bed" 
-    & Sinuosity < 1.2
-    & (LWfreq < 30 | is.na(LWfreq))) %>%
-  mutate(RS = "WA", Condition = "poor")
-
-WApoor
-summary(WApoor)
-nrow(WApoor)
-
-
-# Wandering-moderate (WA moderate) -----------------------------------------------------
-
-WAmoderate = data %>%
-  filter(
-    Gradient < 2 
-    & Confinement != "CV" 
-    & (Threads == "Single" | Threads == "Transitional")
-    & (Bedform == "Pool-Riffle" | Bedform == "Plane-Bed") 
-    & (Sinuosity > 1.2 & Sinuosity < 1.3) 
-    & ((LWfreq < 60) | is.na(LWfreq))) %>%
-  mutate(RS= "WA" , Condition = "moderate")
-
-WAmoderate
-summary(WAmoderate)
-nrow(WAmoderate)
-
-
-# Wandering-good (WA good) -----------------------------------------------------
-
-WAgood = data %>%
-  filter(
-    Gradient < 2 
-    & Confinement != "CV" 
-    & Threads != "Single" 
-    & Bedform != "Plane-Bed"
-    & (Sinuosity > 1.1 & Sinuosity < 1.5)
-    & ((LWfreq > 20) | is.na(LWfreq))) %>%
-  mutate(RS = "WA", Condition = "good")
-
-WAgood
-summary(WAgood)
-nrow(WAgood)
-
-
-# Confined Valley-poor (CV poor) -----------------------------------------------------
-
-CVpoor = data %>%
-  filter(
-    (Gradient > 2 & Gradient < 6)
-    & Confinement == "CV" 
-    & Threads == "Single" 
-    & (Bedform == "Plane-Bed"| Bedform == "Rapid") 
-    & Sinuosity < 1.1
-    & ((LWfreq < 30) | is.na(LWfreq))) %>%
-  mutate(RS = "CV", Condition = "poor")
-
-CVpoor
-summary(CVpoor)
-nrow(CVpoor)
-
-
-# Confined Valley-moderate (CV moderate)-----------------------------------------------------
-
-CVmoderate = data %>%
-  filter(
-    (Gradient > 2 & Gradient < 6)
-    & Confinement == "CV" 
-    & Threads == "Single" 
-    & Bedform != "Plane-Bed" 
-    & Sinuosity < 1.1 
-    & ((LWfreq < 60) | is.na(LWfreq))) %>%
-  mutate(RS = "CV", Condition = "moderate")
-
-CVmoderate
-summary(CVmoderate)
-nrow(CVmoderate)
-
-
-# Confined Valley-(CV good) -----------------------------------------------------
-
-CVgood = data %>%
-  filter(
-    (Gradient > 2 & Gradient < 6)
-    & Threads != "Multi" 
-    & Bedform != "Plane-Bed" 
-    & Sinuosity < 1.2 
-    & Confinement == "CV" 
-    & ((LWfreq > 10) | is.na(LWfreq))) %>%
-  mutate(RS = "CV", Condition = "good")
-
-CVgood
-summary(CVgood)
-nrow(CVgood)
 
 
 # Combine selections into single dataset and save output --------------------
