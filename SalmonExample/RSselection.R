@@ -45,6 +45,26 @@ data = data.in %>%
 # give you the best subset for your river style type. Comment out any that you don't have data for or don't want to use. This might be iterative 
 # because you want enough data to give you an adequate subset, but not too general that the streams found aren't representative of your river style and condition.
 
+# Selection Variables & Options
+	# Gradient is a real number > 0
+	#& Confinement != "CV" or "PCV" or "UCV"
+    #	& Threads == "Single" or "Multi" or "Transitional"
+    #	& Bedform == "Beaver-Dammed" or "Plane-Bed" or "Cascade" or "Pool-Riffle" or "Rapid" or "Step-Pool" 
+    #	& Planform == "Anabranching" or "Meandering" or "Sinuous" or "Straight" or "Wandering"
+	#	& Sinuosity (floating point between 1 and 10)
+    #	& LWfreq is pieces per 100 m (floating point?)
+    #	& DamCount is an integer between 0 and 1000
+
+# GARBAGE
+	Gradient > 0.001
+	& Confinement == "CV" or "PCV" or "UCV"
+    & Threads == "Single" or "Multi" or "Transitional"
+    & Bedform == "Beaver-Dammed" or "Plane-Bed" or "Cascade" or "Pool-Riffle" or "Rapid" or "Step-Pool" 
+    & Planform == "Anabranching" or "Meandering" or "Sinuous" or "Straight" or "Wandering"
+	& Sinuosity < 1.2
+    & LWfreq > 25
+    & DamCount > 5
+
 # Keep your River Style codes, short and easy to understand.  These will be carried through as the label identifier used for each River style
 # if it has a condition varient add it after the code as "good" "moderate" or "poor" all in lower case.
 
@@ -58,13 +78,15 @@ data = data.in %>%
 
 WApoor = data %>%
   filter(
-    Gradient < 2  
-    & Confinement != "CV"
+	Confinement != "CV"
     & Threads == "Single"
     & Bedform == "Plane-Bed" 
-    & Sinuosity < 1.2
-    & (LWfreq < 30 | is.na(LWfreq))) %>%
+    & (Planform == "Straight" | Planform == "Sinuous" )
+	& Sinuosity < 1.2
+    & (LWfreq < 30 | is.na(LWfreq))
+	& (DamCount < 2 | is.na(DamCount))) %>%
   mutate(RS = "WA", Condition = "poor")
+
 
 WApoor
 summary(WApoor)
@@ -75,8 +97,7 @@ nrow(WApoor)
 
 WAmoderate = data %>%
   filter(
-    Gradient < 2 
-    & Confinement != "CV" 
+	Confinement != "CV" 
     & (Threads == "Single" | Threads == "Transitional")
     & (Bedform == "Pool-Riffle" | Bedform == "Plane-Bed") 
     & (Sinuosity > 1.2 & Sinuosity < 1.3) 
@@ -91,8 +112,7 @@ nrow(WAmoderate)
 
 WAgood = data %>%
   filter(
-    Gradient < 2 
-    & Confinement != "CV" 
+    Confinement != "CV" 
     & Threads != "Single" 
     & Bedform != "Plane-Bed"
     & (Sinuosity > 1.1 & Sinuosity < 1.5)
@@ -107,8 +127,7 @@ nrow(WAgood)
 
 WAintact = data %>%
   filter(
-    Gradient < 2 
-    & Confinement != "CV" 
+    Confinement != "CV" 
     & Threads != "Single" 
     & Bedform != "Plane-Bed"
     & (Sinuosity > 1.1 & Sinuosity < 1.5)
