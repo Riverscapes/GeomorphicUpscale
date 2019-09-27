@@ -45,7 +45,7 @@ data = data.in %>%
 # give you the best subset for your river style type. Comment out any that you don't have data for or don't want to use. This might be iterative 
 # because you want enough data to give you an adequate subset, but not too general that the streams found aren't representative of your river style and condition.
 
-# Selection Variables & Options
+# Updated Selection Variables & Options
 	# Gradient is a real number > 0
 	#& Confinement != "CV" or "PCV" or "UCV"
     #	& Threads == "Single" or "Multi" or "Transitional"
@@ -57,7 +57,7 @@ data = data.in %>%
 
 # GARBAGE
 	Gradient > 0.001
-	& Confinement == "CV" or "PCV" or "UCV"
+	& Confinement == "CV" or "PCV" or "UCV" or != "CV"
     & Threads == "Single" or "Multi" or "Transitional"
     & Bedform == "Beaver-Dammed" or "Plane-Bed" or "Cascade" or "Pool-Riffle" or "Rapid" or "Step-Pool" 
     & Planform == "Anabranching" or "Meandering" or "Sinuous" or "Straight" or "Wandering"
@@ -66,7 +66,7 @@ data = data.in %>%
     & DamCount > 5
 
 # Keep your River Style codes, short and easy to understand.  These will be carried through as the label identifier used for each River style
-# if it has a condition varient add it after the code as "good" "moderate" or "poor" all in lower case.
+# if it has a condition variant add it after the code as "good" "moderate" or "poor" all in lower case.
 
 
 # Updating to Chris's Six Reach Types (Wandering_Gravel, Planform_Controlled, Margin_Controlled, Conf_Floodplain, Conf_Bedrock, and AlluvialFan)
@@ -74,6 +74,8 @@ data = data.in %>%
 
 #--*----**------------------------------------
 #### Wandering Reach Types
+### Variables that define Reach Type: 
+### Variables that differentiate condition of this reach type:
 # Wandering-poor (WA poor) -----------------------------------------------------
 
 WApoor = data %>%
@@ -144,7 +146,7 @@ nrow(WAintact)
 PCpoor = data %>%
   filter(
     Gradient < 2.5  
-    & Confinement != "CV"
+	& Confinement == "PCV"
     & Threads == "Single" 
     & Bedform == "Plane-Bed" 
     & Sinuosity < 1.1 
@@ -161,7 +163,7 @@ nrow(PCpoor)
 PCmoderate = data %>%
   filter(
     Gradient < 2.5 
-    & Confinement != "CV" 
+	& Confinement == "PCV"
     & (Threads == "Single" | Threads == "Transitional")
     & (Bedform == "Plane-Bed"| Bedform == "Pool-Riffle")  
     & (Sinuosity > 1.1 & Sinuosity < 1.5) 
@@ -178,7 +180,7 @@ nrow(PCmoderate)
 PCgood = data%>%
   filter(
     Gradient < 2.5 
-    & Confinement != "CV"
+	& Confinement == "PCV"
     & (Threads == "Single" | Threads=="Transitional"| Threads=="Multi")
     & Bedform == "Pool-Riffle"
     & (Sinuosity < 1.5 & Sinuosity > 1.1) 
@@ -194,7 +196,7 @@ nrow(PCgood)
 PCintact = data%>%
   filter(
     Gradient < 2.5 
-    & Confinement != "CV"
+	& Confinement == "PCV"
     & (Threads == "Single" | Threads=="Transitional"| Threads=="Multi")
     & Bedform == "Pool-Riffle"
     & (Sinuosity < 1.5 & Sinuosity > 1.1) 
@@ -279,7 +281,7 @@ nrow(NAintact)
 # Margin Controlled-poor (MC poor) -----------------------------------------------------
 MCpoor = data.in %>%
   filter(((Gradient < 3.5 & Gradient >= 1))
-         & Confinement != "UCV" 
+		 & Confinement == "PCV" 
          & Threads == "Single" 
          & Bedform == "Plane-Bed"
          & Sinuosity < 1.1 
@@ -296,7 +298,7 @@ nrow(MCpoor)
 
 MCmoderate = data %>%
   filter(((Gradient < 3.5 & Gradient>=1))
-         & Confinement != "UCV" 
+		 & Confinement == "PCV" 
          & Threads == "Single" 
          & (Bedform == "Plane-Bed"| Bedform == "Pool-Riffle")  
          & (Sinuosity < 1.3 & Sinuosity > 1.04) 
@@ -310,7 +312,7 @@ nrow(MCmoderate)
 # Margin Controlled-good (MC good) -----------------------------------------------------
 MCgood = data %>%
   filter(((Gradient < 3.5 & Gradient >= 1))
-         & Confinement != "UCV" 
+		 & Confinement == "PCV" 
          & Threads != "Multi" 
          & Bedform != "Plane-Bed"
          & (Sinuosity < 1.5 & Sinuosity > 1.1) 
@@ -324,7 +326,7 @@ nrow(MCgood)
 # Margin Controlled-intact (MC intact) -----------------------------------------------------
 MCintact = data %>%
   filter(((Gradient < 3.5 & Gradient >= 1))
-         & Confinement != "UCV" 
+		 & Confinement == "PCV" 
          & Threads != "Multi" 
          & Bedform != "Plane-Bed"
          & (Sinuosity < 1.5 & Sinuosity > 1.1) 
@@ -340,7 +342,7 @@ nrow(MCintact)
 # Confined Floodplain-poor (MC poor) -----------------------------------------------------
 CFpoor = data.in %>%
   filter(((Gradient < 3.5 & Gradient >= 1))
-         & Confinement != "UCV" 
+		 & Confinement == "CV" 
          & Threads == "Single" 
          & Bedform == "Plane-Bed"
          & Sinuosity < 1.1 
@@ -357,7 +359,7 @@ nrow(CFpoor)
 
 CFmoderate = data %>%
   filter(((Gradient < 3.5 & Gradient>=1))
-         & Confinement != "UCV" 
+		 & Confinement == "CV" 
          & Threads == "Single" 
          & (Bedform == "Plane-Bed"| Bedform == "Pool-Riffle")  
          & (Sinuosity < 1.3 & Sinuosity > 1.04) 
@@ -371,7 +373,7 @@ nrow(CFmoderate)
 # Confined Floodplain-good (CF good) -----------------------------------------------------
 CFgood = data %>%
   filter(((Gradient < 3.5 & Gradient >= 1))
-         & Confinement != "UCV" 
+		 & Confinement == "CV" 
          & Threads != "Multi" 
          & Bedform != "Plane-Bed"
          & (Sinuosity < 1.5 & Sinuosity > 1.1) 
@@ -385,7 +387,7 @@ nrow(CFgood)
 # Confined Floodplain-intact (CF intact) -----------------------------------------------------
 CFintact = data %>%
   filter(((Gradient < 3.5 & Gradient >= 1))
-         & Confinement != "UCV" 
+		 & Confinement == "CV" 
          & Threads != "Multi" 
          & Bedform != "Plane-Bed"
          & (Sinuosity < 1.5 & Sinuosity > 1.1) 
@@ -401,7 +403,7 @@ nrow(CFintact)
 # Confined Bedrock-poor (MC poor) -----------------------------------------------------
 CBpoor = data.in %>%
   filter(((Gradient < 3.5 & Gradient >= 1))
-         & Confinement != "UCV" 
+		 & Confinement == "CV" 
          & Threads == "Single" 
          & Bedform == "Plane-Bed"
          & Sinuosity < 1.1 
@@ -418,7 +420,7 @@ nrow(CBpoor)
 
 CBmoderate = data %>%
   filter(((Gradient < 3.5 & Gradient>=1))
-         & Confinement != "UCV" 
+		 & Confinement == "CV" 
          & Threads == "Single" 
          & (Bedform == "Plane-Bed"| Bedform == "Pool-Riffle")  
          & (Sinuosity < 1.3 & Sinuosity > 1.04) 
@@ -432,7 +434,7 @@ nrow(CBmoderate)
 # Confined Bedrock-good (CB good) -----------------------------------------------------
 CBgood = data %>%
   filter(((Gradient < 3.5 & Gradient >= 1))
-         & Confinement != "UCV" 
+		 & Confinement == "CV" 
          & Threads != "Multi" 
          & Bedform != "Plane-Bed"
          & (Sinuosity < 1.5 & Sinuosity > 1.1) 
@@ -446,7 +448,7 @@ nrow(CBgood)
 # Confined Bedrock-intact (CB intact) -----------------------------------------------------
 CBintact = data %>%
   filter(((Gradient < 3.5 & Gradient >= 1))
-         & Confinement != "UCV" 
+		 & Confinement == "CV" 
          & Threads != "Multi" 
          & Bedform != "Plane-Bed"
          & (Sinuosity < 1.5 & Sinuosity > 1.1) 
@@ -464,7 +466,7 @@ nrow(CBintact)
 AFpoor = data %>%
   filter(
     Gradient < 3  
-    & Confinement != "CV"  
+    & Confinement == "UCV"  
     & Threads == "Single" 
     & Bedform == "Plane-Bed" 
     & Sinuosity < 1.2
@@ -481,7 +483,7 @@ nrow(AFpoor)
 AFmoderate = data %>%
   filter(
     Gradient < 3 
-    & Confinement != "CV"  
+    & Confinement == "UCV"  
     & (Threads == "Single" | Threads == "Transitional")
     & Bedform == "Plane-Bed" 
     & Sinuosity < 1.3
@@ -502,7 +504,7 @@ AFgood = data %>%
     # & (Braid < 5)
     & (Bedform=="Plane-Bed" | Bedform=="Pool-Riffle")
     & (Sinuosity<1.5 & Sinuosity >1.1)
-    & Confinement!="CV" 
+    & Confinement == "UCV"  
     & (LWfreq > 20| is.na(LWfreq))) %>%
   mutate(RS = "AF", Condition = "good")
 
@@ -513,7 +515,7 @@ nrow(AFgood)
 # Alluvial Fan-intact (AF intact) -----------------------------------------------------
 AFintact = data %>%
   filter(((Gradient < 3.5 & Gradient >= 1))
-         & Confinement != "UCV" 
+    & Confinement == "UCV"  
          & Threads != "Multi" 
          & Bedform != "Plane-Bed"
          & (Sinuosity < 1.5 & Sinuosity > 1.1) 
