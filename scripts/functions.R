@@ -72,16 +72,16 @@ make.outputs = function(in.data, pool.by, out.dir, RSlevels, my.facet = "variabl
     
     if(pool.by == "RS"){
       data.sub = in.data %>% select(-Condition) %>% distinct() %>% filter(!is.na(value))
-      p1 = ggplot(data.sub, aes(x = factor(RS), y = value)) +
+      p1 = ggplot(data.sub, aes(x = factor(RS), y = value, color = RS)) +
         geom_boxplot() + 
-        facet_wrap(reformulate(my.facet, "."), scales = "free")
+        facet_wrap(reformulate(my.facet, "."), scales = "free_y")
     }
     
     if(pool.by == "RSCond"){
       p1 = ggplot(in.data, aes(x = factor(RS), y = value, fill = Condition)) +
         geom_boxplot() +
         scale_fill_manual(values = condition.fill) +
-        facet_wrap(reformulate(my.facet, "."), scales = "free")
+        facet_wrap(reformulate(my.facet, "."), scales = "free_y")
     }
     
     if(pool.by == "All"){
