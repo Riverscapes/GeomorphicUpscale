@@ -12,7 +12,7 @@
 
 # Set required paths ---------------------------
 
-# User defined project directory path
+# User defined project directory path (where outputs will be created)
 proj.dir = "C:/Anabranch/UpperSalmon/wrk_Data/temp/GeomorphicUpscale-master/AsotinExample"
 
 # Specify directory path to the downloaded Git repository
@@ -328,7 +328,7 @@ selection.maps.dir = file.path(proj.dir, "Outputs/Selections/Maps")
 if(!file.exists(selection.maps.dir)){dir.create(selection.maps.dir, recursive = TRUE)}
 
 # delete any existing files in Output from previous runs
-unlink(paste(selection.maps.dir, "\\*", sep = ""), recursive = T)
+unlink(paste(selection.maps.dir, "\\*", sep = ""), recursive = TRUE)
 
 # specify location of maps from database
 repo.maps.dir = file.path(repo.dir, "Database/Maps")  
@@ -336,7 +336,7 @@ repo.maps.dir = file.path(repo.dir, "Database/Maps")
 #soruce the geomorphic MapsbyRSselection from where it is locally saved.
 source(file.path(repo.dir, "scripts/selection.maps.R"))
 
-selection.maps(id.name = "visit.id", pool.by = "RS")
+
 selection.maps(id.name = "visit.id", pool.by = "RSCond")
 
        
