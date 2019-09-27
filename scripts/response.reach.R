@@ -51,13 +51,13 @@ create.subdirs(proj.dir,c(basesubdir, "by.reach","pred.fish_perArea_m2"))
 # set path to repo gut metric tables
 metrics.dir = file.path(repo.dir, "Database/Metrics")
 
-#specify GUT output layer to draw data from based on gu.type
-if(gu.type=="GU"){layer="Tier3_InChannel_GU"}
-if(gu.type=="UnitForm" | gu.type=="UnitShape"){layer="Tier2_InChannel_Transition" }
-
-#May need to change this in the future? depended on file naming conventions.  
-#List GUToutput files corresponding to Layer
-GUToutputlist=list.files(metrics.dir)[grep(layer, list.files(metrics.dir)) ]
+# specify gut output layer and corresponding metric table to draw data from based on gu.type parameter
+if(gu.type == "GU"){
+  layer = "Tier3_InChannel_GU" 
+  site.gut.metrics = "Site_GUTMetrics_Tier3_InChannel_GU.csv"}
+if(gu.type == "UnitForm" | gu.type == "UnitShape"){
+  layer = "Tier2_InChannel"
+  site.gut.metrics = "Site_GUTMetrics_Tier2_InChannel.csv"}
 
 # read in site metric fish data
 site.fish.metrics = read_csv(file.path(metrics.dir, "Site_Fish_Metrics.csv"))
@@ -95,7 +95,7 @@ e=compute.densitybyROI("suitable", label="suitablehab") #These #s are not correc
 f=compute.densitybyROI("reach", label="hydro")
 
 #computes density spread over entire BF area rather than hydro extent. sort of fictitious but needed for upscaling.
-g = read.csv(paste(metrics.dir,GUToutputlist[grep("Site_GUT", GUToutputlist)],sep="\\"),stringsAsFactors=F)%>%
+g = read_csv(file.path(metrics.dir, site.gut.metrics)) %>%
   rename(area=bf.area.m2, thalweg=main.thalweg.length.m)%>%
   select(visit.id, area, thalweg) %>%
   full_join(a, by="visit.id")%>%
