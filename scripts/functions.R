@@ -135,7 +135,7 @@ make.outputs.unit = function(in.data, pool.by, gu.type, out.dir, my.facet = "var
     p1 = ggplot(data.sub, aes(x = factor(Unit), y = value, fill = Unit)) + 
       geom_boxplot() +
       scale_fill_manual(values = unit.colors) +
-      facet_wrap(reformulate(my.facet, "."), scales = "free") +
+      facet_wrap(reformulate(".", my.facet), scales = "free_y") +
       theme(axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1))
   }
   
@@ -144,18 +144,18 @@ make.outputs.unit = function(in.data, pool.by, gu.type, out.dir, my.facet = "var
     p1 = ggplot(data.sub, aes(x = factor(Unit), y = value, fill = Unit)) + 
       geom_boxplot() +
       scale_fill_manual(values = unit.colors) +
-      facet_wrap(reformulate(my.facet, "RS"), scales = "free") +
+      facet_grid(reformulate("RS", my.facet), scales = "free") +
       theme(axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1))
   }
   
 #does it even make sense to plot condition for different units since the condition is really about the reach...  
 
- if(pool.by=="RSCond"){
+ if(pool.by == "RSCond"){
 
     p1 = ggplot(in.data, aes(x = factor(Unit), y = value, fill = Condition)) + 
       geom_boxplot() +
       scale_fill_manual(values = condition.fill) +
-      facet_wrap(reformulate(my.facet, "RS"), scales = "free") +
+      facet_grid(reformulate("RS", my.facet), scales = "free") +
       theme(axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1))
 
   }
