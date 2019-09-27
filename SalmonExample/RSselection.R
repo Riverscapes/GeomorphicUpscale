@@ -84,7 +84,6 @@ WApoor = data %>%
     & BfBraid == 1
     & Bedform == "Plane-Bed" 
     & (Planform == "Straight" | Planform == "Sinuous" )
-	& Sinuosity < 1.2
     & (LWfreq < 30 | is.na(LWfreq))
 	& (DamCount < 2 | is.na(DamCount))) %>%
   mutate(RS = "WA", Condition = "poor")
@@ -102,7 +101,6 @@ WAmoderate = data %>%
 	Confinement != "CV" 
     & 1 > BfBraid <= 2 
     & (Bedform == "Pool-Riffle" | Bedform == "Plane-Bed") 
-    & (Sinuosity > 1.2 & Sinuosity < 1.3) 
     & ((LWfreq < 60) | is.na(LWfreq))) %>%
   mutate(RS= "WA" , Condition = "moderate")
 
@@ -117,7 +115,6 @@ WAgood = data %>%
     Confinement != "CV" 
     & 1 > BfBraid <= 2 
     & Bedform != "Plane-Bed"
-    & (Sinuosity > 1.1 & Sinuosity < 1.5)
     & ((LWfreq > 20) | is.na(LWfreq))) %>%
   mutate(RS = "WA", Condition = "good")
 
@@ -132,7 +129,6 @@ WAintact = data %>%
     Confinement != "CV" 
     & 2 > BfBraid <= 3
     & Bedform != "Plane-Bed"
-    & (Sinuosity > 1.1 & Sinuosity < 1.5)
     & ((LWfreq > 20) | is.na(LWfreq))) %>%
   mutate(RS = "WA", Condition = "intact")
 
@@ -149,7 +145,7 @@ PCpoor = data %>%
 	& Confinement == "PCV"
     & BfBraid == 1
     & Bedform == "Plane-Bed" 
-    & Sinuosity < 1.1 
+    & Sinuosity < 1.05 
     & (LWfreq < 30 | is.na(LWfreq))) %>%
   mutate(RS = "PC", Condition = "poor")
 
@@ -166,7 +162,7 @@ PCmoderate = data %>%
 	& Confinement == "PCV"
     & BfBraid == 1
     & (Bedform == "Plane-Bed"| Bedform == "Pool-Riffle")  
-    & (Sinuosity > 1.1 & Sinuosity < 1.5) 
+    & (Sinuosity > 1.05 & Sinuosity <= 1.3) 
     & ((LWfreq > 10 & LWfreq < 60) | is.na(LWfreq))) %>%
   mutate(RS = "PC", Condition = "moderate")
 
@@ -183,7 +179,7 @@ PCgood = data%>%
 	& Confinement == "PCV"
     & & BfBraid == 1 
     & Bedform == "Pool-Riffle"
-    & (Sinuosity < 1.5 & Sinuosity > 1.1) 
+    & Sinuosity > 1.3 
     &((LWfreq > 20) | is.na(LWfreq))) %>%
   mutate(RS = "PC", Condition = "good")
 
@@ -199,7 +195,7 @@ PCintact = data%>%
 	& Confinement == "PCV"
     & 1 > BfBraid <= 2
     & Bedform == "Pool-Riffle"
-    & (Sinuosity < 1.5 & Sinuosity > 1.1) 
+    & Sinuosity > 1.3 
     &((LWfreq > 20) | is.na(LWfreq))) %>%
   mutate(RS = "PC", Condition = "intact")
 
@@ -218,7 +214,6 @@ NApoor = data %>%
     & Confinement == "CV" 
     & BfBraid == 1  
     & (Bedform == "Plane-Bed"| Bedform == "Rapid") 
-    & Sinuosity < 1.1
     & ((LWfreq < 30) | is.na(LWfreq))) %>%
   mutate(RS = "NA", Condition = "poor")
 
@@ -235,7 +230,6 @@ NAmoderate = data %>%
     & Confinement == "CV" 
     & BfBraid == 1 
     & Bedform != "Plane-Bed" 
-    & Sinuosity < 1.1 
     & ((LWfreq < 60) | is.na(LWfreq))) %>%
   mutate(RS = "NA", Condition = "moderate")
 
@@ -251,7 +245,6 @@ NAgood = data %>%
     (Gradient > 2 & Gradient < 6)
     & BfBraid == 1 
     & Bedform != "Plane-Bed" 
-    & Sinuosity < 1.2 
     & Confinement == "CV" 
     & ((LWfreq > 10) | is.na(LWfreq))) %>%
   mutate(RS = "NA", Condition = "good")
@@ -267,7 +260,6 @@ NAintact = data %>%
     (Gradient > 2 & Gradient < 6)
     & BfBraid == 1 
     & Bedform != "Plane-Bed" 
-    & Sinuosity < 1.2 
     & Confinement == "CV" 
     & ((LWfreq > 10) | is.na(LWfreq))) %>%
   mutate(RS = "NA", Condition = "intact")
@@ -284,7 +276,7 @@ MCpoor = data.in %>%
 		 & Confinement == "PCV" 
          & BfBraid == 1
          & Bedform == "Plane-Bed"
-         & Sinuosity < 1.1 
+         & Sinuosity < 1.05 
          & (LWfreq < 30 | is.na(LWfreq)))%>%
   mutate(RS = "MC", Condition = "poor")
 
@@ -301,7 +293,7 @@ MCmoderate = data %>%
 		 & Confinement == "PCV" 
          & BfBraid == 1 
          & (Bedform == "Plane-Bed"| Bedform == "Pool-Riffle")  
-         & (Sinuosity < 1.3 & Sinuosity > 1.04) 
+         & (Sinuosity < 1.3 & Sinuosity >= 1.05) 
          & (LWfreq < 60  | is.na(LWfreq)))%>%
   mutate(RS = "MC", Condition = "moderate")
 
@@ -315,7 +307,7 @@ MCgood = data %>%
 		 & Confinement == "PCV" 
          & 1 > BfBraid <= 2 
          & Bedform != "Plane-Bed"
-         & (Sinuosity < 1.5 & Sinuosity > 1.1) 
+         & Sinuosity > 1.3  
          & (LWfreq > 10 | is.na(LWfreq)))%>%
   mutate(RS = "MC", Condition = "good")
 
@@ -329,7 +321,7 @@ MCintact = data %>%
 		 & Confinement == "PCV" 
          & 1 > BfBraid <= 2
          & Bedform != "Plane-Bed"
-         & (Sinuosity < 1.5 & Sinuosity > 1.1) 
+         & Sinuosity > 1.3 
          & (LWfreq > 10 | is.na(LWfreq)))%>%
   mutate(RS = "MC", Condition = "intact")
 
@@ -345,7 +337,6 @@ CFpoor = data.in %>%
 		 & Confinement == "CV" 
 		 & BfBraid == 1
          & Bedform == "Plane-Bed"
-         & Sinuosity < 1.1 
          & (LWfreq < 30 | is.na(LWfreq)))%>%
   mutate(RS = "CF", Condition = "poor")
 
@@ -362,7 +353,6 @@ CFmoderate = data %>%
 		 & Confinement == "CV" 
          & BfBraid == 1 
          & (Bedform == "Plane-Bed"| Bedform == "Pool-Riffle")  
-         & (Sinuosity < 1.3 & Sinuosity > 1.04) 
          & (LWfreq < 60  | is.na(LWfreq)))%>%
   mutate(RS = "CF", Condition = "moderate")
 
@@ -376,7 +366,6 @@ CFgood = data %>%
 		 & Confinement == "CV" 
          & BfBraid == 1 
          & Bedform != "Plane-Bed"
-         & (Sinuosity < 1.5 & Sinuosity > 1.1) 
          & (LWfreq > 10 | is.na(LWfreq)))%>%
   mutate(RS = "CF", Condition = "good")
 
@@ -390,7 +379,6 @@ CFintact = data %>%
 		 & Confinement == "CV" 
          & (BfBraid == 1 | 1 > BfBraid <= 2) 
          & Bedform != "Plane-Bed"
-         & (Sinuosity < 1.5 & Sinuosity > 1.1) 
          & (LWfreq > 10 | is.na(LWfreq)))%>%
   mutate(RS = "CF", Condition = "intact")
 
@@ -406,7 +394,6 @@ CBpoor = data.in %>%
 		 & Confinement == "CV" 
          & BfBraid == 1 
          & Bedform == "Plane-Bed"
-         & Sinuosity < 1.1 
          & (LWfreq < 30 | is.na(LWfreq)))%>%
   mutate(RS = "CB", Condition = "poor")
 
@@ -423,7 +410,6 @@ CBmoderate = data %>%
 		 & Confinement == "CV" 
          & BfBraid == 1 
          & (Bedform == "Plane-Bed"| Bedform == "Pool-Riffle")  
-         & (Sinuosity < 1.3 & Sinuosity > 1.04) 
          & (LWfreq < 60  | is.na(LWfreq)))%>%
   mutate(RS = "CB", Condition = "moderate")
 
@@ -437,7 +423,6 @@ CBgood = data %>%
 		 & Confinement == "CV" 
          & BfBraid == 1 
          & Bedform != "Plane-Bed"
-         & (Sinuosity < 1.5 & Sinuosity > 1.1) 
          & (LWfreq > 10 | is.na(LWfreq)))%>%
   mutate(RS = "CB", Condition = "good")
 
@@ -451,7 +436,6 @@ CBintact = data %>%
 		 & Confinement == "CV" 
          & (BfBraid == 1 | 1 > BfBraid <= 2)  
          & Bedform != "Plane-Bed"
-         & (Sinuosity < 1.5 & Sinuosity > 1.1) 
          & (LWfreq > 10 | is.na(LWfreq)))%>%
   mutate(RS = "CB", Condition = "intact")
 
@@ -469,7 +453,6 @@ AFpoor = data %>%
     & Confinement == "UCV"  
     & BfBraid == 1 
     & Bedform == "Plane-Bed" 
-    & Sinuosity < 1.2
     & (LWfreq < 30 | is.na(LWfreq))) %>%
   mutate(RS = "AF", Condition = "poor")
 
@@ -486,7 +469,6 @@ AFmoderate = data %>%
     & Confinement == "UCV"  
     & 1 > BfBraid <= 2
     & Bedform == "Plane-Bed" 
-    & Sinuosity < 1.3
     & ((LWfreq < 60 & LWfreq > 10)| is.na(LWfreq))) %>%
   mutate(RS = "AF", Condition = "moderate")
 
@@ -502,7 +484,6 @@ AFgood = data %>%
     Gradient < 3 
     & 2 > BfBraid <= 3
     & (Bedform=="Plane-Bed" | Bedform=="Pool-Riffle")
-    & (Sinuosity<1.5 & Sinuosity >1.1)
     & Confinement == "UCV"  
     & (LWfreq > 20| is.na(LWfreq))) %>%
   mutate(RS = "AF", Condition = "good")
@@ -517,7 +498,6 @@ AFintact = data %>%
     & Confinement == "UCV"  
          & BfBraid > 2
          & Bedform != "Plane-Bed"
-         & (Sinuosity < 1.5 & Sinuosity > 1.1) 
          & (LWfreq > 10 | is.na(LWfreq)))%>%
   mutate(RS = "AF", Condition = "intact")
 
