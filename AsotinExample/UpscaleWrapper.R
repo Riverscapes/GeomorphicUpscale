@@ -1,87 +1,87 @@
-#This script Runs the upscale with user defined inputs
-#Natalie Kramer (n.kramer.anderson@gmail.com)
-#Last Updated JUne 4, 2019
+# This script Runs the upscale with user defined inputs
+# Natalie Kramer (n.kramer.anderson@gmail.com)
+# Last Updated JUne 4, 2019
 
-#documentation is provided here:
-# https://github.com/natalie-kramer/GeomorphicUpscale/edit/master/docs/upscaling.md
-
-###################################
-####User Defined Inputs############
-##################################
-
-#specify directory path to your project where you want your outputs to go.
-#Make a folder if it doesn't already existy
-PROJdir="E:\\AsotinUpscale"
-
-#Specify directory path to the downloaded Git Repo
-GUPdir="E:\\GitHub\\GeomorphicUpscale"
-
-#Read in selections created by RSselections.R
-selections.file="E://AsotinUpscale//Inputs//selections.csv" 
-
-#Builds the project directory structure and re-organizes inputs
-source(paste(GUPdir, "\\scripts\\projbuild.R", sep=""))
-
-#user defined variables
-gu.type="UnitForm"      #Options: UnitForm, GU #UnitShape not available at this time since I don't have maps of these in the database
-RSlevels=c("CV", "FC", "PC", "AF", "WA") #optional vector argument to set RS factor order in graphs and displays, leave as  NA if alphabetical is desired
-plottype=".pdf"   #Options: .tiff, .png, .pdf, "none"
-myscales="fixed" #Options: fixed or free x/y axis scales for tiled plot output
-
-#####################################
-####Generating Selection Output######
-#####################################
-
-#source the geoindicator summary script
-source(paste(GUPdir, "\\scripts\\selection.geoindicators.R", sep="")) 
-
-#soruce the code to copy and file the maps
-source(paste(GUPdir, "\\scripts\\selection.maps.R", sep="")) 
-
-#####################################
-####Generating Assemblage Output##### #plots are not printing????
-#####################################
-
-#source and run code to generate output per reach
-source(paste(GUPdir, "\\scripts\\assemblage.reach.R", sep=""))
-
-#source and run code to generate output per unit type
-source(paste(GUPdir, "\\scripts\\assemblage.unit.R", sep=""))
-
-#####################################
-#####Generating Response Output######
-#####################################
-
-#user defined variables
-model="nrei"         	#Options: nrei, fuzzy, NA
-species="steelhead"         #Options: steelhead, chinook, NA  #I could hardcode this for now..., one less variable.
-
-#source and run code to generate output
-source(paste(GUPdir, "\\scripts\\response.reach.R", sep=""))
-
-#source and run code to generate output
-source(paste(GUPdir, "\\scripts\\response.unit.R", sep=""))
+# Documentation URL: https://github.com/natalie-kramer/GeomorphicUpscale/edit/master/docs/upscaling.md
 
 
-#####################################
-#####Generating Upscale Output#######
-#####################################
+# Set required paths ---------------------------
 
-braid.index.file="E://AsotinUpscale//Inputs//braid_index.csv"
-network.file="E://AsotinUpscale//Inputs//network.csv"
-#Builds the project directory structure and re-organizes inputs
-source(paste(GUPdir, "\\scripts\\projbuild.R", sep=""))
+# User defined project directory path where outputs will be written
+proj.dir = "C:/Anabranch/UpperSalmon/wrk_Data/temp/GeomorphicUpscale-master/AsotinExample"
 
-responsepool="byRScond" #Options: "byRScond", "byRS", "byAll"
-segIDcol="segmentID" #user supplied
-lengthcol="length.m" #user supplied
-widthcol="bf.width.m" #user supplied.
-condcols=c("Condition0","Condition1", "Condition2", "Condition3") #user supplied
-areacols=NA #user supplied. leave as NA if no area is specified per reach segment and it will be estimated
+# Specify directory path to the downloaded Git Repo
+repo.dir = "C:/Anabranch/UpperSalmon/wrk_Data/temp/GeomorphicUpscale-master"
 
-#source and run code to generate output for upscaling response variabales
-source(paste(GUPdir, "\\scripts\\upscale.response.R", sep=""))
+# Path to selections csv created by RSselections.R
+selections.file = "C:/Anabranch/UpperSalmon/wrk_Data/temp/GeomorphicUpscale-master/AsotinExample/Inputs/Selections.csv" 
+
+# Path to network csv and braind index csv
+network.file = "C:/Anabranch/UpperSalmon/wrk_Data/temp/GeomorphicUpscale-master/AsotinExample/Inputs/network.csv"
+braid.index.file = "C:/Anabranch/UpperSalmon/wrk_Data/temp/GeomorphicUpscale-master/AsotinExample/Inputs/braid_index.csv"
+
+# User defined variables ---------------------------
+
+gu.type = "UnitForm"      #Options: UnitForm, GU # UnitShape not available at this time since I don't have maps of these in the database
+RSlevels = NA # optional vector argument to set RS factor order in graphs and displays, leave as  NA if alphabetical is desired
+
+
+# Read back in selections data in case it was clear
+selections = read_csv(selections.file)
+
+# Builds the project directory structure and re-organizes inputs ---------------------------
+
+source(file.path(repo.dir, "scripts/projbuild.R"))
+
+
+# Generate selection output ---------------------------
+
+# geoindicator summary script
+# !! importatnt -- if adding geoindicators or chaning from NKs original names, need to edit the fields selected in
+#                  there selection.geoindicators script
+source(file.path(repo.dir, "scripts/selection.geoindicators.R")) 
+
+# turned this off for now - ask NK why she's calling this in both the RSelection and the UpscaleWrapper
+# # soruce the code to copy and file the maps
+# source(file.path(repo.dir, "scripts/selection.maps.R")) 
+
+
+# Generate assemblage output ---------------------------
+# NK Note: plots are not printing????
+
+# output per reach
+source(file.path(repo.dir, "scripts/assemblage.reach.R"))
+
+# output per unit type
+source(file.path(repo.dir, "scripts/assemblage.unit.R"))
+
+
+# Generate response output ---------------------------
+
+# user defined variables
+model = "nrei"         	# Options: nrei, fuzzy, NA
+species = "steelhead"   # Options: steelhead, chinook, NA  #I could hardcode this for now..., one less variable.
+
+# response by reach
+source(file.path(repo.dir, "scripts/response.reach.R"))
+
+# response by unit
+source(file.path(repo.dir, "scripts/response.unit.R"))
+
+
+# Generate upscale output ---------------------------
 
 
 
-########################################
+# Builds the project directory structure and re-organizes inputs
+source(file.path(repo.dir, "scripts/projbuild.R"))
+
+responsepool = "byRSCond"     #Options: "byRScond", "byRS", "byAll"
+segIDcol = "segmentID"        #user supplied
+lengthcol = "length.m"        #user supplied
+widthcol = "bf.width.m"       #user supplied.
+condcols = c("Condition0", "Condition1", "Condition2", "Condition3")     #user supplied
+areacols = NA #user supplied. leave as NA if no area is specified per reach segment and it will be estimated
+
+# source and run code to generate output for upscaling response variabales
+source(file.path(repo.dir, "scripts/upscale.response.R"))
