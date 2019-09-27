@@ -48,17 +48,17 @@ data = data.in %>%
 # Updated Selection Variables & Options
 	# Gradient is a real number > 0
 	#& Confinement != "CV" or "PCV" or "UCV"
-    #	& Threads == "Single" or "Multi" or "Transitional"
+    #	& BfBraid == 1 or 1 > BfBraid <= 2 or 2 > BfBraid <= 3 or BfBraid > 3
     #	& Bedform == "Beaver-Dammed" or "Plane-Bed" or "Cascade" or "Pool-Riffle" or "Rapid" or "Step-Pool" 
     #	& Planform == "Anabranching" or "Meandering" or "Sinuous" or "Straight" or "Wandering"
 	#	& Sinuosity (floating point between 1 and 10)
     #	& LWfreq is pieces per 100 m (floating point?)
     #	& DamCount is an integer between 0 and 1000
 
-# GARBAGE
+# EXAMPLE SPECS: See: https://docs.google.com/spreadsheets/d/1fQ1DjK9Y53Dgul3bWwHYyQpGKcCf9L18NtE8S2PCcgI/edit?usp=sharing
 	Gradient > 0.001
 	& Confinement == "CV" or "PCV" or "UCV" or != "CV"
-    & Threads == "Single" or "Multi" or "Transitional"
+    & BfBraid == 1 or 1 > BfBraid <= 2 or 2 > BfBraid <= 3 or BfBraid > 3
     & Bedform == "Beaver-Dammed" or "Plane-Bed" or "Cascade" or "Pool-Riffle" or "Rapid" or "Step-Pool" 
     & Planform == "Anabranching" or "Meandering" or "Sinuous" or "Straight" or "Wandering"
 	& Sinuosity < 1.2
@@ -81,7 +81,7 @@ data = data.in %>%
 WApoor = data %>%
   filter(
 	Confinement != "CV"
-    & Threads == "Single"
+    & BfBraid == 1
     & Bedform == "Plane-Bed" 
     & (Planform == "Straight" | Planform == "Sinuous" )
 	& Sinuosity < 1.2
@@ -100,7 +100,7 @@ nrow(WApoor)
 WAmoderate = data %>%
   filter(
 	Confinement != "CV" 
-    & (Threads == "Single" | Threads == "Transitional")
+    & 1 > BfBraid <= 2 
     & (Bedform == "Pool-Riffle" | Bedform == "Plane-Bed") 
     & (Sinuosity > 1.2 & Sinuosity < 1.3) 
     & ((LWfreq < 60) | is.na(LWfreq))) %>%
@@ -115,7 +115,7 @@ nrow(WAmoderate)
 WAgood = data %>%
   filter(
     Confinement != "CV" 
-    & Threads != "Single" 
+    & 1 > BfBraid <= 2 
     & Bedform != "Plane-Bed"
     & (Sinuosity > 1.1 & Sinuosity < 1.5)
     & ((LWfreq > 20) | is.na(LWfreq))) %>%
@@ -130,7 +130,7 @@ nrow(WAgood)
 WAintact = data %>%
   filter(
     Confinement != "CV" 
-    & Threads != "Single" 
+    & 2 > BfBraid <= 3
     & Bedform != "Plane-Bed"
     & (Sinuosity > 1.1 & Sinuosity < 1.5)
     & ((LWfreq > 20) | is.na(LWfreq))) %>%
@@ -147,7 +147,7 @@ PCpoor = data %>%
   filter(
     Gradient < 2.5  
 	& Confinement == "PCV"
-    & Threads == "Single" 
+    & BfBraid == 1
     & Bedform == "Plane-Bed" 
     & Sinuosity < 1.1 
     & (LWfreq < 30 | is.na(LWfreq))) %>%
@@ -164,7 +164,7 @@ PCmoderate = data %>%
   filter(
     Gradient < 2.5 
 	& Confinement == "PCV"
-    & (Threads == "Single" | Threads == "Transitional")
+    & BfBraid == 1
     & (Bedform == "Plane-Bed"| Bedform == "Pool-Riffle")  
     & (Sinuosity > 1.1 & Sinuosity < 1.5) 
     & ((LWfreq > 10 & LWfreq < 60) | is.na(LWfreq))) %>%
@@ -181,7 +181,7 @@ PCgood = data%>%
   filter(
     Gradient < 2.5 
 	& Confinement == "PCV"
-    & (Threads == "Single" | Threads=="Transitional"| Threads=="Multi")
+    & & BfBraid == 1 
     & Bedform == "Pool-Riffle"
     & (Sinuosity < 1.5 & Sinuosity > 1.1) 
     &((LWfreq > 20) | is.na(LWfreq))) %>%
@@ -197,7 +197,7 @@ PCintact = data%>%
   filter(
     Gradient < 2.5 
 	& Confinement == "PCV"
-    & (Threads == "Single" | Threads=="Transitional"| Threads=="Multi")
+    & 1 > BfBraid <= 2
     & Bedform == "Pool-Riffle"
     & (Sinuosity < 1.5 & Sinuosity > 1.1) 
     &((LWfreq > 20) | is.na(LWfreq))) %>%
@@ -216,7 +216,7 @@ NApoor = data %>%
   filter(
     (Gradient > 2 & Gradient < 6)
     & Confinement == "CV" 
-    & Threads == "Single" 
+    & BfBraid == 1  
     & (Bedform == "Plane-Bed"| Bedform == "Rapid") 
     & Sinuosity < 1.1
     & ((LWfreq < 30) | is.na(LWfreq))) %>%
@@ -233,7 +233,7 @@ NAmoderate = data %>%
   filter(
     (Gradient > 2 & Gradient < 6)
     & Confinement == "CV" 
-    & Threads == "Single" 
+    & BfBraid == 1 
     & Bedform != "Plane-Bed" 
     & Sinuosity < 1.1 
     & ((LWfreq < 60) | is.na(LWfreq))) %>%
@@ -249,7 +249,7 @@ nrow(NAmoderate)
 NAgood = data %>%
   filter(
     (Gradient > 2 & Gradient < 6)
-    & Threads != "Multi" 
+    & BfBraid == 1 
     & Bedform != "Plane-Bed" 
     & Sinuosity < 1.2 
     & Confinement == "CV" 
@@ -265,7 +265,7 @@ nrow(NAgood)
 NAintact = data %>%
   filter(
     (Gradient > 2 & Gradient < 6)
-    & Threads != "Multi" 
+    & BfBraid == 1 
     & Bedform != "Plane-Bed" 
     & Sinuosity < 1.2 
     & Confinement == "CV" 
@@ -282,7 +282,7 @@ nrow(NAintact)
 MCpoor = data.in %>%
   filter(((Gradient < 3.5 & Gradient >= 1))
 		 & Confinement == "PCV" 
-         & Threads == "Single" 
+         & BfBraid == 1
          & Bedform == "Plane-Bed"
          & Sinuosity < 1.1 
          & (LWfreq < 30 | is.na(LWfreq)))%>%
@@ -299,7 +299,7 @@ nrow(MCpoor)
 MCmoderate = data %>%
   filter(((Gradient < 3.5 & Gradient>=1))
 		 & Confinement == "PCV" 
-         & Threads == "Single" 
+         & BfBraid == 1 
          & (Bedform == "Plane-Bed"| Bedform == "Pool-Riffle")  
          & (Sinuosity < 1.3 & Sinuosity > 1.04) 
          & (LWfreq < 60  | is.na(LWfreq)))%>%
@@ -313,7 +313,7 @@ nrow(MCmoderate)
 MCgood = data %>%
   filter(((Gradient < 3.5 & Gradient >= 1))
 		 & Confinement == "PCV" 
-         & Threads != "Multi" 
+         & 1 > BfBraid <= 2 
          & Bedform != "Plane-Bed"
          & (Sinuosity < 1.5 & Sinuosity > 1.1) 
          & (LWfreq > 10 | is.na(LWfreq)))%>%
@@ -327,7 +327,7 @@ nrow(MCgood)
 MCintact = data %>%
   filter(((Gradient < 3.5 & Gradient >= 1))
 		 & Confinement == "PCV" 
-         & Threads != "Multi" 
+         & 1 > BfBraid <= 2
          & Bedform != "Plane-Bed"
          & (Sinuosity < 1.5 & Sinuosity > 1.1) 
          & (LWfreq > 10 | is.na(LWfreq)))%>%
@@ -343,7 +343,7 @@ nrow(MCintact)
 CFpoor = data.in %>%
   filter(((Gradient < 3.5 & Gradient >= 1))
 		 & Confinement == "CV" 
-         & Threads == "Single" 
+		 & BfBraid == 1
          & Bedform == "Plane-Bed"
          & Sinuosity < 1.1 
          & (LWfreq < 30 | is.na(LWfreq)))%>%
@@ -360,7 +360,7 @@ nrow(CFpoor)
 CFmoderate = data %>%
   filter(((Gradient < 3.5 & Gradient>=1))
 		 & Confinement == "CV" 
-         & Threads == "Single" 
+         & BfBraid == 1 
          & (Bedform == "Plane-Bed"| Bedform == "Pool-Riffle")  
          & (Sinuosity < 1.3 & Sinuosity > 1.04) 
          & (LWfreq < 60  | is.na(LWfreq)))%>%
@@ -374,7 +374,7 @@ nrow(CFmoderate)
 CFgood = data %>%
   filter(((Gradient < 3.5 & Gradient >= 1))
 		 & Confinement == "CV" 
-         & Threads != "Multi" 
+         & BfBraid == 1 
          & Bedform != "Plane-Bed"
          & (Sinuosity < 1.5 & Sinuosity > 1.1) 
          & (LWfreq > 10 | is.na(LWfreq)))%>%
@@ -388,7 +388,7 @@ nrow(CFgood)
 CFintact = data %>%
   filter(((Gradient < 3.5 & Gradient >= 1))
 		 & Confinement == "CV" 
-         & Threads != "Multi" 
+         & (BfBraid == 1 | 1 > BfBraid <= 2) 
          & Bedform != "Plane-Bed"
          & (Sinuosity < 1.5 & Sinuosity > 1.1) 
          & (LWfreq > 10 | is.na(LWfreq)))%>%
@@ -404,7 +404,7 @@ nrow(CFintact)
 CBpoor = data.in %>%
   filter(((Gradient < 3.5 & Gradient >= 1))
 		 & Confinement == "CV" 
-         & Threads == "Single" 
+         & BfBraid == 1 
          & Bedform == "Plane-Bed"
          & Sinuosity < 1.1 
          & (LWfreq < 30 | is.na(LWfreq)))%>%
@@ -421,7 +421,7 @@ nrow(CBpoor)
 CBmoderate = data %>%
   filter(((Gradient < 3.5 & Gradient>=1))
 		 & Confinement == "CV" 
-         & Threads == "Single" 
+         & BfBraid == 1 
          & (Bedform == "Plane-Bed"| Bedform == "Pool-Riffle")  
          & (Sinuosity < 1.3 & Sinuosity > 1.04) 
          & (LWfreq < 60  | is.na(LWfreq)))%>%
@@ -435,7 +435,7 @@ nrow(CBmoderate)
 CBgood = data %>%
   filter(((Gradient < 3.5 & Gradient >= 1))
 		 & Confinement == "CV" 
-         & Threads != "Multi" 
+         & BfBraid == 1 
          & Bedform != "Plane-Bed"
          & (Sinuosity < 1.5 & Sinuosity > 1.1) 
          & (LWfreq > 10 | is.na(LWfreq)))%>%
@@ -449,7 +449,7 @@ nrow(CBgood)
 CBintact = data %>%
   filter(((Gradient < 3.5 & Gradient >= 1))
 		 & Confinement == "CV" 
-         & Threads != "Multi" 
+         & (BfBraid == 1 | 1 > BfBraid <= 2)  
          & Bedform != "Plane-Bed"
          & (Sinuosity < 1.5 & Sinuosity > 1.1) 
          & (LWfreq > 10 | is.na(LWfreq)))%>%
@@ -467,7 +467,7 @@ AFpoor = data %>%
   filter(
     Gradient < 3  
     & Confinement == "UCV"  
-    & Threads == "Single" 
+    & BfBraid == 1 
     & Bedform == "Plane-Bed" 
     & Sinuosity < 1.2
     & (LWfreq < 30 | is.na(LWfreq))) %>%
@@ -484,7 +484,7 @@ AFmoderate = data %>%
   filter(
     Gradient < 3 
     & Confinement == "UCV"  
-    & (Threads == "Single" | Threads == "Transitional")
+    & 1 > BfBraid <= 2
     & Bedform == "Plane-Bed" 
     & Sinuosity < 1.3
     & ((LWfreq < 60 & LWfreq > 10)| is.na(LWfreq))) %>%
@@ -500,8 +500,7 @@ nrow(AFmoderate)
 AFgood = data %>%
   filter(
     Gradient < 3 
-    & (Threads=="Single" | Threads=="Transitional" | Threads=="Multi")
-    # & (Braid < 5)
+    & 2 > BfBraid <= 3
     & (Bedform=="Plane-Bed" | Bedform=="Pool-Riffle")
     & (Sinuosity<1.5 & Sinuosity >1.1)
     & Confinement == "UCV"  
@@ -516,7 +515,7 @@ nrow(AFgood)
 AFintact = data %>%
   filter(((Gradient < 3.5 & Gradient >= 1))
     & Confinement == "UCV"  
-         & Threads != "Multi" 
+         & BfBraid > 2
          & Bedform != "Plane-Bed"
          & (Sinuosity < 1.5 & Sinuosity > 1.1) 
          & (LWfreq > 10 | is.na(LWfreq)))%>%
