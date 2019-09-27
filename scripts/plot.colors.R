@@ -13,9 +13,10 @@ form.fill = c('Bowl' = '#004DA8',
               'Mound' = '#A80000', 
               'Wall' = '#000000')
 
-form.levels=c("Bowl", "Mound", "Saddle","Trough", "Plane", "Wall")
-form.t.levels=c("Bowl", "Bowl Transition", "Mound", "Mound Transition", "Saddle",
-           "Trough", "Plane", "Wall")
+form.discrete.levels = c('Bowl', 'Trough', 'Plane', 'Saddle', 'Mound', 'Wall')
+
+form.levels = c('Bowl', 'Bowl Transition', 'Trough', 'Plane', 
+                'Mound Transition', 'Saddle', 'Mound', 'Wall')
 
 
 gu.fill = c('Bank' = '#000000', 
@@ -33,7 +34,7 @@ gu.fill = c('Bank' = '#000000',
             'Margin Attached Bar' = '#A80000',
             'Transition' = '#CCCCCC')
 
-gu.levels=c("Pocket Pool","Pool", "Pond", 
+gu.levels = c("Pocket Pool","Pool", "Pond", 
          "Margin Attached Bar","Mid Channel Bar","Barface",  "Riffle",
          "Cascade", "Rapid", "Chute" ,
          "Glide-Run", "Transition", "Bank")

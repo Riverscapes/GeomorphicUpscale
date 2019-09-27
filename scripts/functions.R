@@ -177,9 +177,9 @@ source(paste(myGUPdir, "\\scripts\\plot.colors.R", sep=""))
 mydata=as.data.frame(mydata)
 unitcol=which(names(mydata)==unitcolname)
   
-if(gu.type=="UnitShape"){
-  unit.colors= shape.fill
-  mydata$Unit=factor(mydata[,unitcol], levels=shape.levels)
+if(gu.type == "UnitShape"){
+  unit.colors = shape.fill
+  mydata$Unit = factor(mydata[,unitcol], levels = shape.levels)
   
 }
 
@@ -187,10 +187,10 @@ if(gu.type=="UnitForm"){
   unit.colors= form.fill
   
   if(layer=="Tier2_InChannel_Transition"){
-    mydata$Unit=factor(mydata[,unitcol], levels=form.levels)
+    mydata$Unit=factor(mydata[,unitcol], levels = form.discrete.levels)
   }
   if(layer=="Tier2_InChannel"){
-    mydata$Unit=factor(mydata[,unitcol], levels=form.t.levels)
+    mydata$Unit=factor(mydata[,unitcol], levels = form.levels)
   }
 }
 
