@@ -69,50 +69,57 @@ site.fish = site.fish.metrics %>%
 
 # make site summaries for different response and ROI -----------------------
 
+# predicted fish total in reach 
+pred.n = site.fish %>% 
+  filter(category == "reach") %>% 
+  mutate(ROI = "hydro") %>% 
+  select(visit.id, var, value, ROI)
 
-#just predicted fish total in reach 
-a=site.fish%>%filter(category=="reach")%>%mutate(ROI="hydro")%>%select(visit.id, var, value, ROI)
-#just predicted fish total in suitablehab (should match reach)
-a2=site.fish%>%filter(category=="suitable")%>%mutate(ROI="suitablehab")%>%select(visit.id, var, value, ROI)
-# just pred fish within the best habitat
-b=site.fish%>%filter(category=="best")%>%mutate(ROI="besthab")%>%select(visit.id, var, value, ROI)
 
 #makes layer with just the length of the thalwegs within the hydro modelling extent
-sitehydrothalweg=site.fish.metrics%>%filter(layer=="thalweg", category=="main") #check with Sarah about different thalweg lengths based on different models
-c=sitehydrothalweg%>%full_join(a, by="visit.id")%>%
-  mutate(value=value.y/value.x, var="pred.fish_perLength_m")%>% select(visit.id, var, value, ROI)
+sitehydrothalweg = site.fish.metrics%>%filter(layer=="thalweg", category=="main") #check with Sarah about different thalweg lengths based on different models
+
+c = sitehydrothalweg %>%
+  full_join(a, by="visit.id") %>%
+  mutate(value = value.y/value.x, var = "pred.fish_perLength_m") %>% select(visit.id, var, value, ROI)
 
 #density by specified ROI
+
 compute.densitybyROI=function(ROI, label){
-#makes layer of hydro area within hydro modelling extent
-sitehydroarea=site.fish.metrics%>%filter(var=="area",layer==model,species==species, lifestage==lifestage, category==ROI)
-data=sitehydroarea%>%full_join(filter(site.fish, category==ROI), by="visit.id")%>%
-  mutate(value=value.y/value.x, var="pred.fish_perArea_m2", ROI=label)%>% select(visit.id, var, value, ROI)
-return(data)
+  #makes layer of hydro area within hydro modelling extent
+  sitehydroarea = site.fish.metrics %>% 
+    filter(var == "area", layer == model, species == species, lifestage == lifestage, category == ROI)
+  
+  data = sitehydroarea %>%
+    full_join(filter(site.fish, category == ROI), by = "visit.id") %>%
+    mutate(value = value.y/value.x, var = "pred.fish_perArea_m2", ROI = label) %>% 
+    select(visit.id, var, value, ROI)
+  return(data)
 }
-d=compute.densitybyROI("best", label="besthab")
-e=compute.densitybyROI("suitable", label="suitablehab") #These #s are not correct with this version of dbase
-f=compute.densitybyROI("reach", label="hydro")
+
+
+
+f = compute.densitybyROI("reach", label="hydro")
 
 #computes density spread over entire BF area rather than hydro extent. sort of fictitious but needed for upscaling.
 g = read_csv(file.path(metrics.dir, site.gut.metrics)) %>%
-  rename(area=bf.area.m2, thalweg=main.thalweg.length.m)%>%
+  rename(area=bf.area.m2, thalweg=main.thalweg.length.m) %>%
   select(visit.id, area, thalweg) %>%
-  full_join(a, by="visit.id")%>%
-  mutate(pred.fish_perLength_m2=value/thalweg, pred.fish_perArea_m2=value/area, ROI="bankfull" )%>%
-  gather(value="value", key="var", 7:8)%>%
+  full_join(a, by="visit.id") %>%
+  mutate(pred.fish_perLength_m2 = value/thalweg, pred.fish_perArea_m2 = value/area, ROI="bankfull" ) %>%
+  gather(value = "value", key = "var", 7:8)%>%
   select(visit.id, value, var, ROI)
 
 
 ####combines output with selections##
-siteresponse=join.selection(selections, rbind(a,a2, b,c,d,e,f,g))%>%rename(variable=var)%>%
+siteresponse = join.selection(selections, rbind(pred.n,c,f,g)) %>% rename(variable = var)%>%
 mutate(unit.type="all")
 
 #function to summarize data pooling in different ways and write to files
 alloutputs = function(){
-make.outputs(mydata, pool.by = "", OUTdir, myfacet="ROI", RSlevels)
-make.outputs(mydata, pool.by = "RS", OUTdir,myfacet="ROI", RSlevels)
-make.outputs(mydata, pool.by = "RScond", OUTdir,myfacet="ROI",RSlevels)
+make.outputs(mydata, pool.by = "", OUTdir, myfacet = "ROI", RSlevels)
+make.outputs(mydata, pool.by = "RS", OUTdir, myfacet = "ROI", RSlevels)
+make.outputs(mydata, pool.by = "RScond", OUTdir, myfacet = "ROI", RSlevels)
 }
 
 print("Making site level fish response summaries and plots")
