@@ -59,8 +59,9 @@ source(file.path(repo.dir, "scripts/assemblage.unit.R"))
 # Generate response output ---------------------------
 
 # user defined variables
-model = "nrei"         	# Options: nrei, fuzzy, NA
-species = "steelhead"   # Options: steelhead, chinook, NA  #I could hardcode this for now..., one less variable.
+model = "fuzzy"         	# Options: nrei, fuzzy, NA
+species = "chinook"   # Options: steelhead, chinook, NA  #I could hardcode this for now..., one less variable.
+lifestage = "spawner"
 
 # response by reach
 source(file.path(repo.dir, "scripts/response.reach.R"))
