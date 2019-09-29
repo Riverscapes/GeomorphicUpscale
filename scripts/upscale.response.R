@@ -56,23 +56,21 @@ area.cols = area.cols
 # set up data refs and output file structure  ------------------------------------------------------------------------
 print("setting up data refs and output file structure...")
 
+# set directories and paths ------------------------------------------------------------------------
 
-#specify subdirectory paths to input files.
-response.subdir = c("response" , species, model, lifestage, "by.unit", gu.type, response.pool)
-gu.subdir = c("assemblage", gu.type, "by.unit")
+# set response input directory
+# note: str_to_sentence will convert first letter of species and lifestage to upper case
+response.dir = file.path(proj.dir, "Outputs/Response", str_to_sentence(in.species), str_to_sentence(in.lifestage), "Unit", gu.type, response.pool)
 
-#Create subdirectories based on user variable choices
-outsubdir=c("Outputs","upscale", response.subdir)
-create.subdirs(proj.dir, outsubdir)
+# set gut assemblage directory
+assemblage.dir = file.path(proj.dir, "Outputs/Assemblage", gu.type, "Unit", response.pool)
 
-#Create output subdirectories for upscaling of assemblage stats- I'm not doing this yet-- maybe in new script?
-#create.subdirs(proj.dir, c("Outputs", "upscale",  "assemblage", gu.type))
+# create upscale output directory
+upscale.dir = file.path(proj.dir, "Outputs/Upscale", str_to_sentence(in.species), str_to_sentence(in.lifestage), "Unit", gu.type, response.pool)
+if(!file.exists(upscale.dir)){dir.create(upscale.dir, recursive = TRUE)}
 
-#specify OUTput directory as variable
-OUTdir=paste(proj.dir, paste(outsubdir, collapse="\\"), sep="\\")
-
-#delete any existing files in Output from previous runs
-unlink(paste(OUTdir,"\\*", sep=""), recursive=T)
+# delete any existing files in output directory from previous runs
+unlink(file.path(upscale.dir, "*"), recursive = TRUE)
 
 # specify gut output layer and corresponding metric table to draw data from based on gu.type parameter
 if(gu.type == "GU"){
@@ -84,12 +82,12 @@ if(gu.type == "UnitForm" | gu.type == "UnitShape"){
 # Reads in and restructures data----------------------------------------------------
 print("readin in data...")
 
-#Read in response variable by response.pool variable
-#We should make more universal to upscale other responses besides pred.fish. For now, 
-#I am hardcoding this.
+# Read in response variable by response.pool variable
+# We should make more universal to upscale other responses besides pred.fish. For now, 
+# I am hardcoding this.
 
 #reads in response stats
-responsefile=paste(proj.dir, "Outputs",paste(response.subdir, collapse="\\"), 
+responsefile=paste(proj.dir, "Outputs",paste(response.dir, collapse="\\"), 
       "stats.csv", sep="\\")
 if(file.exists(responsefile)){
 response=read.csv(responsefile)}else{print("result summary does not exist for upscale")}
@@ -114,7 +112,7 @@ response.pred.fish=response%>%filter(variable=="pred.fish", ROI=="hydro")%>%
 #Need condition variations anyway to run scenarios in upscale.
 
 #read in estimated assemblages for each RS and Condition
-assemblage=read.csv(paste(proj.dir, "Outputs",paste(gu.subdir, collapse="\\"),"byRSCond" , "assemblage.csv", sep="\\"))%>%
+assemblage = read_csv(file.path(assemblage.dir, "assemblage.csv"))%>%
   select(-SUM)
 
 #get rid of periods in unit names so that they will match with other layers
@@ -128,7 +126,7 @@ assemblage=assemblage%>%rename('Glide Run'=Glide.Run, 'Margin Attached Bar'=Marg
 #renormalized assemblage ratios converted to long format
 
 #reads in gu stats.csv
-gu.stats=read.csv(paste(proj.dir, "Outputs",paste(gu.subdir, collapse="\\"),"byRSCond" , "stats.csv", sep="\\"))
+gu.stats = read_csv(file.path(assemblage.dir, "stats.csv"))
 
 #selects just the total area for each RS, condition and unit.type
 gu.bf.area=gu.stats%>%filter(variable=="area.sum", ROI=="bankfull")%>%
@@ -282,13 +280,13 @@ basinupscale_RS=reachsummary(b)
 basinupscale=reachsummary(c)
 
 #write output to file
-write.csv(reachupscale, paste(OUTdir, "\\" ,"byreach.csv", sep=""), row.names=F)
-write.csv(basinupscale, paste(OUTdir, "\\", "bybasin.csv", sep=""), row.names=F)
-write.csv(basinupscale_RS, paste(OUTdir, "\\", "bybasin_RS.csv", sep=""), row.names=F)
-write.csv(basinupscale_RSCond, paste(OUTdir, "\\", "bybasin_RSCond.csv", sep=""), row.names=F)
+write.csv(reachupscale, paste(upscale.dir, "\\" ,"byreach.csv", sep=""), row.names=F)
+write.csv(basinupscale, paste(upscale.dir, "\\", "bybasin.csv", sep=""), row.names=F)
+write.csv(basinupscale_RS, paste(upscale.dir, "\\", "bybasin_RS.csv", sep=""), row.names=F)
+write.csv(basinupscale_RSCond, paste(upscale.dir, "\\", "bybasin_RSCond.csv", sep=""), row.names=F)
 
 
-print(paste("files written to: ", OUTdir))
+print(paste("files written to: ", upscale.dir))
 
 # cleaning up ----------------------------------------------
 
