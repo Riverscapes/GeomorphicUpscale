@@ -59,9 +59,9 @@ source(file.path(repo.dir, "scripts/assemblage.unit.R"))
 # Generate response output ---------------------------
 
 # user defined variables
-model = "fuzzy"         	# Options: nrei, fuzzy, NA
-species = "chinook"   # Options: steelhead, chinook, NA  #I could hardcode this for now..., one less variable.
-lifestage = "spawner"
+model = "nrei"         	# Options: nrei, fuzzy, NA
+species = "juvenile"   # Options: steelhead, chinook, NA  #I could hardcode this for now..., one less variable.
+lifestage = "steelhead"
 
 # response by reach
 source(file.path(repo.dir, "scripts/response.reach.R"))
@@ -72,12 +72,16 @@ source(file.path(repo.dir, "scripts/response.unit.R"))
 
 # Generate upscale output ---------------------------
 
-responsepool = "byRSCond"     #Options: "byRScond", "byRS", "byAll"
+response.pool = "byRSCond"     #Options: "byRScond", "byRS", "byAll"
 segIDcol = "segmentID"        #user supplied
-lengthcol = "length.m"        #user supplied
-widthcol = "bf.width.m"       #user supplied.
-condcols = c("Condition0", "Condition1", "Condition2", "Condition3")     #user supplied
-areacols = NA #user supplied. leave as NA if no area is specified per reach segment and it will be estimated
+length.col = "length.m"        #user supplied
+width.col = "bf.width.m"       #user supplied.
+cond.cols = c("Condition0", "Condition1", "Condition2", "Condition3")     #user supplied
+area.cols = NA #user supplied. leave as NA if no area is specified per reach segment and it will be estimated
+
+# read in network and braid.index files
+network = read_csv(file.path(proj.dir, 'Inputs', basename(network.file)))
+braid.index = read_csv(file.path(proj.dir, 'Inputs', basename(braid.index.file)))
 
 # source and run code to generate output for upscaling response variabales
 source(file.path(repo.dir, "scripts/upscale.response.R"))
