@@ -97,30 +97,21 @@ response.area = response %>%
 
 # filters out just data on number of fish
 # this can be re-coded later to allow for upscaling of different variables
-response.pred.fish=response%>%filter(variable=="pred.fish", ROI=="hydro")%>%
-  select(RS, Condition, unit.type, tot)%>%
-  rename(pred.fish=tot) #changed to avg if I decided to sum up over units then average by sites in the other script
+response.pred.fish = response %>%
+  filter(variable == "pred.fish", ROI == "hydro")%>%
+  select(RS, Condition, unit.type, tot) %>%
+  rename(pred.fish = tot) # changed to avg if I decided to sum up over units then average by sites in the other script
 
 # this would give me a avg number of fish per unit type with a standard deviation.  Right now, I 
 # don't have a st. deviation on number of fish
 
-# Read in estimates of Assemblages and re-arrange. 
-# For now hardcoding for byRSCond.  Could make the poolbby variable in the future.
-# Need condition variations anyway to run scenarios in upscale.
+# read in estimates of assemblages
 
 #read in estimated assemblages for each RS and Condition
 assemblage = read_csv(file.path(assemblage.dir, "assemblage.csv"))%>%
   select(-SUM)
 
-#get rid of periods in unit names so that they will match with other layers
-if(gu.type=="UnitForm"){
-assemblage=assemblage%>%rename('Mound Transition'=Mound.Transition, 'Bowl Transition'=Bowl.Transition)}
-if(gu.type=="GU"){
-assemblage=assemblage%>%rename('Glide Run'=Glide.Run, 'Margin Attached Bar'=Margin.Attached.Bar, 
-                                 'Mid Channel Bar'=Mid.Channel.Bar, 'Pocket Pool'=Pocket.Pool)}
-
-
-#renormalized assemblage ratios converted to long format
+# renormalized assemblage ratios converted to long format
 
 #reads in gu stats.csv
 gu.stats = read_csv(file.path(assemblage.dir, "stats.csv"))
