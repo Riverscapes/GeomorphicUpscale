@@ -60,8 +60,8 @@ source(file.path(repo.dir, "scripts/assemblage.unit.R"))
 
 # user defined variables
 model = "nrei"         	# Options: nrei, fuzzy, NA
-species = "juvenile"   # Options: steelhead, chinook, NA  #I could hardcode this for now..., one less variable.
-lifestage = "steelhead"
+species = "steelhead"   # Options: steelhead, chinook, NA  #I could hardcode this for now..., one less variable.
+lifestage = "juvenile"
 
 # response by reach
 source(file.path(repo.dir, "scripts/response.reach.R"))
