@@ -72,11 +72,6 @@ source(file.path(repo.dir, "scripts/response.unit.R"))
 
 # Generate upscale output ---------------------------
 
-
-
-# Builds the project directory structure and re-organizes inputs
-source(file.path(repo.dir, "scripts/projbuild.R"))
-
 responsepool = "byRSCond"     #Options: "byRScond", "byRS", "byAll"
 segIDcol = "segmentID"        #user supplied
 lengthcol = "length.m"        #user supplied
