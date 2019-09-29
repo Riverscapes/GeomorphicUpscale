@@ -71,7 +71,7 @@ if(gu.type == "UnitForm" | gu.type == "UnitShape"){
 # read in site metric fish data
 site.fish.metrics = read_csv(file.path(metrics.dir, "Site_Fish_Metrics.csv"))
 
-# makes layer with just site level resonse for model, species and lifestage specified.
+# filter site level resonse to model, species and lifestage specified
 site.fish = site.fish.metrics %>% 
   filter(layer == in.model & species == in.species & lifestage == in.lifestage & var == "pred.fish")
 
