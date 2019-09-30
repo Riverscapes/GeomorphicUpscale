@@ -51,10 +51,10 @@ geoindicators = selections %>%
 print("making summary outputs...")
 
 # #summarized by All
-# make.outputs(geoindicators, pool.by = "All", out.dir = geo.dir, RSlevels = RSlevels)
+make.outputs(geoindicators, pool.by = "All", out.dir = geo.dir, RSlevels = RSlevels)
 # 
 # #summarized by River Style (RS)
-# make.outputs(geoindicators, pool.by = "RS", out.dir = geo.dir, RSlevels = RSlevels)
+make.outputs(geoindicators, pool.by = "RS", out.dir = geo.dir, RSlevels = RSlevels)
 
 #summarized by RS and Condition
 make.outputs(geoindicators, pool.by = "RSCond", out.dir = geo.dir, RSlevels = RSlevels)
