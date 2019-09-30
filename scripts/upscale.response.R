@@ -107,30 +107,37 @@ response.pred.fish = response %>%
 
 # read in estimates of assemblages
 
-#read in estimated assemblages for each RS and Condition
+# read in assemblage area ratios
 assemblage = read_csv(file.path(assemblage.dir, "assemblage.csv"))%>%
   select(-SUM)
 
-# renormalized assemblage ratios converted to long format
+# renormalized assemblage ratios converted to long format -- no nk code below this comment not sure if there should be something here?
 
-#reads in gu stats.csv
+# read in assemblage statistics
 gu.stats = read_csv(file.path(assemblage.dir, "stats.csv"))
 
-#selects just the total area for each RS, condition and unit.type
-gu.bf.area=gu.stats%>%filter(variable=="area.sum", ROI=="bankfull")%>%
-  select(RS, Condition, unit.type, tot)%>%
-  rename(area.m2=tot)
+# total bankfull area for each unit type
+gu.bf.area = gu.stats %>%
+  filter(variable == "area.sum", ROI == "bankfull") %>%
+  select(RS, Condition, unit.type, tot) %>%
+  rename(area.m2 = tot)
 
-#selects the standard deviation of assemblage ratios for each RS and condition
-gu.sd.ratio.bf.area=gu.stats%>%filter(variable=="area.ratio", ROI=="bankfull")%>%
-  select(RS, Condition, unit.type, sd)%>%
-  rename(sd.ratio.area=sd)
+# sd bankfull area ratio for each unit type
+# selects the standard deviation of assemblage ratios for each RS and condition
+gu.bf.area.ratio.sd = gu.stats %>% 
+  filter(variable == "area.ratio", ROI == "bankfull")%>%
+  select(RS, Condition, unit.type, sd) %>%
+  rename(area.ratio.sd = sd)
 
-levels=levels(gu.stats$unit.type)
-gu.ratio.bf.area=assemblage%>%gather(key="unit.type", value="ratio.area",
-                                     (length(names(assemblage))-length(levels)+1):length(names(assemblage)))%>%
-  select(RS, Condition, unit.type, ratio.area)
-gu.ratio.bf.area$unit.type=as.factor(gu.ratio.bf.area$unit.type)
+gu.levels = gu.stats %>% distinct(unit.type) %>% nrow()
+
+gu.ratio.bf.area = assemblage %>%
+  gather(key = "unit.type", value = "area.ratio",
+                                     (length(names(assemblage)) - (gu.levels)):length(names(assemblage))) %>%
+  select(RS, Condition, unit.type, area.ratio)
+
+# stopped here
+gu.ratio.bf.area$unit.type = as.factor(gu.ratio.bf.area$unit.type)
 
 
 # assembling upscale data----------------------------------------------------
@@ -150,12 +157,12 @@ joinbyRSCond=c("RS", "Condition", "unit.type")
 bf.density=gu.bf.area%>%
   #left_join(response.area, by=joinbyRSCond)%>%
   left_join(gu.ratio.bf.area, joinbyRSCond)%>%
-  left_join(gu.sd.ratio.bf.area, joinbyRSCond)%>%
+  left_join(gu.bf.area.ratio.sd, joinbyRSCond)%>%
   left_join(response.pred.fish, by=joinby)%>%
   #left_join(response.sd.pred.fish,by=joinbyRS) Not needed unless I do my summary of response differently.
   mutate(sd.pred.fish=NA)%>%
   mutate(fish.density=pred.fish/area.m2, sd.fish.density=sd.pred.fish/area.m2)%>% #could calculate also using perc habitat area, gets around the bankfull issue.
-  select(RS, Condition, unit.type, ratio.area, sd.ratio.area,fish.density, sd.fish.density)%>%
+  select(RS, Condition, unit.type, area.ratio, area.ratio.sd,fish.density, sd.fish.density)%>%
   mutate(ROI="bankfull")
 
 
@@ -213,9 +220,9 @@ upscale1=upscale%>%
 
 #Upscale Math #if using more variables better in long format and then adjust this to be more generic, selecting by upscale variable of interest
 upscale2=upscale1%>%
-  mutate(value=ratio.area*reach.area*fish.density)%>% #compute estimated fish per unit type per reach
-  mutate(value.sd=abs(value)*sqrt((sd.ratio.area/ratio.area)^2))%>% #compute estimated sd of fish per unit type per reach type
-  #mutate(value.sd=abs(value)*sqrt((sd.ratio.area/ratio.area)^2 + (sd.fish.density/fish.density)^2))%>% #change to this once I get the sd of fish denisty included.
+  mutate(value=area.ratio*reach.area*fish.density)%>% #compute estimated fish per unit type per reach
+  mutate(value.sd=abs(value)*sqrt((area.ratio.sd/area.ratio)^2))%>% #compute estimated sd of fish per unit type per reach type
+  #mutate(value.sd=abs(value)*sqrt((area.ratio.sd/area.ratio)^2 + (sd.fish.density/fish.density)^2))%>% #change to this once I get the sd of fish denisty included.
   group_by(.[,1], RS, Condition, reach.length, reach.width, reach.area, area.method, reach.braid)%>% #groups by segment id, then RS then Condition
   summarize(value=sum(value, na.rm=T), value.sd=sqrt(sum(value.sd^2, na.rm=T)))%>%
   mutate(variable="pred.fish")
