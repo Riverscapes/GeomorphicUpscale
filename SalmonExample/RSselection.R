@@ -13,16 +13,16 @@
 # Set required paths ---------------------------
 
 # User defined project directory path
-proj.dir = "C:/Anabranch/UpperSalmon/wrk_Data/temp/GeomorphicUpscale-master/AsotinExample"
+proj.dir = "C:/Anabranch/UpperSalmon/wrk_Data/GUTUpscale/PrelimRun_01"
 
 # Specify directory path to the downloaded Git repository
-repo.dir = "C:/Anabranch/UpperSalmon/wrk_Data/temp/GeomorphicUpscale-master"
+repo.dir = "C:/etal/LocalCode/GeomorphicUpscale"
 
 # Load required packages ---------------------------
 library(tidyverse)
 
 # read in data--------------------
-data.in = read_csv(file.path(repo.dir, "Database\\Database_ReachCharacteristics.csv"))
+data.in = read_csv(file.path(repo.dir, "Database/GUTUpscale_Database_ReachCharacteristics.csv"))
 head(data.in) # print first few rows of look-up table
 
 # Make selections for each river style and type --------------------
@@ -33,13 +33,15 @@ head(data.in) # print first few rows of look-up table
 # while not so restrictive that you end up with sites that don't look like your defined River Style.
 
 # Before makeing individual selections for diferent river styles, you can eliminate certain type streams from the entire pool of database streams
+data = data.in
 
-sandystreams = data.in %>%
-  filter(Sndf > 50)
-sandystreams #this search will eliminate four reaches visits 820,1971,2288,3975
-
-data = data.in %>%
-  filter(Sndf < 50)
+# todo - ask Joe if this should be turned back on
+# sandystreams = data.in %>%
+#   filter(Sndf > 50)
+# sandystreams #this search will eliminate four reaches visits 820,1971,2288,3975
+# 
+# data = data.in %>%
+#   filter(Sndf < 50)
 
 # Example selection options.  You won't use all available selection options, just the geo indicators that 
 # give you the best subset for your river style type. Comment out any that you don't have data for or don't want to use. This might be iterative 
@@ -56,14 +58,14 @@ data = data.in %>%
     #	& DamCount is an integer between 0 and 1000
 
 # EXAMPLE SPECS: See: https://docs.google.com/spreadsheets/d/1fQ1DjK9Y53Dgul3bWwHYyQpGKcCf9L18NtE8S2PCcgI/edit?usp=sharing
-	Gradient > 0.001
-	& Confinement == "CV" or "PCV" or "UCV" or != "CV"
-    & BfBraid == 1 or 1 > BfBraid <= 2 or 2 > BfBraid <= 3 or BfBraid > 3
-    & Bedform == "Beaver-Dammed" or "Plane-Bed" or "Cascade" or "Pool-Riffle" or "Rapid" or "Step-Pool" 
-    & Planform == "Anabranching" or "Meandering" or "Sinuous" or "Straight" or "Wandering"
-	& Sinuosity < 1.2
-    & LWfreq > 25
-    & DamCount > 5
+# 	Gradient > 0.001
+# 	& Confinement == "CV" or "PCV" or "UCV" or != "CV"
+#     & BfBraid == 1 or 1 > BfBraid <= 2 or 2 > BfBraid <= 3 or BfBraid > 3
+#     & Bedform == "Beaver-Dammed" or "Plane-Bed" or "Cascade" or "Pool-Riffle" or "Rapid" or "Step-Pool" 
+#     & Planform == "Anabranching" or "Meandering" or "Sinuous" or "Straight" or "Wandering"
+# 	& Sinuosity < 1.2
+#     & LWfreq > 25
+#     & DamCount > 5
 
 # Keep your River Style codes, short and easy to understand.  These will be carried through as the label identifier used for each River style
 # if it has a condition variant add it after the code as "good" "moderate" or "poor" all in lower case.
@@ -81,13 +83,12 @@ data = data.in %>%
 WApoor = data %>%
   filter(
 	Confinement != "CV"
-    & BfBraid == 1
-    & Bedform == "Plane-Bed" 
-    & (Planform == "Straight" | Planform == "Sinuous" )
-    & (LWfreq < 30 | is.na(LWfreq))
-	& (DamCount < 2 | is.na(DamCount))) %>%
+	& BfBraid == 1
+	& LWFreq_Wet <= 5 
+	& BeaverDamDensity == 0
+	& SlowWater_Freq == 0
+	& ChnlUnit_Freq < 2) %>%
   mutate(RS = "WA", Condition = "poor")
-
 
 WApoor
 summary(WApoor)
@@ -98,11 +99,13 @@ nrow(WApoor)
 
 WAmoderate = data %>%
   filter(
-	Confinement != "CV" 
-    & 1 > BfBraid <= 2 
-    & (Bedform == "Pool-Riffle" | Bedform == "Plane-Bed") 
-    & ((LWfreq < 60) | is.na(LWfreq))) %>%
-  mutate(RS= "WA" , Condition = "moderate")
+    Confinement != "CV"
+    & (BfBraid > 1 & BfBraid < 2) 
+    & (LWFreq_Wet > 5 & LWFreq_Wet >= 25)
+    & (BeaverDamDensity > 0 & BeaverDamDensity <= 1)
+    & (SlowWater_Freq > 0 & SlowWater_Freq < 2)
+    & (ChnlUnit_Freq >= 2 & ChnlUnit_Freq <= 10)) %>%
+  mutate(RS = "WA", Condition = "moderate")
 
 WAmoderate
 summary(WAmoderate)
@@ -112,10 +115,12 @@ nrow(WAmoderate)
 
 WAgood = data %>%
   filter(
-    Confinement != "CV" 
-    & 1 > BfBraid <= 2 
-    & Bedform != "Plane-Bed"
-    & ((LWfreq > 20) | is.na(LWfreq))) %>%
+    Confinement != "CV"
+    & (BfBraid > 1 & BfBraid <= 2) 
+    & LWFreq_Wet > 25
+    & (BeaverDamDensity > 5 & BeaverDamDensity <= 15)
+    & (SlowWater_Freq >= 2 & SlowWater_Freq <= 10)
+    & ChnlUnit_Freq > 10) %>%
   mutate(RS = "WA", Condition = "good")
 
 WAgood
@@ -126,10 +131,12 @@ nrow(WAgood)
 
 WAintact = data %>%
   filter(
-    Confinement != "CV" 
-    & 2 > BfBraid <= 3
-    & Bedform != "Plane-Bed"
-    & ((LWfreq > 20) | is.na(LWfreq))) %>%
+    Confinement != "CV"
+    & (BfBraid > 2 & BfBraid <= 3) 
+    & LWFreq_Wet > 25
+    & BeaverDamDensity > 15
+    & SlowWater_Freq > 10
+    & ChnlUnit_Freq > 10) %>%
   mutate(RS = "WA", Condition = "intact")
 
 WAintact
@@ -141,12 +148,13 @@ nrow(WAintact)
 # Planform Controlled-poor (PC poor) -----------------------------------------------------
 PCpoor = data %>%
   filter(
-    Gradient < 2.5  
-	& Confinement == "PCV"
+    Confinement == "PCV"
     & BfBraid == 1
-    & Bedform == "Plane-Bed" 
-    & Sinuosity < 1.05 
-    & (LWfreq < 30 | is.na(LWfreq))) %>%
+    & (Sin >= 1 & Sin <= 1.05) 
+    & LWFreq_Wet == 0
+    & (BeaverDamDensity > 0 & BeaverDamDensity <= 1)
+    & SlowWater_Freq == 0
+    & ChnlUnit_Freq < 2) %>%
   mutate(RS = "PC", Condition = "poor")
 
 PCpoor
@@ -158,12 +166,13 @@ nrow(PCpoor)
 
 PCmoderate = data %>%
   filter(
-    Gradient < 2.5 
-	& Confinement == "PCV"
+    Confinement == "PCV"
     & BfBraid == 1
-    & (Bedform == "Plane-Bed"| Bedform == "Pool-Riffle")  
-    & (Sinuosity > 1.05 & Sinuosity <= 1.3) 
-    & ((LWfreq > 10 & LWfreq < 60) | is.na(LWfreq))) %>%
+    & (Sin > 1.05 & Sin <= 1.3) 
+    & LWFreq_Wet <= 5
+    & (BeaverDamDensity >= 2 & BeaverDamDensity < 5)
+    & (SlowWater_Freq > 0 & SlowWater_Freq < 2)
+    & (ChnlUnit_Freq >= 2 & ChnlUnit_Freq <= 10)) %>%
   mutate(RS = "PC", Condition = "moderate")
 
 PCmoderate
@@ -175,12 +184,13 @@ nrow(PCmoderate)
 
 PCgood = data%>%
   filter(
-    Gradient < 2.5 
-	& Confinement == "PCV"
-    & & BfBraid == 1 
-    & Bedform == "Pool-Riffle"
-    & Sinuosity > 1.3 
-    &((LWfreq > 20) | is.na(LWfreq))) %>%
+    Confinement == "PCV"
+    & BfBraid == 1
+    & Sin >  1.3 
+    & LWFreq_Wet <= 25
+    & BeaverDamDensity > 15
+    & (SlowWater_Freq >= 2 & SlowWater_Freq <= 10)
+    & ChnlUnit_Freq > 10) %>%
   mutate(RS = "PC", Condition = "good")
 
 PCgood
@@ -191,12 +201,13 @@ nrow(PCgood)
 
 PCintact = data%>%
   filter(
-    Gradient < 2.5 
-	& Confinement == "PCV"
-    & 1 > BfBraid <= 2
-    & Bedform == "Pool-Riffle"
-    & Sinuosity > 1.3 
-    &((LWfreq > 20) | is.na(LWfreq))) %>%
+    Confinement == "PCV"
+    & (BfBraid > 1 & BfBraid < 2)
+    & Sin >  1.3 
+    & LWFreq_Wet <= 25
+    & BeaverDamDensity > 15
+    & SlowWater_Freq > 10
+    & ChnlUnit_Freq > 10) %>%
   mutate(RS = "PC", Condition = "intact")
 
 PCintact
@@ -210,11 +221,11 @@ nrow(PCintact)
 
 NApoor = data %>%
   filter(
-    (Gradient > 2 & Gradient < 6)
-    & Confinement == "CV" 
-    & BfBraid == 1  
-    & (Bedform == "Plane-Bed"| Bedform == "Rapid") 
-    & ((LWfreq < 30) | is.na(LWfreq))) %>%
+    Confinement == "CV"
+    & BfBraid == 1 
+    & LWFreq_Wet == 0
+    & SlowWater_Freq == 0
+    & ChnlUnit_Freq < 2) %>%
   mutate(RS = "NA", Condition = "poor")
 
 NApoor
@@ -226,11 +237,11 @@ nrow(NApoor)
 
 NAmoderate = data %>%
   filter(
-    (Gradient > 2 & Gradient < 6)
-    & Confinement == "CV" 
+    Confinement == "CV"
     & BfBraid == 1 
-    & Bedform != "Plane-Bed" 
-    & ((LWfreq < 60) | is.na(LWfreq))) %>%
+    & LWFreq_Wet <= 5
+    & SlowWater_Freq < 2
+    & (ChnlUnit_Freq >= 2 & ChnlUnit_Freq <= 10)) %>%
   mutate(RS = "NA", Condition = "moderate")
 
 NAmoderate
@@ -242,11 +253,11 @@ nrow(NAmoderate)
 
 NAgood = data %>%
   filter(
-    (Gradient > 2 & Gradient < 6)
+    Confinement == "CV"
     & BfBraid == 1 
-    & Bedform != "Plane-Bed" 
-    & Confinement == "CV" 
-    & ((LWfreq > 10) | is.na(LWfreq))) %>%
+    & LWFreq_Wet <= 25
+    & (SlowWater_Freq > 0 & SlowWater_Freq < 2)
+    & ChnlUnit_Freq > 10) %>%
   mutate(RS = "NA", Condition = "good")
 
 NAgood
@@ -257,11 +268,11 @@ nrow(NAgood)
 
 NAintact = data %>%
   filter(
-    (Gradient > 2 & Gradient < 6)
+    Confinement == "CV"
     & BfBraid == 1 
-    & Bedform != "Plane-Bed" 
-    & Confinement == "CV" 
-    & ((LWfreq > 10) | is.na(LWfreq))) %>%
+    & LWFreq_Wet > 25
+    & (SlowWater_Freq >= 2 & SlowWater_Freq <= 10)
+    & ChnlUnit_Freq > 10) %>%
   mutate(RS = "NA", Condition = "intact")
 
 NAintact
@@ -272,12 +283,14 @@ nrow(NAintact)
 #### Margin Controlled Reach Types
 # Margin Controlled-poor (MC poor) -----------------------------------------------------
 MCpoor = data.in %>%
-  filter(((Gradient < 3.5 & Gradient >= 1))
-		 & Confinement == "PCV" 
-         & BfBraid == 1
-         & Bedform == "Plane-Bed"
-         & Sinuosity < 1.05 
-         & (LWfreq < 30 | is.na(LWfreq)))%>%
+  filter(
+    Confinement == "PCV"
+    & BfBraid == 1
+    & (Sin >= 1 & Sin <= 1.05) 
+    & LWFreq_Wet <= 5
+    & BeaverDamDensity == 0
+    & SlowWater_Freq == 0
+    & ChnlUnit_Freq < 2) %>%
   mutate(RS = "MC", Condition = "poor")
 
 MCpoor
@@ -289,12 +302,14 @@ nrow(MCpoor)
 # Margin Controlled-moderate (MC moderate)-----------------------------------------------------
 
 MCmoderate = data %>%
-  filter(((Gradient < 3.5 & Gradient>=1))
-		 & Confinement == "PCV" 
-         & BfBraid == 1 
-         & (Bedform == "Plane-Bed"| Bedform == "Pool-Riffle")  
-         & (Sinuosity < 1.3 & Sinuosity >= 1.05) 
-         & (LWfreq < 60  | is.na(LWfreq)))%>%
+  filter(
+    Confinement == "PCV"
+    & BfBraid == 1
+    & (Sin > 1.05 & Sin <= 1.3) 
+    & LWFreq_Wet <= 25
+    & (BeaverDamDensity > 0 & BeaverDamDensity <= 1)
+    & (SlowWater_Freq > 0 & SlowWater_Freq < 2)
+    & (ChnlUnit_Freq >= 2 & ChnlUnit_Freq <= 10)) %>%
   mutate(RS = "MC", Condition = "moderate")
 
 MCmoderate
@@ -303,12 +318,14 @@ nrow(MCmoderate)
 
 # Margin Controlled-good (MC good) -----------------------------------------------------
 MCgood = data %>%
-  filter(((Gradient < 3.5 & Gradient >= 1))
-		 & Confinement == "PCV" 
-         & 1 > BfBraid <= 2 
-         & Bedform != "Plane-Bed"
-         & Sinuosity > 1.3  
-         & (LWfreq > 10 | is.na(LWfreq)))%>%
+  filter(
+    Confinement == "PCV"
+    & (BfBraid > 1 & BfBraid < 2)
+    & Sin >= 1.3
+    & LWFreq_Wet > 25
+    & (BeaverDamDensity > 5 & BeaverDamDensity <= 15)
+    & (SlowWater_Freq >= 2 & SlowWater_Freq <= 10)
+    & (ChnlUnit_Freq > 10)) %>%
   mutate(RS = "MC", Condition = "good")
 
 MCgood
@@ -317,12 +334,14 @@ nrow(MCgood)
 
 # Margin Controlled-intact (MC intact) -----------------------------------------------------
 MCintact = data %>%
-  filter(((Gradient < 3.5 & Gradient >= 1))
-		 & Confinement == "PCV" 
-         & 1 > BfBraid <= 2
-         & Bedform != "Plane-Bed"
-         & Sinuosity > 1.3 
-         & (LWfreq > 10 | is.na(LWfreq)))%>%
+  filter(
+    Confinement == "PCV"
+    & (BfBraid > 1 & BfBraid < 2)
+    & Sin >= 1.3
+    & LWFreq_Wet > 25
+    & (BeaverDamDensity > 15)
+    & (SlowWater_Freq >= 2 & SlowWater_Freq <= 10)
+    & (ChnlUnit_Freq > 10)) %>%
   mutate(RS = "MC", Condition = "intact")
 
 MCintact
@@ -333,11 +352,12 @@ nrow(MCintact)
 #### Confined Floodplain Reach Types
 # Confined Floodplain-poor (MC poor) -----------------------------------------------------
 CFpoor = data.in %>%
-  filter(((Gradient < 3.5 & Gradient >= 1))
-		 & Confinement == "CV" 
-		 & BfBraid == 1
-         & Bedform == "Plane-Bed"
-         & (LWfreq < 30 | is.na(LWfreq)))%>%
+  filter(
+    Confinement == "CV"
+    & BfBraid == 1 
+    & LWFreq_Wet == 0
+    & SlowWater_Freq == 0
+    & (ChnlUnit_Freq <= 2)) %>%
   mutate(RS = "CF", Condition = "poor")
 
 CFpoor
@@ -349,11 +369,12 @@ nrow(CFpoor)
 # Confined Floodplain-moderate (CF moderate)-----------------------------------------------------
 
 CFmoderate = data %>%
-  filter(((Gradient < 3.5 & Gradient>=1))
-		 & Confinement == "CV" 
-         & BfBraid == 1 
-         & (Bedform == "Plane-Bed"| Bedform == "Pool-Riffle")  
-         & (LWfreq < 60  | is.na(LWfreq)))%>%
+  filter(
+    Confinement == "CV"
+    & BfBraid == 1 
+    & LWFreq_Wet <= 5
+    & SlowWater_Freq < 2
+    & (ChnlUnit_Freq >= 2 & ChnlUnit_Freq <= 10)) %>%
   mutate(RS = "CF", Condition = "moderate")
 
 CFmoderate
@@ -362,11 +383,12 @@ nrow(CFmoderate)
 
 # Confined Floodplain-good (CF good) -----------------------------------------------------
 CFgood = data %>%
-  filter(((Gradient < 3.5 & Gradient >= 1))
-		 & Confinement == "CV" 
-         & BfBraid == 1 
-         & Bedform != "Plane-Bed"
-         & (LWfreq > 10 | is.na(LWfreq)))%>%
+  filter(
+    Confinement == "CV"
+    & BfBraid == 1 
+    & LWFreq_Wet <= 25
+    & (SlowWater_Freq > 0 & SlowWater_Freq < 2)
+    & ChnlUnit_Freq > 10) %>%
   mutate(RS = "CF", Condition = "good")
 
 CFgood
@@ -375,11 +397,12 @@ nrow(CFgood)
 
 # Confined Floodplain-intact (CF intact) -----------------------------------------------------
 CFintact = data %>%
-  filter(((Gradient < 3.5 & Gradient >= 1))
-		 & Confinement == "CV" 
-         & (BfBraid == 1 | 1 > BfBraid <= 2) 
-         & Bedform != "Plane-Bed"
-         & (LWfreq > 10 | is.na(LWfreq)))%>%
+  filter(
+    Confinement == "CV"
+    & (BfBraid > 1 & BfBraid < 2)  
+    & LWFreq_Wet <= 25
+    & (SlowWater_Freq >= 2 & SlowWater_Freq <= 10)
+    & ChnlUnit_Freq > 10) %>%
   mutate(RS = "CF", Condition = "intact")
 
 CFintact
@@ -390,11 +413,12 @@ nrow(CFintact)
 #### Confined Bedrock Reach Types
 # Confined Bedrock-poor (MC poor) -----------------------------------------------------
 CBpoor = data.in %>%
-  filter(((Gradient < 3.5 & Gradient >= 1))
-		 & Confinement == "CV" 
-         & BfBraid == 1 
-         & Bedform == "Plane-Bed"
-         & (LWfreq < 30 | is.na(LWfreq)))%>%
+  filter(
+    Confinement == "CV"
+    & BfBraid == 1 
+    & LWFreq_Wet == 0
+    & SlowWater_Freq == 0
+    & ChnlUnit_Freq < 2) %>%
   mutate(RS = "CB", Condition = "poor")
 
 CBpoor
@@ -402,15 +426,15 @@ summary(CBpoor)
 nrow(CBpoor)
 
 
-
 # Confined Bedrock-moderate (CB moderate)-----------------------------------------------------
 
 CBmoderate = data %>%
-  filter(((Gradient < 3.5 & Gradient>=1))
-		 & Confinement == "CV" 
-         & BfBraid == 1 
-         & (Bedform == "Plane-Bed"| Bedform == "Pool-Riffle")  
-         & (LWfreq < 60  | is.na(LWfreq)))%>%
+  filter(
+    Confinement == "CV"
+    & BfBraid == 1 
+    & LWFreq_Wet <= 5
+    & SlowWater_Freq < 2
+    & ChnlUnit_Freq < 2) %>%
   mutate(RS = "CB", Condition = "moderate")
 
 CBmoderate
@@ -419,11 +443,12 @@ nrow(CBmoderate)
 
 # Confined Bedrock-good (CB good) -----------------------------------------------------
 CBgood = data %>%
-  filter(((Gradient < 3.5 & Gradient >= 1))
-		 & Confinement == "CV" 
-         & BfBraid == 1 
-         & Bedform != "Plane-Bed"
-         & (LWfreq > 10 | is.na(LWfreq)))%>%
+  filter(
+    Confinement == "CV"
+    & BfBraid == 1 
+    & LWFreq_Wet <= 25
+    & (SlowWater_Freq > 0 & SlowWater_Freq < 2)
+    & (ChnlUnit_Freq >= 2 & ChnlUnit_Freq <= 10)) %>%
   mutate(RS = "CB", Condition = "good")
 
 CBgood
@@ -432,11 +457,12 @@ nrow(CBgood)
 
 # Confined Bedrock-intact (CB intact) -----------------------------------------------------
 CBintact = data %>%
-  filter(((Gradient < 3.5 & Gradient >= 1))
-		 & Confinement == "CV" 
-         & (BfBraid == 1 | 1 > BfBraid <= 2)  
-         & Bedform != "Plane-Bed"
-         & (LWfreq > 10 | is.na(LWfreq)))%>%
+  filter(
+    Confinement == "CV"
+    & BfBraid == 1 
+    & LWFreq_Wet > 25
+    & (SlowWater_Freq >= 2 & SlowWater_Freq <= 10)
+    & ChnlUnit_Freq >= 10) %>%
   mutate(RS = "CB", Condition = "intact")
 
 CBintact
@@ -449,11 +475,12 @@ nrow(CBintact)
 
 AFpoor = data %>%
   filter(
-    Gradient < 3  
-    & Confinement == "UCV"  
+    Confinement == "UCV"
     & BfBraid == 1 
-    & Bedform == "Plane-Bed" 
-    & (LWfreq < 30 | is.na(LWfreq))) %>%
+    & LWFreq_Wet <= 5
+    & BeaverDamDensity == 0
+    & SlowWater_Freq == 0
+    & ChnlUnit_Freq < 2) %>%
   mutate(RS = "AF", Condition = "poor")
 
 AFpoor
@@ -465,11 +492,12 @@ nrow(AFpoor)
 
 AFmoderate = data %>%
   filter(
-    Gradient < 3 
-    & Confinement == "UCV"  
-    & 1 > BfBraid <= 2
-    & Bedform == "Plane-Bed" 
-    & ((LWfreq < 60 & LWfreq > 10)| is.na(LWfreq))) %>%
+    Confinement == "UCV"
+    & (BfBraid > 1 & BfBraid < 2)
+    & LWFreq_Wet <= 25
+    & (BeaverDamDensity > 0 & BeaverDamDensity <= 1)
+    & (SlowWater_Freq > 0 & SlowWater_Freq <= 2)
+    & (ChnlUnit_Freq >= 2 & ChnlUnit_Freq <= 10)) %>%
   mutate(RS = "AF", Condition = "moderate")
 
 AFmoderate
@@ -481,11 +509,12 @@ nrow(AFmoderate)
 
 AFgood = data %>%
   filter(
-    Gradient < 3 
-    & 2 > BfBraid <= 3
-    & (Bedform=="Plane-Bed" | Bedform=="Pool-Riffle")
-    & Confinement == "UCV"  
-    & (LWfreq > 20| is.na(LWfreq))) %>%
+    Confinement == "UCV"
+    & (BfBraid >= 2 & BfBraid < 3)
+    & LWFreq_Wet > 25
+    & (BeaverDamDensity > 5 & BeaverDamDensity <= 15)
+    & (SlowWater_Freq >= 2 & SlowWater_Freq <= 10)
+    & ChnlUnit_Freq > 10) %>%
   mutate(RS = "AF", Condition = "good")
 
 AFgood
@@ -494,19 +523,18 @@ nrow(AFgood)
 
 # Alluvial Fan-intact (AF intact) -----------------------------------------------------
 AFintact = data %>%
-  filter(((Gradient < 3.5 & Gradient >= 1))
-    & Confinement == "UCV"  
-         & BfBraid > 2
-         & Bedform != "Plane-Bed"
-         & (LWfreq > 10 | is.na(LWfreq)))%>%
+  filter(
+    Confinement == "UCV"
+    & BfBraid >= 3
+    & LWFreq_Wet > 25
+    & BeaverDamDensity > 15
+    & SlowWater_Freq > 10
+    & ChnlUnit_Freq > 10) %>%
   mutate(RS = "AF", Condition = "intact")
 
 AFintact
 summary(AFintact)
 nrow(AFintact)
-
-
-
 
 
 # Combine selections into single dataset and save output --------------------
