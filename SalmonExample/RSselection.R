@@ -71,6 +71,34 @@ data = data.in
 # if it has a condition variant add it after the code as "good" "moderate" or "poor" all in lower case.
 
 
+inidcator.list = c('Confinement', 'BfBraid', 'Sin', 'LWFreq_Wet', 'BeaverDamDensity', 'SlowWater_Freq', 'ChnlUnit_Freq')
+
+indicator.data = data %>%
+  gather(key = "variable", value = "value", -SiteName, -Watershed, -VisitID) %>%
+  filter(variable %in% inidcator.list) %>%
+  mutate(value = as.numeric(value)) %>%
+  filter(!is.na(value))
+
+box.plots = ggplot(indicator.data, aes(as.factor(variable), value)) +
+  geom_boxplot() +
+  facet_wrap(~ variable, scales = "free")
+
+
+indicator.summary = indicator.data  %>%
+  group_by(variable) %>%
+  summarize(min = min(value),
+            q25 = quantile(value, probs = 0.25),
+            med = median(value),
+            q75 = quantile(value, probs = 0.5),
+            max = max(value),
+            mean = mean(value),
+            sd = sd(value)
+            )
+
+write_csv(indicator.summary, 'C:/Anabranch/UpperSalmon/wrk_Data/GUTUpscale/Geoindicator_SummaryStatistics.csv', col_names = TRUE)
+ggsave('C:/Anabranch/UpperSalmon/wrk_Data/GUTUpscale/Geoindicator_Boxplots.png', plot = box.plots, width = 10, height = 7)
+
+
 # Updating to Chris's Six Reach Types (Wandering_Gravel, Planform_Controlled, Margin_Controlled, Conf_Floodplain, Conf_Bedrock, and AlluvialFan)
 
 
@@ -85,12 +113,12 @@ WApoor = data %>%
 	Confinement != "CV"
 	& BfBraid == 1
 	& LWFreq_Wet <= 5 
-	& BeaverDamDensity == 0
-	& SlowWater_Freq == 0
-	& ChnlUnit_Freq < 2) %>%
+	& SlowWater_Freq <= 2.4
+	& ChnlUnit_Freq <= 2.75) %>%
   mutate(RS = "WA", Condition = "poor")
 
-WApoor
+out.name = file.path(sub.out.dir ,"Boxplots")
+ggsave(paste(out.name, ".pdf", sep = ""), plot = p1, width = 10, height = 7)WApoor
 summary(WApoor)
 nrow(WApoor)
 
@@ -100,11 +128,10 @@ nrow(WApoor)
 WAmoderate = data %>%
   filter(
     Confinement != "CV"
-    & (BfBraid > 1 & BfBraid < 2) 
-    & (LWFreq_Wet > 5 & LWFreq_Wet >= 25)
-    & (BeaverDamDensity > 0 & BeaverDamDensity <= 1)
-    & (SlowWater_Freq > 0 & SlowWater_Freq < 2)
-    & (ChnlUnit_Freq >= 2 & ChnlUnit_Freq <= 10)) %>%
+    & (BfBraid > 1 & BfBraid <= 2) 
+    & LWFreq_Wet <= 25 
+    & (SlowWater_Freq > 0 & SlowWater_Freq <= 2.4)
+    & (ChnlUnit_Freq > 2.75 & ChnlUnit_Freq <= 6)) %>%
   mutate(RS = "WA", Condition = "moderate")
 
 WAmoderate
@@ -118,9 +145,8 @@ WAgood = data %>%
     Confinement != "CV"
     & (BfBraid > 1 & BfBraid <= 2) 
     & LWFreq_Wet > 25
-    & (BeaverDamDensity > 5 & BeaverDamDensity <= 15)
-    & (SlowWater_Freq >= 2 & SlowWater_Freq <= 10)
-    & ChnlUnit_Freq > 10) %>%
+    & (SlowWater_Freq > 2.4 & SlowWater_Freq <= 4)
+    & ChnlUnit_Freq > 6) %>%
   mutate(RS = "WA", Condition = "good")
 
 WAgood
@@ -134,9 +160,8 @@ WAintact = data %>%
     Confinement != "CV"
     & (BfBraid > 2 & BfBraid <= 3) 
     & LWFreq_Wet > 25
-    & BeaverDamDensity > 15
-    & SlowWater_Freq > 10
-    & ChnlUnit_Freq > 10) %>%
+    & SlowWater_Freq > 4
+    & ChnlUnit_Freq > 6) %>%
   mutate(RS = "WA", Condition = "intact")
 
 WAintact
@@ -150,11 +175,10 @@ PCpoor = data %>%
   filter(
     Confinement == "PCV"
     & BfBraid == 1
-    & (Sin >= 1 & Sin <= 1.05) 
+    & (Sin >= 1 & Sin <= 1.1) 
     & LWFreq_Wet == 0
-    & (BeaverDamDensity > 0 & BeaverDamDensity <= 1)
-    & SlowWater_Freq == 0
-    & ChnlUnit_Freq < 2) %>%
+    & SlowWater_Freq <= 2.4
+    & ChnlUnit_Freq <= 2.75) %>%
   mutate(RS = "PC", Condition = "poor")
 
 PCpoor
@@ -168,11 +192,10 @@ PCmoderate = data %>%
   filter(
     Confinement == "PCV"
     & BfBraid == 1
-    & (Sin > 1.05 & Sin <= 1.3) 
+    & (Sin > 1.1 & Sin <= 1.3) 
     & LWFreq_Wet <= 5
-    & (BeaverDamDensity >= 2 & BeaverDamDensity < 5)
-    & (SlowWater_Freq > 0 & SlowWater_Freq < 2)
-    & (ChnlUnit_Freq >= 2 & ChnlUnit_Freq <= 10)) %>%
+    & (SlowWater_Freq > 0 & SlowWater_Freq <= 2.4)
+    & (ChnlUnit_Freq > 2.75 & ChnlUnit_Freq <= 6)) %>%
   mutate(RS = "PC", Condition = "moderate")
 
 PCmoderate
@@ -186,11 +209,10 @@ PCgood = data%>%
   filter(
     Confinement == "PCV"
     & BfBraid == 1
-    & Sin >  1.3 
+    & Sin > 1.3 
     & LWFreq_Wet <= 25
-    & BeaverDamDensity > 15
-    & (SlowWater_Freq >= 2 & SlowWater_Freq <= 10)
-    & ChnlUnit_Freq > 10) %>%
+    & (SlowWater_Freq > 2.4 & SlowWater_Freq <= 4)
+    & ChnlUnit_Freq > 6) %>%
   mutate(RS = "PC", Condition = "good")
 
 PCgood
@@ -205,9 +227,8 @@ PCintact = data%>%
     & (BfBraid > 1 & BfBraid < 2)
     & Sin >  1.3 
     & LWFreq_Wet <= 25
-    & BeaverDamDensity > 15
-    & SlowWater_Freq > 10
-    & ChnlUnit_Freq > 10) %>%
+    & SlowWater_Freq > 4
+    & ChnlUnit_Freq > 6) %>%
   mutate(RS = "PC", Condition = "intact")
 
 PCintact
@@ -225,7 +246,7 @@ NApoor = data %>%
     & BfBraid == 1 
     & LWFreq_Wet == 0
     & SlowWater_Freq == 0
-    & ChnlUnit_Freq < 2) %>%
+    & ChnlUnit_Freq <= 2.75) %>%
   mutate(RS = "NA", Condition = "poor")
 
 NApoor
@@ -241,7 +262,7 @@ NAmoderate = data %>%
     & BfBraid == 1 
     & LWFreq_Wet <= 5
     & SlowWater_Freq < 2
-    & (ChnlUnit_Freq >= 2 & ChnlUnit_Freq <= 10)) %>%
+    & (ChnlUnit_Freq > 2.75 & ChnlUnit_Freq <= 6)) %>%
   mutate(RS = "NA", Condition = "moderate")
 
 NAmoderate
@@ -256,8 +277,8 @@ NAgood = data %>%
     Confinement == "CV"
     & BfBraid == 1 
     & LWFreq_Wet <= 25
-    & (SlowWater_Freq > 0 & SlowWater_Freq < 2)
-    & ChnlUnit_Freq > 10) %>%
+    & (SlowWater_Freq > 0 & SlowWater_Freq <= 2.4)
+    & ChnlUnit_Freq > 6) %>%
   mutate(RS = "NA", Condition = "good")
 
 NAgood
@@ -271,8 +292,8 @@ NAintact = data %>%
     Confinement == "CV"
     & BfBraid == 1 
     & LWFreq_Wet > 25
-    & (SlowWater_Freq >= 2 & SlowWater_Freq <= 10)
-    & ChnlUnit_Freq > 10) %>%
+    & (SlowWater_Freq > 2.4 & SlowWater_Freq <= 4)
+    & ChnlUnit_Freq > 6) %>%
   mutate(RS = "NA", Condition = "intact")
 
 NAintact
@@ -286,11 +307,10 @@ MCpoor = data.in %>%
   filter(
     Confinement == "PCV"
     & BfBraid == 1
-    & (Sin >= 1 & Sin <= 1.05) 
+    & (Sin >= 1 & Sin <= 1.1) 
     & LWFreq_Wet <= 5
-    & BeaverDamDensity == 0
     & SlowWater_Freq == 0
-    & ChnlUnit_Freq < 2) %>%
+    & ChnlUnit_Freq <= 2.75) %>%
   mutate(RS = "MC", Condition = "poor")
 
 MCpoor
@@ -305,11 +325,10 @@ MCmoderate = data %>%
   filter(
     Confinement == "PCV"
     & BfBraid == 1
-    & (Sin > 1.05 & Sin <= 1.3) 
+    & (Sin > 1.1 & Sin <= 1.3) 
     & LWFreq_Wet <= 25
-    & (BeaverDamDensity > 0 & BeaverDamDensity <= 1)
-    & (SlowWater_Freq > 0 & SlowWater_Freq < 2)
-    & (ChnlUnit_Freq >= 2 & ChnlUnit_Freq <= 10)) %>%
+    & (SlowWater_Freq > 0 & SlowWater_Freq <= 2.4)
+    & (ChnlUnit_Freq > 2.75 & ChnlUnit_Freq <= 6)) %>%
   mutate(RS = "MC", Condition = "moderate")
 
 MCmoderate
@@ -323,9 +342,8 @@ MCgood = data %>%
     & (BfBraid > 1 & BfBraid < 2)
     & Sin >= 1.3
     & LWFreq_Wet > 25
-    & (BeaverDamDensity > 5 & BeaverDamDensity <= 15)
-    & (SlowWater_Freq >= 2 & SlowWater_Freq <= 10)
-    & (ChnlUnit_Freq > 10)) %>%
+    & (SlowWater_Freq > 2.4 & SlowWater_Freq <= 4)
+    & (ChnlUnit_Freq > 6)) %>%
   mutate(RS = "MC", Condition = "good")
 
 MCgood
@@ -339,9 +357,8 @@ MCintact = data %>%
     & (BfBraid > 1 & BfBraid < 2)
     & Sin >= 1.3
     & LWFreq_Wet > 25
-    & (BeaverDamDensity > 15)
-    & (SlowWater_Freq >= 2 & SlowWater_Freq <= 10)
-    & (ChnlUnit_Freq > 10)) %>%
+    & (SlowWater_Freq > 2.4 & SlowWater_Freq <= 4)
+    & (ChnlUnit_Freq > 6)) %>%
   mutate(RS = "MC", Condition = "intact")
 
 MCintact
@@ -374,7 +391,7 @@ CFmoderate = data %>%
     & BfBraid == 1 
     & LWFreq_Wet <= 5
     & SlowWater_Freq < 2
-    & (ChnlUnit_Freq >= 2 & ChnlUnit_Freq <= 10)) %>%
+    & (ChnlUnit_Freq > 2.75 & ChnlUnit_Freq <= 6)) %>%
   mutate(RS = "CF", Condition = "moderate")
 
 CFmoderate
@@ -387,8 +404,8 @@ CFgood = data %>%
     Confinement == "CV"
     & BfBraid == 1 
     & LWFreq_Wet <= 25
-    & (SlowWater_Freq > 0 & SlowWater_Freq < 2)
-    & ChnlUnit_Freq > 10) %>%
+    & (SlowWater_Freq > 0 & SlowWater_Freq <= 2.4)
+    & ChnlUnit_Freq > 6) %>%
   mutate(RS = "CF", Condition = "good")
 
 CFgood
@@ -401,8 +418,8 @@ CFintact = data %>%
     Confinement == "CV"
     & (BfBraid > 1 & BfBraid < 2)  
     & LWFreq_Wet <= 25
-    & (SlowWater_Freq >= 2 & SlowWater_Freq <= 10)
-    & ChnlUnit_Freq > 10) %>%
+    & (SlowWater_Freq > 2.4 & SlowWater_Freq <= 4)
+    & ChnlUnit_Freq > 6) %>%
   mutate(RS = "CF", Condition = "intact")
 
 CFintact
@@ -418,7 +435,7 @@ CBpoor = data.in %>%
     & BfBraid == 1 
     & LWFreq_Wet == 0
     & SlowWater_Freq == 0
-    & ChnlUnit_Freq < 2) %>%
+    & ChnlUnit_Freq <= 2.75) %>%
   mutate(RS = "CB", Condition = "poor")
 
 CBpoor
@@ -434,7 +451,7 @@ CBmoderate = data %>%
     & BfBraid == 1 
     & LWFreq_Wet <= 5
     & SlowWater_Freq < 2
-    & ChnlUnit_Freq < 2) %>%
+    & ChnlUnit_Freq <= 2.75) %>%
   mutate(RS = "CB", Condition = "moderate")
 
 CBmoderate
@@ -447,8 +464,8 @@ CBgood = data %>%
     Confinement == "CV"
     & BfBraid == 1 
     & LWFreq_Wet <= 25
-    & (SlowWater_Freq > 0 & SlowWater_Freq < 2)
-    & (ChnlUnit_Freq >= 2 & ChnlUnit_Freq <= 10)) %>%
+    & (SlowWater_Freq > 0 & SlowWater_Freq <= 2.4)
+    & (ChnlUnit_Freq > 2.75 & ChnlUnit_Freq <= 6)) %>%
   mutate(RS = "CB", Condition = "good")
 
 CBgood
@@ -461,7 +478,7 @@ CBintact = data %>%
     Confinement == "CV"
     & BfBraid == 1 
     & LWFreq_Wet > 25
-    & (SlowWater_Freq >= 2 & SlowWater_Freq <= 10)
+    & (SlowWater_Freq > 2.4 & SlowWater_Freq <= 4)
     & ChnlUnit_Freq >= 10) %>%
   mutate(RS = "CB", Condition = "intact")
 
@@ -478,9 +495,8 @@ AFpoor = data %>%
     Confinement == "UCV"
     & BfBraid == 1 
     & LWFreq_Wet <= 5
-    & BeaverDamDensity == 0
     & SlowWater_Freq == 0
-    & ChnlUnit_Freq < 2) %>%
+    & ChnlUnit_Freq <= 2.75) %>%
   mutate(RS = "AF", Condition = "poor")
 
 AFpoor
@@ -495,9 +511,8 @@ AFmoderate = data %>%
     Confinement == "UCV"
     & (BfBraid > 1 & BfBraid < 2)
     & LWFreq_Wet <= 25
-    & (BeaverDamDensity > 0 & BeaverDamDensity <= 1)
     & (SlowWater_Freq > 0 & SlowWater_Freq <= 2)
-    & (ChnlUnit_Freq >= 2 & ChnlUnit_Freq <= 10)) %>%
+    & (ChnlUnit_Freq > 2.75 & ChnlUnit_Freq <= 6)) %>%
   mutate(RS = "AF", Condition = "moderate")
 
 AFmoderate
@@ -512,9 +527,8 @@ AFgood = data %>%
     Confinement == "UCV"
     & (BfBraid >= 2 & BfBraid < 3)
     & LWFreq_Wet > 25
-    & (BeaverDamDensity > 5 & BeaverDamDensity <= 15)
-    & (SlowWater_Freq >= 2 & SlowWater_Freq <= 10)
-    & ChnlUnit_Freq > 10) %>%
+    & (SlowWater_Freq > 2.4 & SlowWater_Freq <= 4)
+    & ChnlUnit_Freq > 6) %>%
   mutate(RS = "AF", Condition = "good")
 
 AFgood
@@ -527,9 +541,8 @@ AFintact = data %>%
     Confinement == "UCV"
     & BfBraid >= 3
     & LWFreq_Wet > 25
-    & BeaverDamDensity > 15
-    & SlowWater_Freq > 10
-    & ChnlUnit_Freq > 10) %>%
+    & SlowWater_Freq > 4
+    & ChnlUnit_Freq > 6) %>%
   mutate(RS = "AF", Condition = "intact")
 
 AFintact
