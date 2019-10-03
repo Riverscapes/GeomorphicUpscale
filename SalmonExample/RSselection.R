@@ -103,9 +103,8 @@ ggsave('C:/Anabranch/UpperSalmon/wrk_Data/GUTUpscale/Geoindicator_Boxplots.png',
 
 
 #--*----**------------------------------------
-#### Wandering Reach Types
-### Variables that define Reach Type: 
-### Variables that differentiate condition of this reach type:
+# Wandering Reach Types
+
 # Wandering-poor (WA poor) -----------------------------------------------------
 
 WApoor = data %>%
@@ -117,11 +116,9 @@ WApoor = data %>%
 	& ChnlUnit_Freq <= 2.75) %>%
   mutate(RS = "WA", Condition = "poor")
 
-out.name = file.path(sub.out.dir ,"Boxplots")
-ggsave(paste(out.name, ".pdf", sep = ""), plot = p1, width = 10, height = 7)WApoor
+WApoor
 summary(WApoor)
 nrow(WApoor)
-
 
 # Wandering-moderate (WA moderate) -----------------------------------------------------
 
@@ -169,7 +166,8 @@ summary(WAintact)
 nrow(WAintact)
 
 #--*----**------------------------------------
-#### Planform Controlled Reach Types
+# Planform Controlled Reach Types
+
 # Planform Controlled-poor (PC poor) -----------------------------------------------------
 PCpoor = data %>%
   filter(
@@ -184,7 +182,6 @@ PCpoor = data %>%
 PCpoor
 summary(PCpoor)
 nrow(PCpoor)
-
 
 # Planform Controlled-moderate (PC moderate) -----------------------------------------------------
 
@@ -201,7 +198,6 @@ PCmoderate = data %>%
 PCmoderate
 summary(PCmoderate)
 nrow(PCmoderate)
-
 
 # Planform Controlled-good (PC good) -----------------------------------------------------
 
@@ -225,8 +221,8 @@ PCintact = data%>%
   filter(
     Confinement == "PCV"
     & (BfBraid > 1 & BfBraid < 2)
-    & Sin >  1.3 
-    & LWFreq_Wet <= 25
+    & Sin > 1.3 
+    & LWFreq_Wet > 25
     & SlowWater_Freq > 4
     & ChnlUnit_Freq > 6) %>%
   mutate(RS = "PC", Condition = "intact")
@@ -236,7 +232,7 @@ summary(PCintact)
 nrow(PCintact)
 
 #--*----**------------------------------------
-#### NA - These are primiarily Step-Cascade and Conf_Bedrock. These seem to be ones that Chris missed (n=48 small reaches in Upper Salmon)
+# NA - These are primiarily Step-Cascade and Conf_Bedrock. These seem to be ones that Chris missed (n=48 small reaches in Upper Salmon)
 
 # NA-poor (NA poor) -----------------------------------------------------
 
@@ -245,14 +241,13 @@ NApoor = data %>%
     Confinement == "CV"
     & BfBraid == 1 
     & LWFreq_Wet == 0
-    & SlowWater_Freq == 0
+    & SlowWater_Freq <= 2.4
     & ChnlUnit_Freq <= 2.75) %>%
   mutate(RS = "NA", Condition = "poor")
 
 NApoor
 summary(NApoor)
 nrow(NApoor)
-
 
 # NA-moderate (NA moderate)-----------------------------------------------------
 
@@ -261,14 +256,13 @@ NAmoderate = data %>%
     Confinement == "CV"
     & BfBraid == 1 
     & LWFreq_Wet <= 5
-    & SlowWater_Freq < 2
+    & (SlowWater_Freq > 0 & SlowWater_Freq <= 2.4)
     & (ChnlUnit_Freq > 2.75 & ChnlUnit_Freq <= 6)) %>%
   mutate(RS = "NA", Condition = "moderate")
 
 NAmoderate
 summary(NAmoderate)
 nrow(NAmoderate)
-
 
 # NA- Good(NA good) -----------------------------------------------------
 
@@ -301,7 +295,8 @@ summary(NAintact)
 nrow(NAintact)
 
 #--*----**------------------------------------
-#### Margin Controlled Reach Types
+# Margin Controlled Reach Types
+
 # Margin Controlled-poor (MC poor) -----------------------------------------------------
 MCpoor = data.in %>%
   filter(
@@ -309,15 +304,13 @@ MCpoor = data.in %>%
     & BfBraid == 1
     & (Sin >= 1 & Sin <= 1.1) 
     & LWFreq_Wet <= 5
-    & SlowWater_Freq == 0
+    & SlowWater_Freq == 2.4
     & ChnlUnit_Freq <= 2.75) %>%
   mutate(RS = "MC", Condition = "poor")
 
 MCpoor
 summary(MCpoor)
 nrow(MCpoor)
-
-
 
 # Margin Controlled-moderate (MC moderate)-----------------------------------------------------
 
@@ -366,22 +359,21 @@ summary(MCintact)
 nrow(MCintact)
 
 #--*----**------------------------------------
-#### Confined Floodplain Reach Types
+# Confined Floodplain Reach Types
+
 # Confined Floodplain-poor (MC poor) -----------------------------------------------------
 CFpoor = data.in %>%
   filter(
     Confinement == "CV"
     & BfBraid == 1 
     & LWFreq_Wet == 0
-    & SlowWater_Freq == 0
-    & (ChnlUnit_Freq <= 2)) %>%
+    & SlowWater_Freq <= 2.4
+    & (ChnlUnit_Freq <= 2.75)) %>%
   mutate(RS = "CF", Condition = "poor")
 
 CFpoor
 summary(CFpoor)
 nrow(CFpoor)
-
-
 
 # Confined Floodplain-moderate (CF moderate)-----------------------------------------------------
 
@@ -390,7 +382,7 @@ CFmoderate = data %>%
     Confinement == "CV"
     & BfBraid == 1 
     & LWFreq_Wet <= 5
-    & SlowWater_Freq < 2
+    & SlowWater_Freq <= 2.4
     & (ChnlUnit_Freq > 2.75 & ChnlUnit_Freq <= 6)) %>%
   mutate(RS = "CF", Condition = "moderate")
 
@@ -399,6 +391,7 @@ summary(CFmoderate)
 nrow(CFmoderate)
 
 # Confined Floodplain-good (CF good) -----------------------------------------------------
+
 CFgood = data %>%
   filter(
     Confinement == "CV"
@@ -413,11 +406,12 @@ summary(CFgood)
 nrow(CFgood)
 
 # Confined Floodplain-intact (CF intact) -----------------------------------------------------
+
 CFintact = data %>%
   filter(
     Confinement == "CV"
     & (BfBraid > 1 & BfBraid < 2)  
-    & LWFreq_Wet <= 25
+    & LWFreq_Wet > 25
     & (SlowWater_Freq > 2.4 & SlowWater_Freq <= 4)
     & ChnlUnit_Freq > 6) %>%
   mutate(RS = "CF", Condition = "intact")
@@ -427,21 +421,21 @@ summary(CFintact)
 nrow(CFintact)
 
 #--*----**------------------------------------
-#### Confined Bedrock Reach Types
+# Confined Bedrock Reach Types
+
 # Confined Bedrock-poor (MC poor) -----------------------------------------------------
 CBpoor = data.in %>%
   filter(
     Confinement == "CV"
     & BfBraid == 1 
     & LWFreq_Wet == 0
-    & SlowWater_Freq == 0
+    & SlowWater_Freq <= 2.4
     & ChnlUnit_Freq <= 2.75) %>%
   mutate(RS = "CB", Condition = "poor")
 
 CBpoor
 summary(CBpoor)
 nrow(CBpoor)
-
 
 # Confined Bedrock-moderate (CB moderate)-----------------------------------------------------
 
@@ -450,7 +444,7 @@ CBmoderate = data %>%
     Confinement == "CV"
     & BfBraid == 1 
     & LWFreq_Wet <= 5
-    & SlowWater_Freq < 2
+    & (SlowWater_Freq > 0 & SlowWater_Freq <= 2.4)
     & ChnlUnit_Freq <= 2.75) %>%
   mutate(RS = "CB", Condition = "moderate")
 
@@ -459,6 +453,7 @@ summary(CBmoderate)
 nrow(CBmoderate)
 
 # Confined Bedrock-good (CB good) -----------------------------------------------------
+
 CBgood = data %>%
   filter(
     Confinement == "CV"
@@ -473,13 +468,14 @@ summary(CBgood)
 nrow(CBgood)
 
 # Confined Bedrock-intact (CB intact) -----------------------------------------------------
+
 CBintact = data %>%
   filter(
     Confinement == "CV"
     & BfBraid == 1 
     & LWFreq_Wet > 25
     & (SlowWater_Freq > 2.4 & SlowWater_Freq <= 4)
-    & ChnlUnit_Freq >= 10) %>%
+    & ChnlUnit_Freq >= 6) %>%
   mutate(RS = "CB", Condition = "intact")
 
 CBintact
@@ -487,7 +483,8 @@ summary(CBintact)
 nrow(CBintact)
 
 #--*----**------------------------------------
-#### Alluvial Fan Reach Types
+# Alluvial Fan Reach Types
+
 # Alluvial Fan-poor (AF poor) -----------------------------------------------------
 
 AFpoor = data %>%
@@ -495,14 +492,13 @@ AFpoor = data %>%
     Confinement == "UCV"
     & BfBraid == 1 
     & LWFreq_Wet <= 5
-    & SlowWater_Freq == 0
+    & SlowWater_Freq <= 2.4
     & ChnlUnit_Freq <= 2.75) %>%
   mutate(RS = "AF", Condition = "poor")
 
 AFpoor
 summary(AFpoor)
 nrow(AFpoor)
-
 
 # Alluvial Fan-moderate (AF moderate) -----------------------------------------------------
 
@@ -511,14 +507,13 @@ AFmoderate = data %>%
     Confinement == "UCV"
     & (BfBraid > 1 & BfBraid < 2)
     & LWFreq_Wet <= 25
-    & (SlowWater_Freq > 0 & SlowWater_Freq <= 2)
+    & (SlowWater_Freq > 0 & SlowWater_Freq <= 2.4)
     & (ChnlUnit_Freq > 2.75 & ChnlUnit_Freq <= 6)) %>%
   mutate(RS = "AF", Condition = "moderate")
 
 AFmoderate
 summary(AFmoderate)
 nrow(AFmoderate)
-
 
 # Alluvial Fan-good (AF good) -----------------------------------------------------
 
@@ -536,6 +531,7 @@ summary(AFgood)
 nrow(AFgood)
 
 # Alluvial Fan-intact (AF intact) -----------------------------------------------------
+
 AFintact = data %>%
   filter(
     Confinement == "UCV"
