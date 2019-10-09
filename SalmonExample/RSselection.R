@@ -20,6 +20,7 @@ repo.dir = "C:/etal/LocalCode/GeomorphicUpscale"
 
 # Load required packages ---------------------------
 library(tidyverse)
+library(purrrlyr)
 
 # read in data--------------------
 data.in = read_csv(file.path(repo.dir, "Database/GUTUpscale_Database_ReachCharacteristics.csv"))
@@ -71,32 +72,6 @@ data = data.in
 # if it has a condition variant add it after the code as "good" "moderate" or "poor" all in lower case.
 
 
-inidcator.list = c('Confinement', 'BfBraid', 'Sin', 'LWFreq_Wet', 'BeaverDamDensity', 'SlowWater_Freq', 'ChnlUnit_Freq')
-
-indicator.data = data %>%
-  gather(key = "variable", value = "value", -SiteName, -Watershed, -VisitID) %>%
-  filter(variable %in% inidcator.list) %>%
-  mutate(value = as.numeric(value)) %>%
-  filter(!is.na(value))
-
-box.plots = ggplot(indicator.data, aes(as.factor(variable), value)) +
-  geom_boxplot() +
-  facet_wrap(~ variable, scales = "free")
-
-
-indicator.summary = indicator.data  %>%
-  group_by(variable) %>%
-  summarize(min = min(value),
-            q25 = quantile(value, probs = 0.25),
-            med = median(value),
-            q75 = quantile(value, probs = 0.5),
-            max = max(value),
-            mean = mean(value),
-            sd = sd(value)
-            )
-
-write_csv(indicator.summary, 'C:/Anabranch/UpperSalmon/wrk_Data/GUTUpscale/Geoindicator_SummaryStatistics.csv', col_names = TRUE)
-ggsave('C:/Anabranch/UpperSalmon/wrk_Data/GUTUpscale/Geoindicator_Boxplots.png', plot = box.plots, width = 10, height = 7)
 
 
 # Updating to Chris's Six Reach Types (Wandering_Gravel, Planform_Controlled, Margin_Controlled, Conf_Floodplain, Conf_Bedrock, and AlluvialFan)
@@ -126,7 +101,7 @@ WAmoderate = data %>%
   filter(
     Confinement != "CV"
     & (BfBraid > 1 & BfBraid <= 2) 
-    & LWFreq_Wet <= 25 
+    & LWFreq_Wet <= 20
     & (SlowWater_Freq > 0 & SlowWater_Freq <= 2.4)
     & (ChnlUnit_Freq > 2.75 & ChnlUnit_Freq <= 6)) %>%
   mutate(RS = "WA", Condition = "moderate")
@@ -141,9 +116,9 @@ WAgood = data %>%
   filter(
     Confinement != "CV"
     & (BfBraid > 1 & BfBraid <= 2) 
-    & LWFreq_Wet > 25
-    & (SlowWater_Freq > 2.4 & SlowWater_Freq <= 4)
-    & ChnlUnit_Freq > 6) %>%
+    & LWFreq_Wet > 20
+    & (SlowWater_Freq > 2.4)
+    & ChnlUnit_Freq > 2.75) %>%
   mutate(RS = "WA", Condition = "good")
 
 WAgood
@@ -156,9 +131,9 @@ WAintact = data %>%
   filter(
     Confinement != "CV"
     & (BfBraid > 2 & BfBraid <= 3) 
-    & LWFreq_Wet > 25
-    & SlowWater_Freq > 4
-    & ChnlUnit_Freq > 6) %>%
+    & LWFreq_Wet > 20
+    & (SlowWater_Freq > 2.4)
+    & ChnlUnit_Freq > 2.75) %>%
   mutate(RS = "WA", Condition = "intact")
 
 WAintact
@@ -174,7 +149,7 @@ PCpoor = data %>%
     Confinement == "PCV"
     & BfBraid == 1
     & (Sin >= 1 & Sin <= 1.1) 
-    & LWFreq_Wet == 0
+    & LWFreq_Wet <= 5
     & SlowWater_Freq <= 2.4
     & ChnlUnit_Freq <= 2.75) %>%
   mutate(RS = "PC", Condition = "poor")
@@ -190,7 +165,7 @@ PCmoderate = data %>%
     Confinement == "PCV"
     & BfBraid == 1
     & (Sin > 1.1 & Sin <= 1.3) 
-    & LWFreq_Wet <= 5
+    & LWFreq_Wet <= 20
     & (SlowWater_Freq > 0 & SlowWater_Freq <= 2.4)
     & (ChnlUnit_Freq > 2.75 & ChnlUnit_Freq <= 6)) %>%
   mutate(RS = "PC", Condition = "moderate")
@@ -206,9 +181,9 @@ PCgood = data%>%
     Confinement == "PCV"
     & BfBraid == 1
     & Sin > 1.3 
-    & LWFreq_Wet <= 25
-    & (SlowWater_Freq > 2.4 & SlowWater_Freq <= 4)
-    & ChnlUnit_Freq > 6) %>%
+    & LWFreq_Wet <= 20
+    & (SlowWater_Freq > 2.4)
+    & ChnlUnit_Freq > 2.75) %>%
   mutate(RS = "PC", Condition = "good")
 
 PCgood
@@ -222,9 +197,9 @@ PCintact = data%>%
     Confinement == "PCV"
     & (BfBraid > 1 & BfBraid < 2)
     & Sin > 1.3 
-    & LWFreq_Wet > 25
-    & SlowWater_Freq > 4
-    & ChnlUnit_Freq > 6) %>%
+    & LWFreq_Wet > 20
+    & SlowWater_Freq > 2.4
+    & ChnlUnit_Freq > 2.75) %>%
   mutate(RS = "PC", Condition = "intact")
 
 PCintact
@@ -240,7 +215,7 @@ NApoor = data %>%
   filter(
     Confinement == "CV"
     & BfBraid == 1 
-    & LWFreq_Wet == 0
+    & LWFreq_Wet <= 5
     & SlowWater_Freq <= 2.4
     & ChnlUnit_Freq <= 2.75) %>%
   mutate(RS = "NA", Condition = "poor")
@@ -270,9 +245,9 @@ NAgood = data %>%
   filter(
     Confinement == "CV"
     & BfBraid == 1 
-    & LWFreq_Wet <= 25
-    & (SlowWater_Freq > 0 & SlowWater_Freq <= 2.4)
-    & ChnlUnit_Freq > 6) %>%
+    & LWFreq_Wet <= 20
+    & (SlowWater_Freq > 2.4)
+    & ChnlUnit_Freq > 2.75) %>%
   mutate(RS = "NA", Condition = "good")
 
 NAgood
@@ -285,9 +260,9 @@ NAintact = data %>%
   filter(
     Confinement == "CV"
     & BfBraid == 1 
-    & LWFreq_Wet > 25
-    & (SlowWater_Freq > 2.4 & SlowWater_Freq <= 4)
-    & ChnlUnit_Freq > 6) %>%
+    & LWFreq_Wet > 20
+    & (SlowWater_Freq > 2.4)
+    & ChnlUnit_Freq > 2.75) %>%
   mutate(RS = "NA", Condition = "intact")
 
 NAintact
@@ -304,7 +279,7 @@ MCpoor = data.in %>%
     & BfBraid == 1
     & (Sin >= 1 & Sin <= 1.1) 
     & LWFreq_Wet <= 5
-    & SlowWater_Freq == 2.4
+    & SlowWater_Freq <= 2.4
     & ChnlUnit_Freq <= 2.75) %>%
   mutate(RS = "MC", Condition = "poor")
 
@@ -319,7 +294,7 @@ MCmoderate = data %>%
     Confinement == "PCV"
     & BfBraid == 1
     & (Sin > 1.1 & Sin <= 1.3) 
-    & LWFreq_Wet <= 25
+    & LWFreq_Wet <= 20
     & (SlowWater_Freq > 0 & SlowWater_Freq <= 2.4)
     & (ChnlUnit_Freq > 2.75 & ChnlUnit_Freq <= 6)) %>%
   mutate(RS = "MC", Condition = "moderate")
@@ -334,9 +309,9 @@ MCgood = data %>%
     Confinement == "PCV"
     & (BfBraid > 1 & BfBraid < 2)
     & Sin >= 1.3
-    & LWFreq_Wet > 25
-    & (SlowWater_Freq > 2.4 & SlowWater_Freq <= 4)
-    & (ChnlUnit_Freq > 6)) %>%
+    & LWFreq_Wet > 20
+    & (SlowWater_Freq > 2.4)
+    & (ChnlUnit_Freq > 2.75)) %>%
   mutate(RS = "MC", Condition = "good")
 
 MCgood
@@ -349,9 +324,9 @@ MCintact = data %>%
     Confinement == "PCV"
     & (BfBraid > 1 & BfBraid < 2)
     & Sin >= 1.3
-    & LWFreq_Wet > 25
-    & (SlowWater_Freq > 2.4 & SlowWater_Freq <= 4)
-    & (ChnlUnit_Freq > 6)) %>%
+    & LWFreq_Wet > 20
+    & (SlowWater_Freq > 2.4)
+    & (ChnlUnit_Freq > 2.75)) %>%
   mutate(RS = "MC", Condition = "intact")
 
 MCintact
@@ -361,12 +336,12 @@ nrow(MCintact)
 #--*----**------------------------------------
 # Confined Floodplain Reach Types
 
-# Confined Floodplain-poor (MC poor) -----------------------------------------------------
+# Confined Floodplain-poor (CF poor) -----------------------------------------------------
 CFpoor = data.in %>%
   filter(
     Confinement == "CV"
     & BfBraid == 1 
-    & LWFreq_Wet == 0
+    & LWFreq_Wet <= 5
     & SlowWater_Freq <= 2.4
     & (ChnlUnit_Freq <= 2.75)) %>%
   mutate(RS = "CF", Condition = "poor")
@@ -396,8 +371,8 @@ CFgood = data %>%
   filter(
     Confinement == "CV"
     & BfBraid == 1 
-    & LWFreq_Wet <= 25
-    & (SlowWater_Freq > 0 & SlowWater_Freq <= 2.4)
+    & LWFreq_Wet <= 20
+    & (SlowWater_Freq >= 2.4)
     & ChnlUnit_Freq > 6) %>%
   mutate(RS = "CF", Condition = "good")
 
@@ -411,8 +386,8 @@ CFintact = data %>%
   filter(
     Confinement == "CV"
     & (BfBraid > 1 & BfBraid < 2)  
-    & LWFreq_Wet > 25
-    & (SlowWater_Freq > 2.4 & SlowWater_Freq <= 4)
+    & LWFreq_Wet > 20
+    & (SlowWater_Freq >= 2.4)
     & ChnlUnit_Freq > 6) %>%
   mutate(RS = "CF", Condition = "intact")
 
@@ -428,7 +403,7 @@ CBpoor = data.in %>%
   filter(
     Confinement == "CV"
     & BfBraid == 1 
-    & LWFreq_Wet == 0
+    & LWFreq_Wet <= 5
     & SlowWater_Freq <= 2.4
     & ChnlUnit_Freq <= 2.75) %>%
   mutate(RS = "CB", Condition = "poor")
@@ -458,7 +433,7 @@ CBgood = data %>%
   filter(
     Confinement == "CV"
     & BfBraid == 1 
-    & LWFreq_Wet <= 25
+    & LWFreq_Wet <= 20
     & (SlowWater_Freq > 0 & SlowWater_Freq <= 2.4)
     & (ChnlUnit_Freq > 2.75 & ChnlUnit_Freq <= 6)) %>%
   mutate(RS = "CB", Condition = "good")
@@ -473,8 +448,8 @@ CBintact = data %>%
   filter(
     Confinement == "CV"
     & BfBraid == 1 
-    & LWFreq_Wet > 25
-    & (SlowWater_Freq > 2.4 & SlowWater_Freq <= 4)
+    & LWFreq_Wet > 20
+    & (SlowWater_Freq > 2.4)
     & ChnlUnit_Freq >= 6) %>%
   mutate(RS = "CB", Condition = "intact")
 
@@ -506,9 +481,9 @@ AFmoderate = data %>%
   filter(
     Confinement == "UCV"
     & (BfBraid > 1 & BfBraid < 2)
-    & LWFreq_Wet <= 25
-    & (SlowWater_Freq > 0 & SlowWater_Freq <= 2.4)
-    & (ChnlUnit_Freq > 2.75 & ChnlUnit_Freq <= 6)) %>%
+    & LWFreq_Wet <= 20
+    & (SlowWater_Freq > 2.4)
+    & (ChnlUnit_Freq > 2.75)) %>%
   mutate(RS = "AF", Condition = "moderate")
 
 AFmoderate
@@ -521,9 +496,9 @@ AFgood = data %>%
   filter(
     Confinement == "UCV"
     & (BfBraid >= 2 & BfBraid < 3)
-    & LWFreq_Wet > 25
-    & (SlowWater_Freq > 2.4 & SlowWater_Freq <= 4)
-    & ChnlUnit_Freq > 6) %>%
+    & LWFreq_Wet <= 20
+    & (SlowWater_Freq > 2.4)
+    & ChnlUnit_Freq > 2.75) %>%
   mutate(RS = "AF", Condition = "good")
 
 AFgood
@@ -535,10 +510,10 @@ nrow(AFgood)
 AFintact = data %>%
   filter(
     Confinement == "UCV"
-    & BfBraid >= 3
-    & LWFreq_Wet > 25
-    & SlowWater_Freq > 4
-    & ChnlUnit_Freq > 6) %>%
+    & BfBraid >= 2
+    & LWFreq_Wet > 20
+    & SlowWater_Freq > 2.4
+    & ChnlUnit_Freq > 2.75) %>%
   mutate(RS = "AF", Condition = "intact")
 
 AFintact
@@ -549,11 +524,13 @@ nrow(AFintact)
 # Combine selections into single dataset and save output --------------------
 
 # combine selections into single df
-selections = rbind(FCpoor,FCmoderate, FCgood, 
-                 AFpoor,AFmoderate, AFgood,
-                 PCpoor,PCmoderate, PCgood, 
-                 WApoor, WAmoderate, WAgood,
-                 CVpoor, CVmoderate, CVgood) %>%
+selections = rbind(AFpoor,AFmoderate, AFgood, AFintact,
+                 CBpoor, CBmoderate, CBgood, CBintact,
+                 CFpoor, CFmoderate, CFgood, CFintact,
+                 MCpoor, MCmoderate, MCgood, MCintact,
+                 NApoor, NAmoderate, NAgood, NAintact,
+                 PCpoor,PCmoderate, PCgood, PCintact,
+                 WApoor, WAmoderate, WAgood, WAintact) %>%
   mutate(RSCond = paste(RS, Condition, sep = ""))
 
 # print sample size summary
@@ -584,7 +561,7 @@ repo.maps.dir = file.path(repo.dir, "Database/Maps")
 #soruce the geomorphic MapsbyRSselection from where it is locally saved.
 source(file.path(repo.dir, "scripts/selection.maps.R"))
 
-selection.maps(id.name = "visit.id", pool.by = "RS")
-selection.maps(id.name = "visit.id", pool.by = "RSCond")
+selection.maps(id.name = "VisitID", pool.by = "RS")
+selection.maps(id.name = "VisitID", pool.by = "RSCond")
 
        
