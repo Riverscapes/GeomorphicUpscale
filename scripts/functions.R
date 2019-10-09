@@ -3,12 +3,12 @@
 summarize.f = function(data, value){
   
   data.summary = data %>%
-    summarize(avg = mean(value, na.rm = T), 
-              sd = sd(value, na.rm = T),
-              med = median(value, na.rm = T), 
-              min = min(value, na.rm = T),
-              max = max(value, na.rm = T),
-              tot = sum(value, na.rm = T),
+    summarize(avg = mean(value, na.rm = TRUE), 
+              sd = sd(value, na.rm = TRUE),
+              med = median(value, na.rm = TRUE), 
+              min = min(value, na.rm = TRUE),
+              max = max(value, na.rm = TRUE),
+              tot = sum(value, na.rm = TRUE),
               n = length(na.omit(value)))
   
   return(data.summary)
@@ -55,7 +55,6 @@ make.outputs = function(in.data, pool.by, out.dir, RSlevels, my.facet = "variabl
   if(!is.na(pool.by)){
     
     # if RSlevels isn't NA, set RS column to factor with same levels as RSlevels
-    # note: not sure why RSlevels would be NA ??
     if(!all(is.na(RSlevels))){in.data$RS = factor(in.data$RS, levels = RSlevels)}
     
     # set output subdirectory name based on 'pool.by' argument
@@ -78,6 +77,8 @@ make.outputs = function(in.data, pool.by, out.dir, RSlevels, my.facet = "variabl
     }
     
     if(pool.by == "RSCond"){
+      # set condition plotting order
+      in.data = in.data %>% mutate(Condition = factor(Condition, levels = condition.levels))
       p1 = ggplot(in.data, aes(x = factor(RS), y = value, fill = Condition)) +
         geom_boxplot() +
         scale_fill_manual(values = condition.fill) +
@@ -108,7 +109,7 @@ make.outputs = function(in.data, pool.by, out.dir, RSlevels, my.facet = "variabl
 #to do----------------------------------------------------------
 #make xlabels vertical rather than horizontal so I can read them
 #2 levels of facet wrapping for conditin and RS- separate x axis somehow so it is easier to read and understand.
-make.outputs.unit = function(in.data, pool.by, gu.type, out.dir, my.facet = "variable", RSlevels, myunitcolname = "unit.type"){
+make.outputs.unit = function(in.data, pool.by, gu.type, out.dir, my.facet = "variable", RSlevels){
   
   # set output subdirectory name based on 'pool.by' argument
   if(pool.by == "RS"){
@@ -119,20 +120,26 @@ make.outputs.unit = function(in.data, pool.by, gu.type, out.dir, my.facet = "var
     sub.out.dir = file.path(out.dir, "byAll")  
   }
   
+  # set plotting colors
+  if(gu.type == "UnitForm"){
+    unit.colors = form.fill
+    in.data = in.data %>%
+      mutate(unit.type = factor(unit.type, levels = form.levels))
+  }else{
+    unit.colors = gu.fill
+    in.data = in.data %>%
+      mutate(unit.type = factor(unit.type, levels = gu.levels))
+  }
+
   # create output subdirectory
   if(!file.exists(sub.out.dir)){dir.create(sub.out.dir, recursive = TRUE)}
   
-  a = set.levels.colors(in.data, gu.type = gu.type, unitcolname = myunitcolname)
-  in.data = a$mydata
-  unit.colors = a$unit.colors
-  
-  if(is.na(RSlevels)[1]==F){
-    in.data$RS=factor(in.data$RS,levels=RSlevels)}
-  
+  # if RSlevels isn't NA, set RS column to factor with same levels as RSlevels
+  if(!all(is.na(RSlevels))){in.data$RS = factor(in.data$RS, levels = RSlevels)}
   
   if(pool.by == "All"){
     data.sub = in.data %>% select(-RS,-Condition) %>% distinct()
-    p1 = ggplot(data.sub, aes(x = factor(Unit), y = value, fill = Unit)) + 
+    p1 = ggplot(data.sub, aes(x = factor(unit.type), y = value, fill = unit.type)) + 
       geom_boxplot() +
       scale_fill_manual(values = unit.colors) +
       facet_wrap(reformulate(".", my.facet), scales = "free_y") +
@@ -141,7 +148,7 @@ make.outputs.unit = function(in.data, pool.by, gu.type, out.dir, my.facet = "var
   
   if(pool.by == "RS"){
     data.sub = in.data %>% select(-Condition) %>% distinct()
-    p1 = ggplot(data.sub, aes(x = factor(Unit), y = value, fill = Unit)) + 
+    p1 = ggplot(data.sub, aes(x = factor(unit.type), y = value, fill = unit.type)) + 
       geom_boxplot() +
       scale_fill_manual(values = unit.colors) +
       facet_grid(reformulate("RS", my.facet), scales = "free") +
@@ -151,8 +158,8 @@ make.outputs.unit = function(in.data, pool.by, gu.type, out.dir, my.facet = "var
 #does it even make sense to plot condition for different units since the condition is really about the reach...  
 
  if(pool.by == "RSCond"){
-
-    p1 = ggplot(in.data, aes(x = factor(Unit), y = value, fill = Condition)) + 
+   in.data = in.data %>% mutate(Condition = factor(Condition, levels = condition.levels))
+    p1 = ggplot(in.data, aes(x = factor(unit.type), y = value, fill = Condition)) + 
       geom_boxplot() +
       scale_fill_manual(values = condition.fill) +
       facet_grid(reformulate("RS", my.facet), scales = "free") +
@@ -167,46 +174,5 @@ make.outputs.unit = function(in.data, pool.by, gu.type, out.dir, my.facet = "var
   
   out.data = make.summary(in.data, pool.by, sub.out.dir)
   return(out.data)
-}
-
-#Set plotting colors and levels depending on gu.type #depends on already sourcing the script plot.colors
-set.levels.colors=function(mydata, gu.type, myGUPdir=repo.dir, unitcolname){
-
-source(paste(myGUPdir, "\\scripts\\plot.colors.R", sep=""))
-
-mydata=as.data.frame(mydata)
-unitcol=which(names(mydata)==unitcolname)
-  
-if(gu.type == "UnitShape"){
-  unit.colors = shape.fill
-  mydata$Unit = factor(mydata[,unitcol], levels = shape.levels)
-  
-}
-
-if(gu.type=="UnitForm"){
-  unit.colors= form.fill
-  
-  if(layer=="Tier2_InChannel_Transition"){
-    mydata$Unit=factor(mydata[,unitcol], levels = form.discrete.levels)
-  }
-  if(layer=="Tier2_InChannel"){
-    mydata$Unit=factor(mydata[,unitcol], levels = form.levels)
-  }
-}
-
-if(gu.type=="GU"){
-  unit.colors=gu.fill
-  mydata$Unit=factor(mydata[,unitcol], levels=gu.levels)
-}
-
-#print("Unit Colors=")
-#print(unit.colors)
-
-#print("GU levels=")
-#print(levels(mydata$Unit))
-
-#print(head(mydata))
-
-return(list(mydata=mydata, unit.colors=unit.colors))
 }
 
