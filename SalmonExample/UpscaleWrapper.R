@@ -24,9 +24,14 @@ braid.index.file = "C:/Anabranch/UpperSalmon/wrk_Data/temp/GeomorphicUpscale-mas
 
 gu.type = "UnitForm"      #Options: UnitForm, GU # UnitShape not available at this time since I don't have maps of these in the database
 RSlevels = NA # optional vector argument to set RS factor order in graphs and displays, leave as  NA if alphabetical is desired
+geoindicators = c('BfBraid', 'LWFreq_Wet', 'SlowWater_Freq', 'ChnlUnit_Freq', 'Sin') # list of geoindicators to create plots for
 
 
-# Read back in selections data in case it was clear
+# Dependencies -------------------------------------------------------------------
+
+library(tidyverse)
+
+# Read back in selections data in case it was cleared
 selections = read_csv(selections.file)
 
 # Builds the project directory structure and re-organizes inputs ---------------------------
@@ -37,8 +42,7 @@ source(file.path(repo.dir, "scripts/projbuild.R"))
 # Generate selection output ---------------------------
 
 # geoindicator summary script
-# !! importatnt -- if adding geoindicators or chaning from NKs original names, need to edit the fields selected in
-#                  there selection.geoindicators script
+
 source(file.path(repo.dir, "scripts/selection.geoindicators.R")) 
 
 # turned this off for now - ask NK why she's calling this in both the RSelection and the UpscaleWrapper
