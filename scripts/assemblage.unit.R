@@ -81,7 +81,7 @@ print("making assemblage tables and plots...")
 # assemblages based on area.ratio from gut unit metrics, where
 #   area.ratio = sum(areas for unit type i) / sum(areas for all unit types)
 # note: here natalie is using the average area.ratio form pool.by results
-assemblage.proportions = function(my.stats, pool.by, my.ROI = "bankfull", out.dir = assemblage.dir){
+assemblage.proportions = function(my.stats, pool.by, my.ROI = "bankfull", out.dir = assemblage.dir, gu.type = gu.type){
   
   # set output subdirectory name based on 'pool.by' argument
   if(pool.by == "RS"){
@@ -133,12 +133,12 @@ assemblage.proportions = function(my.stats, pool.by, my.ROI = "bankfull", out.di
   write_csv(assemblage.norm, file.path(sub.out.dir, "assemblage.csv"), col_names = TRUE)
   
   # call function to make plots
-  assemblage.plot(assemblage.norm, pool.by, start.col, end.col, out.dir = sub.out.dir)
+  assemblage.plot(assemblage.norm, pool.by, start.col, end.col, out.dir = sub.out.dir, gu.type = gu.type)
 
 }
 
 # function to plot assemblage. Used within assemblage.proportions function
-assemblage.plot = function(assemblage.data, pool.by, start.col, end.col, out.dir){
+assemblage.plot = function(assemblage.data, pool.by, start.col, end.col, out.dir, gu.type){
   
   #Read in and manipulate data for plotting
   my.data = assemblage.data %>%
@@ -155,9 +155,16 @@ assemblage.plot = function(assemblage.data, pool.by, start.col, end.col, out.dir
   if(pool.by != "All"){
     if(!all(is.na(RSlevels))){my.data$RS = factor(my.data$RS, levels = RSlevels)}}
   
-  a = set.levels.colors(my.data, gu.type, repo.dir, unitcolname = "Unit")
-  unit.colors = a$unit.colors
-  # my.data = a$my.data # commenting out.  not sure why nk was overwriting here
+  # set plotting colors
+  if(gu.type == "UnitForm"){
+    unit.colors = form.fill
+    my.data = my.data %>%
+      mutate(Unit = factor(Unit, levels = form.levels))
+  }else{
+    unit.colors = gu.fill
+    my.data = my.data %>%
+      mutate(Unit = factor(Unit, levels = gu.levels))
+  }
   
   #makes assemblage plots
   if(pool.by == "All"){
@@ -186,9 +193,9 @@ assemblage.plot = function(assemblage.data, pool.by, start.col, end.col, out.dir
 }
 
 #writes assemblages and creates plots based on specified pool.by
-assemblage.proportions(stats.RSCond, pool.by = "RSCond")
-assemblage.proportions(stats.RS, pool.by = "RS")
-assemblage.proportions(stats, pool.by = "All")
+assemblage.proportions(stats.RSCond, pool.by = "RSCond", gu.type = gu.type)
+assemblage.proportions(stats.RS, pool.by = "RS", gu.type = gu.type)
+assemblage.proportions(stats, pool.by = "All", gu.type = gu.type)
 
 
 
