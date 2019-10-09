@@ -11,8 +11,8 @@
 
 library(tidyverse)
 
-source(file.path(repo.dir, "scripts\\plot.colors.R"))
-source(file.path(repo.dir, "scripts\\functions.R"))
+source(file.path(repo.dir, "scripts/plot.colors.R"))
+source(file.path(repo.dir, "scripts/functions.R"))
 
 
 # user variables defined in UpscaleWrapper.R ------------------------------------------------------------
@@ -46,16 +46,20 @@ if(gu.type == "UnitForm" | gu.type == "UnitShape"){
 
 # read in site data and convert to long data format
 # add wet to bankfull area ratio
-site.metrics = read_csv(file.path(metrics.dir, gut.metrics)) %>%
+site.metrics = read_csv(file.path(metrics.dir, gut.metrics)) 
+
+if('visit.id' %in% names(site.metrics)){site.metrics = site.metrics %>% rename(VisitID = visit.id)}
+
+site.metrics = site.metrics %>%
   select(-gut.layer) %>%
   mutate(wet.bf.area.ratio = round(wet.area.m2 / bf.area.m2, 3)) %>%
-  gather(value = "value", key = "variable", -visit.id)
+  gather(value = "value", key = "variable", -VisitID)
 
 # join site metrics and selections
 # add unit.type (here all units) and ROI 
 site.data = selections %>% 
-  select(RS, Condition, visit.id) %>%
-  inner_join(site.metrics, by = 'visit.id') %>%
+  select(RS, Condition, VisitID) %>%
+  inner_join(site.metrics, by = 'VisitID') %>%
   mutate(unit.type = "all", ROI = "bankfull")
 
 # re-set ROI to wettedf for rows where variable is 'wet.area.m2'

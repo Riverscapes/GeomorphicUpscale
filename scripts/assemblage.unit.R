@@ -14,8 +14,8 @@
 
 library(tidyverse)
 
-source(file.path(repo.dir, "scripts\\plot.colors.R"))
-source(file.path(repo.dir, "scripts\\functions.R"))
+source(file.path(repo.dir, "scripts/plot.colors.R"))
+source(file.path(repo.dir, "scripts/functions.R"))
 
 
 # user variables defined in UpscaleWrapper.R ------------------------------------------------------------
@@ -48,15 +48,19 @@ if(gu.type == "UnitForm" | gu.type == "UnitShape"){
 # Read in and preps unit data ----------------------------------------------------------
 
 # read in unit data and convert to long data format
-unit.metrics = read_csv(file.path(metrics.dir, gut.metrics)) %>%
+unit.metrics = read_csv(file.path(metrics.dir, gut.metrics))
+
+if('visit.id' %in% names(unit.metrics)){unit.metrics = unit.metrics %>% rename(VisitID = visit.id)}
+
+unit.metrics = unit.metrics %>%
     select(-gut.layer)%>%
-    gather(value = "value", key = "variable", -visit.id, -unit.type) %>%
+    gather(value = "value", key = "variable", -VisitID, -unit.type) %>%
     mutate(ROI = "bankfull")
   
 #combine Unit data with selections
 unit.data = selections %>% 
-  select(RS, Condition, visit.id) %>%
-  inner_join(unit.metrics, by = 'visit.id') %>%
+  select(RS, Condition, VisitID) %>%
+  inner_join(unit.metrics, by = 'VisitID') %>%
   filter(!is.na(unit.type))
   
 # summarize variables in GUT unit summary ----------------------------------------------
