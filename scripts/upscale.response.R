@@ -136,28 +136,29 @@ gu.ratio.bf.area$unit.type = as.factor(gu.ratio.bf.area$unit.type)
 
 
 # assembling upscale data----------------------------------------------------
-#Combining response and assemblage data
+
+# Combining response and assemblage data
 print("assembling upscale data")
 
+# conditionals for dealing with different response.pools
+if(response.pool == "byRSCond"){join.by = c("RS", "Condition", "unit.type")}
+if(response.pool == "byRS"){join.by = c("RS", "unit.type")}
+if(response.pool == "byAll"){join.by = c("unit.type")}
 
+join.byRSCond=c("RS", "Condition", "unit.type")
 
-#conditionals for dealing with different response.pools
-if(response.pool=="byRSCond"){joinby=c("RS", "Condition", "unit.type")}
-if(response.pool=="byRS"){joinby=c("RS", "unit.type")}
+# computes fish density for upscale. Can be appended to later to accomodate density within hydro or wetted.
+# but, I need the assemblages within the wetted extent in order to do this type of upscale.
 
-joinbyRSCond=c("RS", "Condition", "unit.type")
-
-#computes fish density for upscale. Can be appended to later to accomodate density within hydro or wetted.
-#but, I need the assemblages within the wetted extent in order to do this type of upscale.
-bf.density=gu.bf.area%>%
-  #left_join(response.area, by=joinbyRSCond)%>%
-  left_join(gu.ratio.bf.area, joinbyRSCond)%>%
-  left_join(gu.bf.area.ratio.sd, joinbyRSCond)%>%
-  left_join(response.pred.fish, by=joinby)%>%
-  #left_join(response.sd.pred.fish,by=joinbyRS) Not needed unless I do my summary of response differently.
-  mutate(sd.pred.fish=NA)%>%
-  mutate(fish.density=pred.fish/area.m2, sd.fish.density=sd.pred.fish/area.m2)%>% #could calculate also using perc habitat area, gets around the bankfull issue.
-  select(RS, Condition, unit.type, area.ratio, area.ratio.sd,fish.density, sd.fish.density)%>%
+bf.density = gu.bf.area %>%
+  #left_join(response.area, by=join.byRSCond) %>% # nk had commented out - not sure why
+  left_join(gu.ratio.bf.area, by = join.by) %>%
+  left_join(gu.bf.area.ratio.sd, by = join.by) %>%
+  left_join(response.pred.fish, by = join.by) %>%
+  #left_join(response.sd.pred.fish,by=join.byRS) Not needed unless I do my summary of response differently.
+  mutate(sd.pred.fish = NA) %>%
+  mutate(fish.density = pred.fish / area.m2, fish.density.sd = sd.pred.fish / area.m2) %>% #could calculate also using perc habitat area, gets around the bankfull issue.
+  select(RS, Condition, unit.type, area.ratio, area.ratio.sd, fish.density, fish.density.sd) %>%
   mutate(ROI="bankfull")
 
 
@@ -217,7 +218,7 @@ upscale1=upscale%>%
 upscale2=upscale1%>%
   mutate(value=area.ratio*reach.area*fish.density)%>% #compute estimated fish per unit type per reach
   mutate(value.sd=abs(value)*sqrt((area.ratio.sd/area.ratio)^2))%>% #compute estimated sd of fish per unit type per reach type
-  #mutate(value.sd=abs(value)*sqrt((area.ratio.sd/area.ratio)^2 + (sd.fish.density/fish.density)^2))%>% #change to this once I get the sd of fish denisty included.
+  #mutate(value.sd=abs(value)*sqrt((area.ratio.sd/area.ratio)^2 + (fish.density.sd/fish.density)^2))%>% #change to this once I get the sd of fish denisty included.
   group_by(.[,1], RS, Condition, reach.length, reach.width, reach.area, area.method, reach.braid)%>% #groups by segment id, then RS then Condition
   summarize(value=sum(value, na.rm=T), value.sd=sqrt(sum(value.sd^2, na.rm=T)))%>%
   mutate(variable="pred.fish")
