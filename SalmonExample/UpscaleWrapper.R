@@ -76,10 +76,14 @@ seg.id.col = "RECNO"
 length.col = "LENGTH"        
 width.col = "WIDE_WW"       
 cond.cols = c("GEO_COND")     #user supplied
-area.cols = "AREA_WW" # leave as NA if no area is specified per reach segment and it will be estimated
+area.col = "AREA_WW" # leave as NA if no area is specified per reach segment and it will be estimated but this requires braid index file
 
 # read in network and braid.index files
 network = read_csv(network.file)
+
+# filter out rows with missing widths
+network = network %>% filter(WIDE_WW > 0)
+
 if(!is.na(braid.index.file)){braid.index = read_csv(braid.index.file)}else{braid.index = NA}
 
 # source and run code to generate output for upscaling response variabales
