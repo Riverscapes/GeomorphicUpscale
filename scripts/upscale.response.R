@@ -8,6 +8,8 @@
 
 # To Do ------------------------------------------------------------
 
+# !!!! Unit_Fish_Metrics_Tier*_InChannel has area.delft field (hydro model - gut unit intersection) for each unit so why aren't we using this instead of bankfull areas for each unit in upscale???
+# !!!! ....so assemblage should also include proprtions for wetted
 # here natalie is upscaling only by unit so what was point of generating all upscale by reach stuff?
 # should have ability to upscale by reach as well?
 
@@ -72,15 +74,8 @@ if(!file.exists(upscale.dir)){dir.create(upscale.dir, recursive = TRUE)}
 # delete any existing files in output directory from previous runs
 unlink(file.path(upscale.dir, "*"), recursive = TRUE)
 
-# specify gut output layer and corresponding metric table to draw data from based on gu.type parameter
-if(gu.type == "GU"){
-  layer = "Tier3_InChannel_GU"}
-if(gu.type == "UnitForm" | gu.type == "UnitShape"){
-  layer = "Tier2_InChannel"}
-
 
 # Reads in and restructures data----------------------------------------------------
-
 
 # Read in response variable by response.pool variable
 
@@ -117,6 +112,7 @@ assemblage = read_csv(file.path(assemblage.dir, "assemblage.csv"))%>%
 gu.stats = read_csv(file.path(assemblage.dir, "stats.csv"))
 
 # total bankfull area for each unit type
+# note: unit roi is only for bankfull (no hydro was calculated)
 gu.bf.area = gu.stats %>%
   filter(variable == "area.sum", ROI == "bankfull") %>%
   select(RS, Condition, unit.type, tot) %>%
@@ -124,8 +120,9 @@ gu.bf.area = gu.stats %>%
 
 # sd bankfull area ratio for each unit type
 # selects the standard deviation of assemblage ratios for each RS and condition
+# note: area ratio for unit of type (i) = sum(areas for unit type (i)) / sum(areas for all units)
 gu.bf.area.ratio.sd = gu.stats %>% 
-  filter(variable == "area.ratio", ROI == "bankfull")%>%
+  filter(variable == "area.ratio", ROI == "bankfull") %>%
   select(RS, Condition, unit.type, sd) %>%
   rename(area.ratio.sd = sd)
 
@@ -135,7 +132,6 @@ gu.ratio.bf.area = assemblage %>%
   gather(key = "unit.type", value = "area.ratio", (length(names(assemblage)) - (gu.levels)):length(names(assemblage))) %>%
   select(RS, Condition, unit.type, area.ratio)
 
-# stopped here
 gu.ratio.bf.area$unit.type = as.factor(gu.ratio.bf.area$unit.type)
 
 
