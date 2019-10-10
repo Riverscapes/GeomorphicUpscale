@@ -8,8 +8,10 @@
 
 # To Do ------------------------------------------------------------
 
+# ask nk about standard deviation calculations in upscale2 -- not sure how this is being calculated...
 # !!!! Unit_Fish_Metrics_Tier*_InChannel has area.delft field (hydro model - gut unit intersection) for each unit so why aren't we using this instead of bankfull areas for each unit in upscale???
 # !!!! ....so assemblage should also include proprtions for wetted
+# right now hokey way of calculating sd (see notes below).  why not calculate confindence interval??
 # here natalie is upscaling only by unit so what was point of generating all upscale by reach stuff?
 # should have ability to upscale by reach as well?
 
@@ -145,11 +147,11 @@ if(response.pool == "byRSCond"){join.by = c("RS", "Condition", "unit.type")}
 if(response.pool == "byRS"){join.by = c("RS", "unit.type")}
 if(response.pool == "byAll"){join.by = c("unit.type")}
 
-join.byRSCond=c("RS", "Condition", "unit.type")
-
 # computes fish density for upscale. Can be appended to later to accomodate density within hydro or wetted.
 # but, I need the assemblages within the wetted extent in order to do this type of upscale.
 
+# note - not sure why nk was creating sd.pred.fish field, setting all values to na and thent rying to use this to
+#        calculate standard deviation
 bf.density = gu.bf.area %>%
   #left_join(response.area, by=join.byRSCond) %>% # nk had commented out - not sure why
   left_join(gu.ratio.bf.area, by = join.by) %>%
@@ -157,13 +159,13 @@ bf.density = gu.bf.area %>%
   left_join(response.pred.fish, by = join.by) %>%
   #left_join(response.sd.pred.fish,by=join.byRS) Not needed unless I do my summary of response differently.
   mutate(sd.pred.fish = NA) %>%
-  mutate(fish.density = pred.fish / area.m2, fish.density.sd = sd.pred.fish / area.m2) %>% #could calculate also using perc habitat area, gets around the bankfull issue.
+  mutate(fish.density = pred.fish / area.m2, 
+         fish.density.sd = sd.pred.fish / area.m2) %>% #could calculate also using perc habitat area, gets around the bankfull issue.
   select(RS, Condition, unit.type, area.ratio, area.ratio.sd, fish.density, fish.density.sd) %>%
-  mutate(ROI="bankfull")
+  mutate(ROI = "bankfull")
 
-
-#If adding more variables for upscale (ex. Model values, perc habitat, etc), could be handy to have in long (gathered) format instead.
-upscale.response=bf.density
+# If adding more variables for upscale (ex. Model values, perc habitat, etc), could be handy to have in long (gathered) format instead.
+upscale.response = bf.density
 
 # Upscales response on the network for different scenarios ------------------------------
 
@@ -171,110 +173,115 @@ print("upscaling response on the network for different condition senarios")
 
 #Finds position of columns related to defined header in network file
 
-condcols.n=match(condcols,colnames(network))
-RScol.n=which(colnames(network)=="RS")
-seg.id.col.n=which(colnames(network)==seg.id.col)
-length.col.n=which(colnames(network)==length.col)
-width.col.n=which(colnames(network)==width.col)
-
-
-#This is the part that does the upscaling on the network for each cond col scenario (the for loop)
-
-#fix character warnings
-for(i in 1:length(condcols.n)){ #maybe this can be changed to an lapply or something.
-  
-upscale=network[,c(seg.id.col.n,RScol.n, condcols.n[i], length.col.n, width.col.n)]
-names(upscale)=c(names(network)[seg.id.col.n],"RS", "Condition","reach.length", "reach.width")
+cond.cols.n = match(cond.cols, colnames(network))
+RScol.n = which(colnames(network) == "RS")
+seg.id.col.n = which(colnames(network) == seg.id.col)
+length.col.n = which(colnames(network) == length.col)
+width.col.n = which(colnames(network) == width.col)
 
 #Estimate area based on condition and braid.index or specify user supplied areas
 Estimate.Area=function(data, condcol.n, RScol.n, seg.id.col.n, length.col.n, width.col.n){
   length=data[,length.col.n]
   width=data[, width.col.n]
-  C=braid.index%>%select(RS, Condition, C)%>%
-    right_join(data, by = c("RS", "Condition"))%>%select(C)
+  C = braid.index %>% 
+    select(RS, Condition, C) %>%
+    right_join(data, by = c("RS", "Condition")) %>%
+    select(C)
   area=length*width*as.data.frame(C)[,1]
   return(area)
 }
+#This is the part that does the upscaling on the network for each cond col scenario (the for loop)
 
-if(is.na(areacols)){
- area=Estimate.Area(data=upscale, condcol.n=3, RScol.n=2, seg.id.col.n=1, length.col.n=4, width.col.n=5)
- area.method="estimated"
-}else{
-  areacol.n=match(areacols[i],colnames(network))
-  area=network[,areacol.n]
-  area.method="given"
-}
+#fix character warnings
+for(i in 1:length(cond.cols)){ #maybe this can be changed to an lapply or something.
+
+  cond.col = cond.cols[i]
   
-#set upscale data table for condition scenario to include area 
-  upscale = upscale%>%mutate(reach.area=area, area.method=area.method)%>%mutate(reach.braid=reach.area/reach.length/reach.width)
- # head(upscale)
+  if(any(is.na(area.col), str_length(area.col) == 0)){
+    upscale.network = network %>% 
+      select(!!seg.id.col, RS, !!cond.col, !!length.col, !!width.col)  
+    names(upscale.network) = c(seg.id.col, "RS", "Condition", "reach.length", "reach.width")
+    area = Estimate.Area(data = upscale.network, condcol.n = 3, RScol.n = 2, seg.id.col.n = 1, length.col.n = 4, width.col.n = 5)
+    upscale.network = upscale.network %>% 
+      mutate(reach.area = area, area.method = "estimated")
+  }else{
+    upscale.network = network %>% 
+      select(!!seg.id.col, RS, !!cond.col, !!length.col, !!width.col, !!area.col) %>%
+      mutate(area.method = "given")
+    names(upscale.network) = c(seg.id.col, "RS", "Condition", "reach.length", "reach.width", "reach.area", "area.method")
+  }
+  
+  # calculate reach.braid metric 
+  upscale.network = upscale.network %>% 
+    mutate(reach.braid = reach.area / reach.length / reach.width)
+   # head(upscale.network)
 
-#combine upscale network segments with response- tied to RS and condition specified on network
-upscale1=upscale%>%
-    full_join(upscale.response%>%filter(ROI=="bankfull"), by=c("RS", "Condition"))%>%
-    filter(!is.na(.[,1])) #removes any rows with NA for segID left over from join
+  #combine upscale network segments with response- tied to RS and condition specified on network
+  upscale.network1 = upscale.network %>%
+    inner_join(upscale.response %>% filter(ROI == "bankfull"), by = c("RS", "Condition")) 
+
 
 #Upscale Math #if using more variables better in long format and then adjust this to be more generic, selecting by upscale variable of interest
-upscale2=upscale1%>%
-  mutate(value=area.ratio*reach.area*fish.density)%>% #compute estimated fish per unit type per reach
-  mutate(value.sd=abs(value)*sqrt((area.ratio.sd/area.ratio)^2))%>% #compute estimated sd of fish per unit type per reach type
+upscale.network2 = upscale.network1 %>%
+  mutate(area.ratio = as.numeric(area.ratio),
+         value = area.ratio * reach.area * fish.density) %>% #compute estimated fish per unit type per reach
+  mutate(value.sd = abs(value) * sqrt((area.ratio.sd / area.ratio)**2)) %>% #compute estimated sd of fish per unit type per reach type
   #mutate(value.sd=abs(value)*sqrt((area.ratio.sd/area.ratio)^2 + (fish.density.sd/fish.density)^2))%>% #change to this once I get the sd of fish denisty included.
-  group_by(.[,1], RS, Condition, reach.length, reach.width, reach.area, area.method, reach.braid)%>% #groups by segment id, then RS then Condition
-  summarize(value=sum(value, na.rm=T), value.sd=sqrt(sum(value.sd^2, na.rm=T)))%>%
-  mutate(variable="pred.fish")
+  group_by(!!seg.id.col, RS, Condition, reach.length, reach.width, reach.area, area.method, reach.braid) %>% #groups by segment id, then RS then Condition
+  summarize(value = sum(value, na.rm = TRUE), value.sd = sqrt(sum(value.sd**2, na.rm = TRUE))) %>%
+  mutate(variable = "pred.fish")
 
 
-upscale2$Scenario= names(network)[condcols.n[i]] #add field that specifies which condition scenario was used.
+upscale.network2$Scenario= names(network)[cond.cols.n[i]] #add field that specifies which condition scenario was used.
 
 #math for SE rather than standard deviation
 #varSE=abs(var)*sqrt(((sd/sqrt(n))/PercGU)^2+((sd.r/sqrt(n.r))/bfdensity)^2) #SE includes n
 #varSD=abs(var)*sqrt((sd/PercGU)^2+(sd.bfdensity/bfdensity)^2))
  
-  if(i==1){reachupscale=upscale2}else{reachupscale=rbind(reachupscale,upscale2)}
+  if(i==1){reach.upscale=upscale.network2}else{reach.upscale=rbind(reach.upscale,upscale.network2)}
 } #this is the end of the for loop.
 
 
 
 
-reachupscale$species=species
-reachupscale$model=model
-reachupscale$lifestage=lifestage
-reachupscale$response.pool=response.pool
-reachupscale$gu.type=gu.type
-names(reachupscale[1])=seg.id.col
+reach.upscale$species = species
+reach.upscale$model = model
+reach.upscale$lifestage = lifestage
+reach.upscale$response.pool = response.pool
+reach.upscale$gu.type = gu.type
+names(reach.upscale[1]) = seg.id.col
 
-#group results by Scenario and RS and Condition
-a=reachupscale%>%
-  group_by(Scenario, RS, Condition, area.method, model, species, variable, response.pool, gu.type )
+# group results by Scenario and RS and Condition
+a = reach.upscale %>%
+  group_by(Scenario, RS, Condition, area.method, model, species, variable, response.pool, gu.type)
 #group results by Scenario and  RS
-b=reachupscale%>%
-  group_by(Scenario, RS, area.method, model, species, variable, response.pool , gu.type)
+b = reach.upscale %>%
+  group_by(Scenario, RS, area.method, model, species, variable, response.pool, gu.type)
 #group results by only Scenario 
-c=reachupscale%>%
-  group_by(Scenario, area.method, model, species,  variable, response.pool, gu.type )  
+c = reach.upscale %>%
+  group_by(Scenario, area.method, model, species, variable, response.pool, gu.type)  
   
 #make basin summaries
-reachsummary=function(groupeddata){
-  groupeddata%>%summarize(value=sum(value,na.rm=T), 
-                          value.sd= sqrt(sum(value.sd^2, na.rm=T)),
-                          tot.area=sum(area,na.rm=T),
-                          tot.length=sum(reach.length, na.rm=T),
-                          mean.width=mean(reach.width, na.rm=T),
-                          sd.width=sd(reach.width, na.rm=T),
-                          mean.braid=mean(reach.braid, na.rm=T),
-                          sd.braid=sd(reach.width, na.rm=T),
-  )
+reach.summary = function(grouped.data){
+  grouped.data %>% summarize(value = sum(value, na.rm = TRUE), 
+                          value.sd = sqrt(sum(value.sd**2, na.rm = TRUE)),
+                          tot.area = sum(area,na.rm = TRUE),
+                          tot.length = sum(reach.length, na.rm = TRUE),
+                          mean.width = mean(reach.width, na.rm = TRUE),
+                          sd.width = sd(reach.width, na.rm = TRUE),
+                          mean.braid = mean(reach.braid, na.rm = TRUE),
+                          sd.braid = sd(reach.width, na.rm = TRUE))
 }
 
-basinupscale_RSCond=reachsummary(a)
-basinupscale_RS=reachsummary(b)
-basinupscale=reachsummary(c)
+basin.upscale.RSCond = reach.summary(a)
+basin.upscale.RS = reach.summary(b)
+basin.upscale = reach.summary(c)
 
 #write output to file
-write.csv(reachupscale, paste(upscale.dir, "\\" ,"byreach.csv", sep=""), row.names=F)
-write.csv(basinupscale, paste(upscale.dir, "\\", "bybasin.csv", sep=""), row.names=F)
-write.csv(basinupscale_RS, paste(upscale.dir, "\\", "bybasin_RS.csv", sep=""), row.names=F)
-write.csv(basinupscale_RSCond, paste(upscale.dir, "\\", "bybasin_RSCond.csv", sep=""), row.names=F)
+write_csv(reach.upscale, file.path(upscale.dir, "byreach.csv"), col_names = TRUE)
+write_csv(basin.upscale, file.path(upscale.dir, "bybasin.csv"), col_names = TRUE)
+write_csv(basin.upscale.RS, file.path(upscale.dir, "bybasin_RS.csv"), col_names = TRUE)
+write_csv(basin.upscale.RSCond, file.path(upscale.dir, "bybasin_RSCond.csv"), col_names = TRUE)
 
 
 print(paste("files written to: ", upscale.dir))
@@ -286,7 +293,7 @@ print(paste("files written to: ", upscale.dir))
 # 
 # keepvars=c("selections", "proj.dir","GUPdir", "plottype", "myscales" , "RSlevels", "gu.type", 
 #            "species", "model", "lifestage", "network", "braid.index",
-#             "response.pool", "seg.id.col", "length.col" , "width.col" , "condcols", "areacols")
+#             "response.pool", "seg.id.col", "length.col" , "width.col" , "cond.cols", "area.cols")
 # 
 # rm(list=ls()[-match(x = keepvars, table = ls())])
 # 
