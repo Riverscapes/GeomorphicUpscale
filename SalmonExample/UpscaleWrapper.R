@@ -8,17 +8,17 @@
 # Set required paths ---------------------------
 
 # User defined project directory path where outputs will be written
-proj.dir = "C:/Anabranch/UpperSalmon/wrk_Data/temp/GeomorphicUpscale-master/AsotinExample"
+proj.dir = "C:/Anabranch/UpperSalmon/wrk_Data/GUTUpscale/PrelimRun_01"
 
 # Specify directory path to the downloaded Git Repo
-repo.dir = "C:/Anabranch/UpperSalmon/wrk_Data/temp/GeomorphicUpscale-master"
+repo.dir = "C:/etal/LocalCode/GeomorphicUpscale"
 
 # Path to selections csv created by RSselections.R
-selections.file = "C:/Anabranch/UpperSalmon/wrk_Data/temp/GeomorphicUpscale-master/AsotinExample/Inputs/Selections.csv" 
+selections.file = "C:/Anabranch/UpperSalmon/wrk_Data/GUTUpscale/PrelimRun_01/Inputs/Selections.csv"
 
-# Path to network csv and braind index csv
-network.file = "C:/Anabranch/UpperSalmon/wrk_Data/temp/GeomorphicUpscale-master/AsotinExample/Inputs/network.csv"
-braid.index.file = "C:/Anabranch/UpperSalmon/wrk_Data/temp/GeomorphicUpscale-master/AsotinExample/Inputs/braid_index.csv"
+# Path to network csv and braid index csv
+network.file = "C:/Anabranch/UpperSalmon/wrk_Data/GUTUpscale/PrelimRun_01/Inputs/Anadramous_Network.csv"
+braid.index.file = NA
 
 # User defined variables ---------------------------
 
@@ -72,15 +72,15 @@ source(file.path(repo.dir, "scripts/response.unit.R"))
 # Generate upscale output ---------------------------
 
 response.pool = "byRSCond"     #Options: "byRScond", "byRS", "byAll"
-segIDcol = "segmentID"        #user supplied
-length.col = "length.m"        #user supplied
-width.col = "bf.width.m"       #user supplied.
-cond.cols = c("Condition0", "Condition1", "Condition2", "Condition3")     #user supplied
-area.cols = NA #user supplied. leave as NA if no area is specified per reach segment and it will be estimated
+seg.id.col = "RECNO"        
+length.col = "LENGTH"        
+width.col = "WIDE_WW"       
+cond.cols = c("GEO_COND")     #user supplied
+area.cols = "AREA_WW" # leave as NA if no area is specified per reach segment and it will be estimated
 
 # read in network and braid.index files
-network = read_csv(file.path(proj.dir, 'Inputs', basename(network.file)))
-braid.index = read_csv(file.path(proj.dir, 'Inputs', basename(braid.index.file)))
+network = read_csv(network.file)
+if(!is.na(braid.index.file)){braid.index = read_csv(braid.index.file)}else{braid.index = NA}
 
 # source and run code to generate output for upscaling response variabales
 source(file.path(repo.dir, "scripts/upscale.response.R"))
