@@ -173,7 +173,7 @@ upscale.response = bf.density
 print("upscaling response on the network for different condition senarios")
 
 
-#Estimate area based on condition and braid.index or specify user supplied areas
+#Estimate area based on condition and braid.index if not supplied by the user
 Estimate.Area=function(data, condcol.n, RScol.n, seg.id.col.n, length.col.n, width.col.n){
   length=data[,length.col.n]
   width=data[, width.col.n]
@@ -184,12 +184,11 @@ Estimate.Area=function(data, condcol.n, RScol.n, seg.id.col.n, length.col.n, wid
   area=length*width*as.data.frame(C)[,1]
   return(area)
 }
+
 #This is the part that does the upscaling on the network for each cond col scenario (the for loop)
 
 #fix character warnings
-for(i in 1:length(cond.cols)){ #maybe this can be changed to an lapply or something.
-
-  cond.col = cond.cols[i]
+upscale.fn = function(cond.col){
   
   if(any(is.na(area.col), str_length(area.col) == 0)){
     upscale.network = network %>% 
@@ -208,7 +207,6 @@ for(i in 1:length(cond.cols)){ #maybe this can be changed to an lapply or someth
   # calculate reach.braid metric 
   upscale.network = upscale.network %>% 
     mutate(reach.braid = reach.area / reach.length / reach.width)
-   # head(upscale.network)
 
   #combine upscale network segments with response- tied to RS and condition specified on network
   upscale.network.response = upscale.network %>%
@@ -224,13 +222,10 @@ for(i in 1:length(cond.cols)){ #maybe this can be changed to an lapply or someth
     left_join(upscale.network %>% select(-RS, -Condition), by = seg.id.col) %>%
     select(!!seg.id.col, RS, Condition, reach.length, reach.width, reach.area, area.method, reach.braid, everything())
  
-  if(i==1){
-    reach.upscale = upscale.network.response
-  }else{
-    reach.upscale = rbind(reach.upscale, upscale.network.response)
-  }
-} #this is the end of the for loop.
+  return(upscale.network.response)
+}
 
+reach.upscale = map_dfr(cond.cols, upscale.fn)
 
 # add additional fields
 reach.upscale = reach.upscale %>%
