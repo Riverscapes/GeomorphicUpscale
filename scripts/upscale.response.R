@@ -105,7 +105,7 @@ response.pred.fish = response %>%
 # read in estimates of assemblages
 
 # read in assemblage area ratios
-assemblage = read_csv(file.path(assemblage.dir, "assemblage.csv"))%>%
+assemblage = read_csv(file.path(assemblage.dir, "assemblage.csv")) %>%
   select(-SUM)
 
 # renormalized assemblage ratios converted to long format -- no nk code below this comment not sure if there should be something here?
@@ -131,8 +131,9 @@ gu.bf.area.ratio.sd = gu.stats %>%
 gu.levels = gu.stats %>% distinct(unit.type) %>% nrow()
 
 gu.ratio.bf.area = assemblage %>%
-  gather(key = "unit.type", value = "area.ratio", (length(names(assemblage)) - (gu.levels)):length(names(assemblage))) %>%
-  select(RS, Condition, unit.type, area.ratio)
+  gather(key = "unit.type", value = "area.ratio", (length(names(assemblage)) - (gu.levels + 1)):length(names(assemblage))) %>%
+  select(RS, Condition, unit.type, area.ratio) %>%
+  mutate(area.ratio = as.numeric(area.ratio))
 
 gu.ratio.bf.area$unit.type = as.factor(gu.ratio.bf.area$unit.type)
 
@@ -171,13 +172,6 @@ upscale.response = bf.density
 
 print("upscaling response on the network for different condition senarios")
 
-#Finds position of columns related to defined header in network file
-
-cond.cols.n = match(cond.cols, colnames(network))
-RScol.n = which(colnames(network) == "RS")
-seg.id.col.n = which(colnames(network) == seg.id.col)
-length.col.n = which(colnames(network) == length.col)
-width.col.n = which(colnames(network) == width.col)
 
 #Estimate area based on condition and braid.index or specify user supplied areas
 Estimate.Area=function(data, condcol.n, RScol.n, seg.id.col.n, length.col.n, width.col.n){
@@ -217,39 +211,37 @@ for(i in 1:length(cond.cols)){ #maybe this can be changed to an lapply or someth
    # head(upscale.network)
 
   #combine upscale network segments with response- tied to RS and condition specified on network
-  upscale.network1 = upscale.network %>%
-    inner_join(upscale.response %>% filter(ROI == "bankfull"), by = c("RS", "Condition")) 
-
-
-#Upscale Math #if using more variables better in long format and then adjust this to be more generic, selecting by upscale variable of interest
-upscale.network2 = upscale.network1 %>%
-  mutate(area.ratio = as.numeric(area.ratio),
-         value = area.ratio * reach.area * fish.density) %>% #compute estimated fish per unit type per reach
-  mutate(value.sd = abs(value) * sqrt((area.ratio.sd / area.ratio)**2)) %>% #compute estimated sd of fish per unit type per reach type
-  #mutate(value.sd=abs(value)*sqrt((area.ratio.sd/area.ratio)^2 + (fish.density.sd/fish.density)^2))%>% #change to this once I get the sd of fish denisty included.
-  group_by(!!seg.id.col, RS, Condition, reach.length, reach.width, reach.area, area.method, reach.braid) %>% #groups by segment id, then RS then Condition
-  summarize(value = sum(value, na.rm = TRUE), value.sd = sqrt(sum(value.sd**2, na.rm = TRUE))) %>%
-  mutate(variable = "pred.fish")
-
-
-upscale.network2$Scenario= names(network)[cond.cols.n[i]] #add field that specifies which condition scenario was used.
-
-#math for SE rather than standard deviation
-#varSE=abs(var)*sqrt(((sd/sqrt(n))/PercGU)^2+((sd.r/sqrt(n.r))/bfdensity)^2) #SE includes n
-#varSD=abs(var)*sqrt((sd/PercGU)^2+(sd.bfdensity/bfdensity)^2))
+  upscale.network.response = upscale.network %>%
+    inner_join(upscale.response %>% filter(ROI == "bankfull"), by = c("RS", "Condition")) %>%
+    mutate(value = area.ratio * reach.area * fish.density) %>% #  compute estimated fish per unit type per reach
+    mutate(value.sd = abs(value) * sqrt((area.ratio.sd / area.ratio)**2)) %>% #compute estimated sd of fish per unit type per reach type
+    #mutate(value.sd=abs(value)*sqrt((area.ratio.sd/area.ratio)^2 + (fish.density.sd/fish.density)^2))%>% #change to this once I get the sd of fish denisty included.
+    #group_by_at(seg.id.col, 'RS', 'Condition', reach.length, reach.width, reach.area, area.method, reach.braid) %>% #groups by segment id, then RS then Condition
+    group_by_at(vars(seg.id.col, 'RS', 'Condition')) %>% #groups by segment id, then RS then Condition
+    summarize(value = sum(value, na.rm = TRUE), value.sd = sqrt(sum(value.sd**2, na.rm = TRUE))) %>%
+    ungroup() %>%
+    mutate(variable = "pred.fish", Scenario = cond.col) %>% #add field that specifies which condition scenario was used.
+    left_join(upscale.network %>% select(-RS, -Condition), by = seg.id.col) %>%
+    select(!!seg.id.col, RS, Condition, reach.length, reach.width, reach.area, area.method, reach.braid, everything())
  
-  if(i==1){reach.upscale=upscale.network2}else{reach.upscale=rbind(reach.upscale,upscale.network2)}
+  if(i==1){
+    reach.upscale = upscale.network.response
+  }else{
+    reach.upscale = rbind(reach.upscale, upscale.network.response)
+  }
 } #this is the end of the for loop.
 
 
+# add additional fields
+reach.upscale = reach.upscale %>%
+  mutate(species = species,
+         model = model,
+         lifestage = lifestage,
+         response.pool = response.pool,
+         gu.type = gu.type)
 
 
-reach.upscale$species = species
-reach.upscale$model = model
-reach.upscale$lifestage = lifestage
-reach.upscale$response.pool = response.pool
-reach.upscale$gu.type = gu.type
-names(reach.upscale[1]) = seg.id.col
+# names(reach.upscale[1]) = seg.id.col
 
 # group results by Scenario and RS and Condition
 a = reach.upscale %>%
@@ -265,7 +257,7 @@ c = reach.upscale %>%
 reach.summary = function(grouped.data){
   grouped.data %>% summarize(value = sum(value, na.rm = TRUE), 
                           value.sd = sqrt(sum(value.sd**2, na.rm = TRUE)),
-                          tot.area = sum(area,na.rm = TRUE),
+                          tot.area = sum(area, na.rm = TRUE),
                           tot.length = sum(reach.length, na.rm = TRUE),
                           mean.width = mean(reach.width, na.rm = TRUE),
                           sd.width = sd(reach.width, na.rm = TRUE),
@@ -278,24 +270,8 @@ basin.upscale.RS = reach.summary(b)
 basin.upscale = reach.summary(c)
 
 #write output to file
-write_csv(reach.upscale, file.path(upscale.dir, "byreach.csv"), col_names = TRUE)
-write_csv(basin.upscale, file.path(upscale.dir, "bybasin.csv"), col_names = TRUE)
-write_csv(basin.upscale.RS, file.path(upscale.dir, "bybasin_RS.csv"), col_names = TRUE)
-write_csv(basin.upscale.RSCond, file.path(upscale.dir, "bybasin_RSCond.csv"), col_names = TRUE)
-
-
-print(paste("files written to: ", upscale.dir))
-
-# cleaning up ----------------------------------------------
-
-# print("erasing temporary variables")
-# 
-# 
-# keepvars=c("selections", "proj.dir","GUPdir", "plottype", "myscales" , "RSlevels", "gu.type", 
-#            "species", "model", "lifestage", "network", "braid.index",
-#             "response.pool", "seg.id.col", "length.col" , "width.col" , "cond.cols", "area.cols")
-# 
-# rm(list=ls()[-match(x = keepvars, table = ls())])
-# 
-# print("done")
+write_csv(reach.upscale, file.path(upscale.dir, "byReach.csv"), col_names = TRUE)
+write_csv(basin.upscale, file.path(upscale.dir, "byBasin.csv"), col_names = TRUE)
+write_csv(basin.upscale.RS, file.path(upscale.dir, "byBasinRS.csv"), col_names = TRUE)
+write_csv(basin.upscale.RSCond, file.path(upscale.dir, "byBasinRSCond.csv"), col_names = TRUE)
 
