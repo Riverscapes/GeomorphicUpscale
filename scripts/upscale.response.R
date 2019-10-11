@@ -173,30 +173,21 @@ upscale.response = bf.density
 print("upscaling response on the network for different condition senarios")
 
 
-#Estimate area based on condition and braid.index if not supplied by the user
-Estimate.Area=function(data, condcol.n, RScol.n, seg.id.col.n, length.col.n, width.col.n){
-  length=data[,length.col.n]
-  width=data[, width.col.n]
-  C = braid.index %>% 
-    select(RS, Condition, C) %>%
-    right_join(data, by = c("RS", "Condition")) %>%
-    select(C)
-  area=length*width*as.data.frame(C)[,1]
-  return(area)
-}
-
 #This is the part that does the upscaling on the network for each cond col scenario (the for loop)
 
 #fix character warnings
 upscale.fn = function(cond.col){
   
   if(any(is.na(area.col), str_length(area.col) == 0)){
+    # Estimate area based on condition and braid.index if not supplied by the user
+    braid.c = braid.index %>% select(RS, Condition, C)
     upscale.network = network %>% 
       select(!!seg.id.col, RS, !!cond.col, !!length.col, !!width.col)  
     names(upscale.network) = c(seg.id.col, "RS", "Condition", "reach.length", "reach.width")
-    area = Estimate.Area(data = upscale.network, condcol.n = 3, RScol.n = 2, seg.id.col.n = 1, length.col.n = 4, width.col.n = 5)
     upscale.network = upscale.network %>% 
-      mutate(reach.area = area, area.method = "estimated")
+      left_join(braid.c, by = c(RS, Condition)) %>%
+      mutate(reach.area = reach.length * reach.area * C, 
+             area.method = "estimated")
   }else{
     upscale.network = network %>% 
       select(!!seg.id.col, RS, !!cond.col, !!length.col, !!width.col, !!area.col) %>%
