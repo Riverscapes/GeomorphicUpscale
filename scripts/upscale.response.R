@@ -262,7 +262,7 @@ reach.summary = function(grouped.data){
                           mean.width = mean(reach.width, na.rm = TRUE),
                           sd.width = sd(reach.width, na.rm = TRUE),
                           mean.braid = mean(reach.braid, na.rm = TRUE),
-                          sd.braid = sd(reach.width, na.rm = TRUE))
+                          sd.braid = sd(reach.braid, na.rm = TRUE))
 }
 
 basin.upscale.RSCond = reach.summary(a)
