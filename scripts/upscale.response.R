@@ -241,23 +241,11 @@ reach.upscale = reach.upscale %>%
          gu.type = gu.type)
 
 
-# names(reach.upscale[1]) = seg.id.col
-
-# group results by Scenario and RS and Condition
-a = reach.upscale %>%
-  group_by(Scenario, RS, Condition, area.method, model, species, variable, response.pool, gu.type)
-#group results by Scenario and  RS
-b = reach.upscale %>%
-  group_by(Scenario, RS, area.method, model, species, variable, response.pool, gu.type)
-#group results by only Scenario 
-c = reach.upscale %>%
-  group_by(Scenario, area.method, model, species, variable, response.pool, gu.type)  
-  
-#make basin summaries
+# results summar function
 reach.summary = function(grouped.data){
   grouped.data %>% summarize(value = sum(value, na.rm = TRUE), 
                           value.sd = sqrt(sum(value.sd**2, na.rm = TRUE)),
-                          tot.area = sum(area, na.rm = TRUE),
+                          tot.area = sum(reach.area, na.rm = TRUE),
                           tot.length = sum(reach.length, na.rm = TRUE),
                           mean.width = mean(reach.width, na.rm = TRUE),
                           sd.width = sd(reach.width, na.rm = TRUE),
@@ -265,9 +253,20 @@ reach.summary = function(grouped.data){
                           sd.braid = sd(reach.braid, na.rm = TRUE))
 }
 
-basin.upscale.RSCond = reach.summary(a)
-basin.upscale.RS = reach.summary(b)
-basin.upscale = reach.summary(c)
+# result summary by Scenario and RS and Condition
+basin.upscale.RSCond = reach.upscale %>% 
+  group_by(Scenario, RS, Condition, area.method, model, species, variable, response.pool, gu.type) %>% 
+  reach.summary()
+
+# result summary by Scenario and RS and Condition
+basin.upscale.RS = reach.upscale %>% 
+  group_by(Scenario, RS, area.method, model, species, variable, response.pool, gu.type) %>%
+  reach.summary()
+
+# result summary by Scenario 
+basin.upscale = reach.upscale %>%
+  group_by(Scenario, area.method, model, species, variable, response.pool, gu.type) %>%
+  reach.summary()
 
 #write output to file
 write_csv(reach.upscale, file.path(upscale.dir, "byReach.csv"), col_names = TRUE)
