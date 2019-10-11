@@ -1,4 +1,4 @@
-#Upcales reponse by unit and river style to a network
+#Upcales response by unit and river style to a network
 
 #Natalie Kramer (n.kramer.anderson@gmail.com)
 #Last Updated Aug 13 2019
