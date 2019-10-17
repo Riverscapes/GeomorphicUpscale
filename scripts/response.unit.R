@@ -31,18 +31,25 @@ RSlevels = RSlevels # optional vector argument to set RS factor order in graphs 
 # set path to repo gut metric tables
 metrics.dir = file.path(repo.dir, "Database/Metrics")
 
+# read in unit metric fish data (for predicted fish per unit) and unit data (area for each unit)
 # specify gut output layer and corresponding metric table to draw data from based on gu.type parameter
 if(gu.type == "GU"){
-  gut.metrics = "Unit_Fish_Metrics_Tier3_InChannel_GU.csv"}
+  unit.fish.metrics = read_csv(file.path(metrics.dir, "Unit_Fish_Metrics_Tier3_InChannel_GU_All.csv"))
+  gut.metrics = read_csv(file.path(metrics.dir, "Unit_GUTMetrics_Tier3_InChannel_GU.csv")) %>%
+    rename(GU = unit.type)}
 if(gu.type == "UnitForm" | gu.type == "UnitShape"){
-  gut.metrics = "Unit_Fish_Metrics_Tier2_InChannel.csv"}
+  unit.fish.metrics = read_csv(file.path(metrics.dir, "Unit_Fish_Metrics_Tier2_InChannel_All.csv"))
+  gut.metrics = read_csv(file.path(metrics.dir, "Unit_GUTMetrics_Tier2_InChannel.csv")) %>%
+    rename(UnitForm = unit.type)}
 
-# read in unit metric fish data
-unit.fish.metrics = read_csv(file.path(metrics.dir, gut.metrics))
 
 # check visit id column name and change if necessary to match selections 
 if('visit.id' %in% names(unit.fish.metrics)){unit.fish.metrics = unit.fish.metrics %>% rename(VisitID = visit.id)}
+if('visit.id' %in% names(gut.metrics)){gut.metrics = gut.metrics %>% rename(VisitID = visit.id)}
 
+# join gut unit area to unit fish metrics
+unit.fish.metrics = unit.fish.metrics %>% left_join(gut.metrics %>% select(!!gu.type, VisitID, area.sum, n), by = c("VisitID", gu.type)) %>%
+  rename(n.units = n)
 
 # get pairwise combinations of model (layer), species, and lifestage ------------------------------------------------------------------------
 
@@ -72,12 +79,14 @@ calc.response.unit = function(model.df){
   unit.fish = unit.fish.metrics %>% 
     filter(model == in.model & species == in.species & lifestage == in.lifestage)
   
-  # add field for ratio of suitable habitat area to hydro model area
-  # subset columns for plotting (note - dropping pred.fish.suitable bc exact same value as pred.fish)
+  # add fields for fish density (m2) and ratio of suitable habitat area to hydro model area
+  # subset columns for plotting
   unit.fish = unit.fish %>%
-    mutate(suitable.area.ratio = round(hab.area.suitable / area.delft, 3)) %>%
-    rename(unit.type = gu.type) %>%
-    select(-pred.fish.suitable, -area.delft, - hab.area.suitable) # same as pred.fish so dropping
+    mutate(density.m2 = round(pred.fish / area.sum, 3), 
+           suitable.area.ratio = round(hab.area.suitable / area.delft, 3)) %>%
+    rename(unit.type = gu.type,
+           unit.area = area.sum) %>%
+    select(-area.delft, - hab.area.suitable) # same as pred.fish so dropping
   
   # convert to long form tibble 
   unit.fish.long = unit.fish %>%
@@ -90,7 +99,7 @@ calc.response.unit = function(model.df){
     inner_join(unit.fish.long, by = 'VisitID') %>%
     filter(!is.na(value)) %>%
     mutate(ROI = "hydro",
-           variable = factor(variable, levels = c('pred.fish', 'suitable.area.ratio', 'med', 'mean', 'sd', 'med.suitable', 'mean.suitable', 'sd.suitable'))) 
+           variable = factor(variable, levels = c('pred.fish', 'density.m2', 'suitable.area.ratio', 'unit.area', 'n.units', 'med', 'mean', 'sd', 'med.suitable', 'mean.suitable', 'sd.suitable'))) 
   
   
   # summarizes data for use in upscale ----------------------------------------------------
