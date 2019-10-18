@@ -26,9 +26,11 @@ metrics.dir = file.path(repo.dir, "Database/Metrics")
 # read in unit metric fish data (for predicted fish per unit)
 # specify gut output layer and corresponding metric table to draw data from based on gu.type parameter
 if(gu.type == "GU"){
-  unit.fish.metrics = read_csv(file.path(metrics.dir, "Unit_Fish_Metrics_Tier3_InChannel_GU_All.csv"))}
+  unit.fish.metrics = read_csv(file.path(metrics.dir, "Unit_Fish_Metrics_Tier3_InChannel_GU_All.csv")) %>%
+    filter(!is.na(GU))}
 if(gu.type == "UnitForm" | gu.type == "UnitShape"){
-  unit.fish.metrics = read_csv(file.path(metrics.dir, "Unit_Fish_Metrics_Tier2_InChannel_All.csv"))}
+  unit.fish.metrics = read_csv(file.path(metrics.dir, "Unit_Fish_Metrics_Tier2_InChannel_All.csv")) %>%
+    filter(!is.na(UnitForm))}
 
 
 # check visit id column name and change if necessary to match selections 
@@ -66,13 +68,16 @@ calc.response.unit = function(model.df){
   # these are units where there was no overlap between fish model extent and the unit
   unit.fish = unit.fish %>% filter(!is.na(pred.fish))
   
-  # add fields for fish density (m2) and ratio of suitable habitat area to hydro model area
-  # subset columns for plotting
+  # add fields for 
+  #   - fish density (m2)
+  #   - ratio of suitable habitat area to hydro model area
+  #   - number of units (needed for unit count in grouping summary)
   unit.fish = unit.fish %>%
     mutate(density.m2 = round(pred.fish / area.unit, 3), 
-           suitable.area.ratio = round(hab.area.suitable / area.delft, 3)) %>%
-    rename(unit.type = gu.type) %>%
-    select(-area.sum, -hab.area.suitable)
+           suitable.area.ratio = round(hab.area.suitable / area.delft, 3),
+           n.units = 1) %>%
+    rename(unit.type = gu.type) 
+    # select(-hab.area.suitable)
   
   # convert to long form tibble 
   unit.fish.long = unit.fish %>%
@@ -83,10 +88,10 @@ calc.response.unit = function(model.df){
   unit.response = selections %>% 
     select(RS, Condition, VisitID) %>%
     inner_join(unit.fish.long, by = 'VisitID') %>%
-    filter(!is.na(value)) %>%
+    # filter(!is.na(value)) %>%
     mutate(ROI = "hydro",
            variable = factor(variable, levels = c('pred.fish', 'density.m2', 'n.units',
-                                                  'area.delft', 'area.unit', 'suitable.area.ratio', 
+                                                  'area.delft', 'area.unit', 'hab.area.suitable', 'suitable.area.ratio', 
                                                   'med', 'mean', 'sd', 
                                                   'med.suitable', 'mean.suitable', 'sd.suitable'))) 
   
