@@ -114,4 +114,3 @@ calc.response.unit = function(model.df){
 
 response.unit.fn(gu.type = "UnitForm")
 response.unit.fn(gu.type = "GU")
-
