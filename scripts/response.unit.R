@@ -17,31 +17,39 @@ source(file.path(repo.dir, "scripts/plot.colors.R"))
 source(file.path(repo.dir, "scripts/functions.R"))
 
 
-# set directories and paths ------------------------------------------------------------------------
+response.unit.fn = function(gu.type){
 
+  print(str_c('Calculating fish response by geomorphic unit for', gu.type, sep = " "))
+  
+  # set directories and paths ------------------------------------------------------------------------
+  
+  # set path to repo gut metric tables
+  metrics.dir = file.path(repo.dir, "Database/Metrics")
+  
+  # read in unit metric fish data (for predicted fish per unit)
+  # specify gut output layer and corresponding metric table to draw data from based on gu.type parameter
+  if(gu.type == "GU"){
+    unit.fish.metrics = read_csv(file.path(metrics.dir, "Unit_Fish_Metrics_Tier3_InChannel_GU_All.csv")) %>%
+      filter(!is.na(GU))}
+  if(gu.type == "UnitForm" | gu.type == "UnitShape"){
+    unit.fish.metrics = read_csv(file.path(metrics.dir, "Unit_Fish_Metrics_Tier2_InChannel_All.csv")) %>%
+      filter(!is.na(UnitForm))}
+  
+  
+  # check visit id column name and change if necessary to match selections 
+  if('visit.id' %in% names(unit.fish.metrics)){unit.fish.metrics = unit.fish.metrics %>% rename(VisitID = visit.id)}
+  
+  # get pairwise combinations of model (layer), species, and lifestage -----------------------------------
+  
+  model.df = unit.fish.metrics %>%
+    distinct(model, species, lifestage) %>%
+    filter(!is.na(species)) %>%
+    as.data.frame()
 
-# set path to repo gut metric tables
-metrics.dir = file.path(repo.dir, "Database/Metrics")
-
-# read in unit metric fish data (for predicted fish per unit)
-# specify gut output layer and corresponding metric table to draw data from based on gu.type parameter
-if(gu.type == "GU"){
-  unit.fish.metrics = read_csv(file.path(metrics.dir, "Unit_Fish_Metrics_Tier3_InChannel_GU_All.csv")) %>%
-    filter(!is.na(GU))}
-if(gu.type == "UnitForm" | gu.type == "UnitShape"){
-  unit.fish.metrics = read_csv(file.path(metrics.dir, "Unit_Fish_Metrics_Tier2_InChannel_All.csv")) %>%
-    filter(!is.na(UnitForm))}
-
-
-# check visit id column name and change if necessary to match selections 
-if('visit.id' %in% names(unit.fish.metrics)){unit.fish.metrics = unit.fish.metrics %>% rename(VisitID = visit.id)}
-
-# get pairwise combinations of model (layer), species, and lifestage ------------------------------------------------------------------------
-
-model.df = unit.fish.metrics %>%
-  distinct(model, species, lifestage) %>%
-  filter(!is.na(species)) %>%
-  as.data.frame()
+  # run reach calculate response function for each pariwise combination of species x lifestage x model
+  model.df %>% by_row(calc.response.unit)
+  
+}
 
 
 # caclulate unit response function ------------------------------------------------------------------------
@@ -98,13 +106,12 @@ calc.response.unit = function(model.df){
   
   # summarizes data for use in upscale ----------------------------------------------------
   
-  print("Making unit level fish response summaries and plots...")
   make.outputs.unit(in.data = unit.response, pool.by = "RSCond", gu.type = gu.type, out.dir = response.dir, RSlevels = RSlevels)
   make.outputs.unit(in.data = unit.response, pool.by = "RS", gu.type = gu.type, out.dir = response.dir, RSlevels = RSlevels)
   make.outputs.unit(in.data = unit.response, pool.by = "All", gu.type = gu.type, out.dir = response.dir, RSlevels = RSlevels)
   
 }
 
+response.unit.fn(gu.type = "UnitForm")
+response.unit.fn(gu.type = "GU")
 
-# run reach response function for each species x lifestage x model
-model.df %>% by_row(calc.response.unit)
