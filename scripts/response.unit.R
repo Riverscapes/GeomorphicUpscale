@@ -23,25 +23,16 @@ source(file.path(repo.dir, "scripts/functions.R"))
 # set path to repo gut metric tables
 metrics.dir = file.path(repo.dir, "Database/Metrics")
 
-# read in unit metric fish data (for predicted fish per unit) and unit data (area for each unit)
+# read in unit metric fish data (for predicted fish per unit)
 # specify gut output layer and corresponding metric table to draw data from based on gu.type parameter
 if(gu.type == "GU"){
-  unit.fish.metrics = read_csv(file.path(metrics.dir, "Unit_Fish_Metrics_Tier3_InChannel_GU_All.csv"))
-  gut.metrics = read_csv(file.path(metrics.dir, "Unit_GUTMetrics_Tier3_InChannel_GU.csv")) %>%
-    rename(GU = unit.type)}
+  unit.fish.metrics = read_csv(file.path(metrics.dir, "Unit_Fish_Metrics_Tier3_InChannel_GU_All.csv"))}
 if(gu.type == "UnitForm" | gu.type == "UnitShape"){
-  unit.fish.metrics = read_csv(file.path(metrics.dir, "Unit_Fish_Metrics_Tier2_InChannel_All.csv"))
-  gut.metrics = read_csv(file.path(metrics.dir, "Unit_GUTMetrics_Tier2_InChannel.csv")) %>%
-    rename(UnitForm = unit.type)}
+  unit.fish.metrics = read_csv(file.path(metrics.dir, "Unit_Fish_Metrics_Tier2_InChannel_All.csv"))}
 
 
 # check visit id column name and change if necessary to match selections 
 if('visit.id' %in% names(unit.fish.metrics)){unit.fish.metrics = unit.fish.metrics %>% rename(VisitID = visit.id)}
-if('visit.id' %in% names(gut.metrics)){gut.metrics = gut.metrics %>% rename(VisitID = visit.id)}
-
-# join gut unit area to unit fish metrics
-unit.fish.metrics = unit.fish.metrics %>% left_join(gut.metrics %>% select(!!gu.type, VisitID, area.sum, n), by = c("VisitID", gu.type)) %>%
-  rename(n.units = n)
 
 # get pairwise combinations of model (layer), species, and lifestage ------------------------------------------------------------------------
 
