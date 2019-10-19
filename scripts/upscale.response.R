@@ -8,26 +8,11 @@
 
 # To Do ------------------------------------------------------------
 
-# ask nk about standard deviation calculations in upscale2 -- not sure how this is being calculated...
-# !!!! Unit_Fish_Metrics_Tier*_InChannel has area.delft field (hydro model - gut unit intersection) for each unit so why aren't we using this instead of bankfull areas for each unit in upscale???
-# !!!! ....so assemblage should also include proprtions for wetted
-# right now hokey way of calculating sd (see notes below).  why not calculate confindence interval??
-# here natalie is upscaling only by unit so what was point of generating all upscale by reach stuff?
-# should have ability to upscale by reach as well?
-
 # NK: 
-#eliminate species and model from directory structure and instead include as field in output table?  Maybe append to this table
-#when run for different species or just run for all species and model types on the fly-- not make a user variable...?
 
-#get rid of condition character warnings during join in upscale part.
+# get rid of condition character warnings during join in upscale part.
 
-#upscale geomorphic variables (maybe in different script?) ex.# units to reach upscale.  Also Percent of each unit type.
-
-#Need to think about how we are summarizing predicted fish and getting sd dev. check sd calculations for correctness.
-#the right now there is none because it is the total fish / tota area of a certain unit....
-#perhaps we need to be summarizing by each site and then taking the average fish per unit type across sites so that 
-#the standard deviation is reflective of the variation across sites rather than across units (which I am not really using...)
-#so basically I would need to sum across individual units in the response script prior to summarizing the data. Then in this script, I would just use the avg rather than the tot.
+# upscale geomorphic variables (maybe in different script?) ex.# units to reach upscale.  Also Percent of each unit type.
 
 # Dependencies ------------------------------------------------------------
 
