@@ -46,26 +46,16 @@ unlink(file.path(upscale.dir, "*"), recursive = TRUE)
 
 # Read in response variable by response.pool variable
 
-# We should make more universal to upscale other responses besides pred.fish. For now, I am hardcoding this.
-
 # read in response stats csv
 response = read_csv(file.path(response.dir, "stats.csv"))
 
-# this can be re-coded later to allow for upscaling of different ROI using alternate methods
-response.area = response %>% 
-  filter(variable == "area", ROI == "hydro") %>%
-  select(RS, Condition, unit.type, tot) %>%
-  rename(hydro.area.m2 = tot)
-
 # filters out just data on number of fish
 # this can be re-coded later to allow for upscaling of different variables
-response.pred.fish = response %>%
-  filter(variable == "pred.fish", ROI == "hydro")%>%
-  select(RS, Condition, unit.type, tot) %>%
-  rename(pred.fish = tot) # change to avg if I decided to sum up over units then average by sites in the other script
-
-# this would give me a avg number of fish per unit type with a standard deviation.  Right now, I 
-# don't have a st. deviation on number of fish
+response.density = response %>%
+  filter(variable == "density.m2", ROI == "hydro")
+  # filter(variable == "density.m2", ROI == "hydro") %>%
+  # select(RS, Condition, unit.type, avg) %>%
+  # rename(pred.fish = sum)
 
 # read in estimates of assemblages
 
@@ -73,17 +63,8 @@ response.pred.fish = response %>%
 assemblage = read_csv(file.path(assemblage.dir, "assemblage.csv")) %>%
   select(-SUM)
 
-# renormalized assemblage ratios converted to long format -- no nk code below this comment not sure if there should be something here?
-
 # read in assemblage statistics
 gu.stats = read_csv(file.path(assemblage.dir, "stats.csv"))
-
-# total bankfull area for each unit type
-# note: unit roi is only for bankfull (no hydro was calculated)
-gu.bf.area = gu.stats %>%
-  filter(variable == "area.sum", ROI == "bankfull") %>%
-  select(RS, Condition, unit.type, tot) %>%
-  rename(area.m2 = tot)
 
 # sd bankfull area ratio for each unit type
 # selects the standard deviation of assemblage ratios for each RS and condition
@@ -181,6 +162,7 @@ upscale.fn = function(cond.col){
   return(upscale.network.response)
 }
 
+# run reach upscale function for each condition scenario
 reach.upscale = map_dfr(cond.cols, upscale.fn)
 
 # add additional fields
