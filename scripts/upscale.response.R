@@ -196,8 +196,8 @@ reach.upscale = reach.upscale %>%
 reach.summary = function(grouped.data){
   grouped.data %>% summarize(value = sum(value, na.rm = TRUE), 
                           value.sd = sqrt(sum(value.sd**2, na.rm = TRUE)),
-                          tot.area = sum(reach.area, na.rm = TRUE),
-                          tot.length = sum(reach.length, na.rm = TRUE),
+                          sum.area = sum(reach.area, na.rm = TRUE),
+                          sum.length = sum(reach.length, na.rm = TRUE),
                           mean.width = mean(reach.width, na.rm = TRUE),
                           sd.width = sd(reach.width, na.rm = TRUE),
                           mean.braid = mean(reach.braid, na.rm = TRUE),
