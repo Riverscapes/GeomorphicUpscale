@@ -49,70 +49,51 @@ unlink(file.path(upscale.dir, "*"), recursive = TRUE)
 # read in response stats csv
 response = read_csv(file.path(response.dir, "stats.csv"))
 
-# filters out just data on number of fish
-# this can be re-coded later to allow for upscaling of different variables
+# get density (fish per m2) and density se from response stats
 response.density = response %>%
-  filter(variable == "density.m2", ROI == "hydro")
-  # filter(variable == "density.m2", ROI == "hydro") %>%
-  # select(RS, Condition, unit.type, avg) %>%
-  # rename(pred.fish = sum)
+  filter(variable == "density.m2", ROI == "hydro") %>%
+  select(RS, Condition, unit.type, avg, se) %>%
+  rename(density.m2 = avg, density.m2.se = se)
 
-# read in estimates of assemblages
+# read in assemblage statistics
+gu.stats = read_csv(file.path(assemblage.dir, "stats.csv"))
+
+# get bankfull area ratio value and se for each unit type
+# note: area ratio for unit of type (i) = sum(areas for unit type (i)) / sum(areas for all units)
+gu.assemblage.se = gu.stats %>% 
+  filter(variable == "area.ratio", ROI == "bankfull") %>%
+  select(RS, Condition, unit.type, se) %>%
+  rename(area.ratio.se = se)
 
 # read in assemblage area ratios
 assemblage = read_csv(file.path(assemblage.dir, "assemblage.csv")) %>%
   select(-SUM)
 
-# read in assemblage statistics
-gu.stats = read_csv(file.path(assemblage.dir, "stats.csv"))
-
-# sd bankfull area ratio for each unit type
-# selects the standard deviation of assemblage ratios for each RS and condition
-# note: area ratio for unit of type (i) = sum(areas for unit type (i)) / sum(areas for all units)
-gu.bf.area.ratio.sd = gu.stats %>% 
-  filter(variable == "area.ratio", ROI == "bankfull") %>%
-  select(RS, Condition, unit.type, sd) %>%
-  rename(area.ratio.sd = sd)
+# convert assemblage area ratios to long format
 
 gu.levels = gu.stats %>% distinct(unit.type) %>% nrow()
 
-gu.ratio.bf.area = assemblage %>%
-  gather(key = "unit.type", value = "area.ratio", (length(names(assemblage)) - (gu.levels + 1)):length(names(assemblage))) %>%
+gu.assemblage = assemblage %>%
+  gather(key = "unit.type", value = "area.ratio", (ncol(assemblage) - gu.levels + 1):ncol(assemblage)) %>%
   select(RS, Condition, unit.type, area.ratio) %>%
-  mutate(area.ratio = as.numeric(area.ratio))
-
-gu.ratio.bf.area$unit.type = as.factor(gu.ratio.bf.area$unit.type)
+  mutate(area.ratio = as.numeric(area.ratio)) %>%
+  left_join(gu.assemblage.se, by = c('RS', 'Condition', 'unit.type'))
 
 
 # assembling upscale data----------------------------------------------------
 
-# Combining response and assemblage data
-print("assembling upscale data")
-
-# conditionals for dealing with different response.pools
+# set join columns based on response.pool
 if(response.pool == "byRSCond"){join.by = c("RS", "Condition", "unit.type")}
 if(response.pool == "byRS"){join.by = c("RS", "unit.type")}
 if(response.pool == "byAll"){join.by = c("unit.type")}
 
-# computes fish density for upscale. Can be appended to later to accomodate density within hydro or wetted.
-# but, I need the assemblages within the wetted extent in order to do this type of upscale.
+# Combining response and assemblage data
 
-# note - not sure why nk was creating sd.pred.fish field, setting all values to na and thent rying to use this to
-#        calculate standard deviation
-bf.density = gu.bf.area %>%
-  #left_join(response.area, by=join.byRSCond) %>% # nk had commented out - not sure why
-  left_join(gu.ratio.bf.area, by = join.by) %>%
-  left_join(gu.bf.area.ratio.sd, by = join.by) %>%
-  left_join(response.pred.fish, by = join.by) %>%
-  #left_join(response.sd.pred.fish,by=join.byRS) Not needed unless I do my summary of response differently.
-  mutate(sd.pred.fish = NA) %>%
-  mutate(fish.density = pred.fish / area.m2, 
-         fish.density.sd = sd.pred.fish / area.m2) %>% #could calculate also using perc habitat area, gets around the bankfull issue.
+upscale.response = gu.assemblage %>%
+  left_join(response.density, by = join.by) %>%
   select(RS, Condition, unit.type, area.ratio, area.ratio.sd, fish.density, fish.density.sd) %>%
   mutate(ROI = "bankfull")
 
-# If adding more variables for upscale (ex. Model values, perc habitat, etc), could be handy to have in long (gathered) format instead.
-upscale.response = bf.density
 
 # Upscales response on the network for different scenarios ------------------------------
 
