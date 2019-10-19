@@ -25,6 +25,10 @@ source(file.path(repo.dir, "scripts/functions.R"))
 # set up data refs and output file structure  ------------------------------------------------------------------------
 print("setting up data refs and output file structure...")
 
+in.species = species
+in.lifestage = lifestage
+in.model = model
+
 # set directories and paths ------------------------------------------------------------------------
 
 # set response input directory
@@ -91,7 +95,7 @@ if(response.pool == "byAll"){join.by = c("unit.type")}
 
 upscale.response = gu.assemblage %>%
   left_join(response.density, by = join.by) %>%
-  select(RS, Condition, unit.type, area.ratio, area.ratio.sd, fish.density, fish.density.sd) %>%
+  select(RS, Condition, unit.type, area.ratio, area.ratio.se, density.m2, density.m2.se) %>%
   mutate(ROI = "bankfull")
 
 
@@ -160,7 +164,7 @@ reach.upscale = reach.upscale %>%
 # results summar function
 reach.summary = function(grouped.data){
   grouped.data %>% summarize(value = sum(value, na.rm = TRUE), 
-                          value.sd = sqrt(sum(value.sd**2, na.rm = TRUE)),
+                          value.se = sqrt(sum(value.se**2, na.rm = TRUE)),
                           sum.area = sum(reach.area, na.rm = TRUE),
                           sum.length = sum(reach.length, na.rm = TRUE),
                           mean.width = mean(reach.width, na.rm = TRUE),
@@ -171,17 +175,23 @@ reach.summary = function(grouped.data){
 
 # result summary by Scenario and RS and Condition
 basin.upscale.RSCond = reach.upscale %>% 
-  group_by(Scenario, RS, Condition, area.method, model, species, variable, response.pool, gu.type) %>% 
+  rename(value = pred.n, value.se = pred.n.se) %>%
+  mutate(variable = "pred.fish") %>%
+  group_by(Scenario, RS, Condition, area.method, model, species, lifestage, variable, response.pool, gu.type) %>% 
   reach.summary()
 
 # result summary by Scenario and RS and Condition
 basin.upscale.RS = reach.upscale %>% 
-  group_by(Scenario, RS, area.method, model, species, variable, response.pool, gu.type) %>%
+  rename(value = pred.n, value.se = pred.n.se) %>%
+  mutate(variable = "pred.fish") %>%
+  group_by(Scenario, RS, area.method, model, species, lifestage, variable, response.pool, gu.type) %>%
   reach.summary()
 
 # result summary by Scenario 
 basin.upscale = reach.upscale %>%
-  group_by(Scenario, area.method, model, species, variable, response.pool, gu.type) %>%
+  rename(value = pred.n, value.se = pred.n.se) %>%
+  mutate(variable = "pred.fish") %>%
+  group_by(Scenario, area.method, model, species, lifestage, variable, response.pool, gu.type) %>%
   reach.summary()
 
 #write output to file
