@@ -99,10 +99,6 @@ upscale.response = gu.assemblage %>%
 
 print("upscaling response on the network for different condition senarios")
 
-
-#This is the part that does the upscaling on the network for each cond col scenario (the for loop)
-
-#fix character warnings
 upscale.fn = function(cond.col){
   
   if(any(is.na(area.col), str_length(area.col) == 0)){
@@ -126,21 +122,27 @@ upscale.fn = function(cond.col){
   upscale.network = upscale.network %>% 
     mutate(reach.braid = reach.area / reach.length / reach.width)
 
-  #combine upscale network segments with response- tied to RS and condition specified on network
+  # combine upscale network segments with response (tied to RS and condition specified on network)
   upscale.network.response = upscale.network %>%
-    inner_join(upscale.response %>% filter(ROI == "bankfull"), by = c("RS", "Condition")) %>%
-    mutate(value = area.ratio * reach.area * fish.density) %>% #  compute estimated fish per unit type per reach
-    mutate(value.sd = abs(value) * sqrt((area.ratio.sd / area.ratio)**2)) %>% #compute estimated sd of fish per unit type per reach type
-    #mutate(value.sd=abs(value)*sqrt((area.ratio.sd/area.ratio)^2 + (fish.density.sd/fish.density)^2))%>% #change to this once I get the sd of fish denisty included.
-    #group_by_at(seg.id.col, 'RS', 'Condition', reach.length, reach.width, reach.area, area.method, reach.braid) %>% #groups by segment id, then RS then Condition
-    group_by_at(vars(seg.id.col, 'RS', 'Condition')) %>% #groups by segment id, then RS then Condition
-    summarize(value = sum(value, na.rm = TRUE), value.sd = sqrt(sum(value.sd**2, na.rm = TRUE))) %>%
+    inner_join(upscale.response, by = c("RS", "Condition"))
+  
+  # upscale density to predicted count value and propagate standard error
+  upscale.network.response = upscale.network.response %>%
+    mutate(n = area.ratio * reach.area * density.m2,
+           n.se = n * sqrt((area.ratio.se / area.ratio)**2) + (density.m2.se / density.m2))
+  
+  # calculate total predicted fish, propagated standard error and density for each network segment
+  # add column for scenario
+  upscale.network.response.final = upscale.network.response %>%
+    group_by_at(vars(seg.id.col, 'RS', 'Condition')) %>% 
+    summarize(pred.n = sum(n, na.rm = TRUE), pred.n.se = sqrt(sum(n.se**2, na.rm = TRUE))) %>%
     ungroup() %>%
-    mutate(variable = "pred.fish", Scenario = cond.col) %>% #add field that specifies which condition scenario was used.
     left_join(upscale.network %>% select(-RS, -Condition), by = seg.id.col) %>%
+    mutate(Scenario = cond.col,
+           pred.m2 = pred.n / reach.area) %>%
     select(!!seg.id.col, RS, Condition, reach.length, reach.width, reach.area, area.method, reach.braid, everything())
  
-  return(upscale.network.response)
+  return(upscale.network.response.final)
 }
 
 # run reach upscale function for each condition scenario
