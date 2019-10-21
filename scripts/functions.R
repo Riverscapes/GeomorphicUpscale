@@ -3,13 +3,14 @@
 summarize.f = function(data, value){
   
   data.summary = data %>%
-    summarize(avg = mean(value, na.rm = TRUE), 
+    summarize(n = length(na.omit(value)),
+              avg = mean(value, na.rm = TRUE), 
               sd = sd(value, na.rm = TRUE),
+              se = sd / sqrt(n),
               med = median(value, na.rm = TRUE), 
               min = min(value, na.rm = TRUE),
               max = max(value, na.rm = TRUE),
-              tot = sum(value, na.rm = TRUE),
-              n = length(na.omit(value)))
+              sum = sum(value, na.rm = TRUE))
   
   return(data.summary)
 }
@@ -46,8 +47,6 @@ make.summary = function(in.data, pool.by, out.dir){
 
 # function that includes make.summary and summarize.f. writes summary and plots
 # To do----------------------------------------------
-# clean up xlab so it doesn't appear
-# get rid fo repetivenesss in code.  figure out ggplot better.
 # omit na prior to plotting so we don't get so many warning messages
 
 make.outputs = function(in.data, pool.by, out.dir, RSlevels, my.facet = "variable"){
@@ -175,4 +174,122 @@ make.outputs.unit = function(in.data, pool.by, gu.type, out.dir, my.facet = "var
   out.data = make.summary(in.data, pool.by, sub.out.dir)
   return(out.data)
 }
+
+# estimating assemblage estimates from average proportions ----------------------------------------------
+
+# function that makes renormalized assemlages and plots them 
+# assemblages based on area.ratio from gut unit metrics, where
+#   area.ratio = sum(areas for unit type i) / sum(areas for all unit types)
+# note: here natalie is using the average area.ratio from pool.by results
+assemblage.proportions = function(my.stats, pool.by, out.dir, my.ROI = "bankfull", gu.type = gu.type){
+  
+  # set output subdirectory name based on 'pool.by' argument
+  if(pool.by == "RS"){
+    sub.out.dir = file.path(out.dir, "byRS")
+  }else if(pool.by == "RSCond"){
+    sub.out.dir = file.path(out.dir, "byRSCond")
+  }else{
+    sub.out.dir = file.path(out.dir, "byAll")  
+  }
+  
+  #filter data for just proportions of reach occupied by each unit
+  assemblage = my.stats %>% 
+    filter(variable == "area.ratio", ROI == my.ROI) %>%
+    select(-sd, -se, -med, -min, -max, -n, -sum)
+  
+  # spreads table grouped by pool.by so that unit types are converted to columns
+  if(pool.by == "RSCond"){
+    assemblage.group = assemblage %>%
+      group_by(RS, Condition) %>%
+      spread(key = "unit.type", value = avg) %>%
+      ungroup()
+  }
+  
+  if(pool.by=="RS"){
+    assemblage.group = assemblage %>%
+      group_by(RS) %>%
+      spread(key = "unit.type", value = avg) %>%
+      ungroup
+  }
+  
+  if(pool.by == "All"){
+    assemblage.group = assemblage %>%
+      spread(key = "unit.type", value = avg)
+  }
+  
+  # makes list of unit types and find starting and ending column for renormalization
+  unit.list = levels(as.factor(my.stats$unit.type))
+  start.col = length(names(assemblage.group)) - length(unit.list) + 1
+  end.col = length(names(assemblage.group))
+  
+  # renormalize proportions to sum to 100
+  assemblage.norm = assemblage.group %>% ungroup() %>%
+    mutate(SUM1 = select(., start.col:end.col) %>% apply(1, sum, na.rm = TRUE)) %>% #make sum across proportions
+    mutate_at(start.col:end.col, funs(./SUM1)) %>% #renormalize columns
+    mutate(SUM = select(.,start.col:end.col) %>% apply(1, sum, na.rm = TRUE)) %>% #check math
+    select(-SUM1)
+  
+  # save output
+  write_csv(assemblage.norm, file.path(sub.out.dir, "assemblage.csv"), col_names = TRUE)
+  
+  # call function to make plots
+  assemblage.plot(assemblage.norm, pool.by, start.col, end.col, out.dir = sub.out.dir, gu.type = gu.type)
+  
+}
+
+# function to plot assemblage. Used within assemblage.proportions function
+assemblage.plot = function(assemblage.data, pool.by, start.col, end.col, out.dir, gu.type){
+  
+  #Read in and manipulate data for plotting
+  my.data = assemblage.data %>%
+    gather(key = "Unit", value = "value", start.col:end.col) %>%
+    select(-SUM)
+  
+  # sets colors and factor orders for plotting
+  
+  # condition levels for plots hard coded as "poor", "mod", "good", "intact" to show up in correct order
+  if(pool.by == "RSCond"){
+    my.data$Condition = factor(my.data$Condition, levels = condition.levels)}
+  
+  # set RSlevel order (if not set to NA)
+  if(pool.by != "All"){
+    if(!all(is.na(RSlevels))){my.data$RS = factor(my.data$RS, levels = RSlevels)}}
+  
+  # set plotting colors
+  if(gu.type == "UnitForm"){
+    unit.colors = form.fill
+    my.data = my.data %>%
+      mutate(Unit = factor(Unit, levels = form.levels))
+  }else{
+    unit.colors = gu.fill
+    my.data = my.data %>%
+      mutate(Unit = factor(Unit, levels = gu.levels))
+  }
+  
+  #makes assemblage plots
+  if(pool.by == "All"){
+    p1 = ggplot(my.data, aes(x = ROI, y = value, fill = Unit)) +
+      geom_bar(stat = "identity", position = 'stack') +
+      scale_fill_manual(values = unit.colors)
+  }
+  
+  if(pool.by == "RS"){
+    p1 = ggplot(my.data, aes(x = RS, y = value, fill = Unit)) +
+      geom_bar(stat = "identity", position = 'stack') +
+      scale_fill_manual(values = unit.colors)
+  }
+  
+  if(pool.by == "RSCond"){
+    p1 = ggplot(my.data, aes(x = Condition, y = value, fill = Unit)) +
+      geom_bar(stat = "identity", position = 'stack') +
+      scale_fill_manual(values = unit.colors) +
+      facet_wrap( ~ RS, scales='free')
+  }
+  
+  # save assemblage plots 
+  ggsave(file.path(out.dir, "assemblage.pdf"), plot = p1, width = 10, height = 7 )
+  ggsave(file.path(out.dir, "assemblage.png"), plot = p1, width = 10, height = 7)
+  
+}
+
 
