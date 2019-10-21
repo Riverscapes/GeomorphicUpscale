@@ -445,7 +445,7 @@ visit.id,GU,model,species,lifestage,area.delft,hab.area.suitable,pred.fish,med,m
 1596,Glide-Run,nrei,steelhead,juvenile,2657.801,762.205,552,-145.162,-121.859,153.921,NA,NA,NA
 1596,Margin Attached Bar,nrei,steelhead,juvenile,189.214,27.714000000000002,15,-12.928,-9.139,48.452,NA,NA,NA
 1596,Mid Channel Bar,nrei,steelhead,juvenile,62.370000000000005,19.203,13,5.441,2.539,19.183,NA,NA,NA
-1596,"NA",nrei,steelhead,juvenile,2.27,0.002,0,-30.046,-28.442,6.329,NA,NA,NA
+1596,NA,nrei,steelhead,juvenile,2.27,0.002,0,-30.046,-28.442,6.329,NA,NA,NA
 1596,Pocket Pool,nrei,steelhead,juvenile,22.18,6.805,10,-107.546,-76.982,87.709,NA,NA,NA
 1596,Pool,nrei,steelhead,juvenile,600.15,184.296,199,-150.53,-108.267,134.903,NA,NA,NA
 1596,Riffle,nrei,steelhead,juvenile,459.28000000000003,141.52800000000002,108,-150.108,-108.814,113.73,NA,NA,NA
@@ -456,7 +456,7 @@ visit.id,GU,model,species,lifestage,area.delft,hab.area.suitable,pred.fish,med,m
 1596,Glide-Run,fuzzy,chinook,spawner,2657.801,134.543,2,0.3,0.31,0.056,NA,NA,NA
 1596,Margin Attached Bar,fuzzy,chinook,spawner,189.214,3.47,0,0.23,0.246,0.057,NA,NA,NA
 1596,Mid Channel Bar,fuzzy,chinook,spawner,62.370000000000005,0,0,0.239,0.244,0.015,NA,NA,NA
-1596,"NA",fuzzy,chinook,spawner,2.27,0,0,0.23,0.232,0.004,NA,NA,NA
+1596,NA,fuzzy,chinook,spawner,2.27,0,0,0.23,0.232,0.004,NA,NA,NA
 1596,Pocket Pool,fuzzy,chinook,spawner,22.18,0,0,0.3,0.3,0,NA,NA,NA
 1596,Pool,fuzzy,chinook,spawner,600.15,41.739,2,0.3,0.319,0.067,NA,NA,NA
 1596,Riffle,fuzzy,chinook,spawner,459.28000000000003,20.49,0,0.3,0.308,0.054,NA,NA,NA
@@ -467,7 +467,7 @@ visit.id,GU,model,species,lifestage,area.delft,hab.area.suitable,pred.fish,med,m
 1596,Glide-Run,fuzzy,steelhead,spawner,2657.801,120.743,3,0.216,0.194,0.106,NA,NA,NA
 1596,Margin Attached Bar,fuzzy,steelhead,spawner,189.214,3.47,0,0.078,0.097,0.076,NA,NA,NA
 1596,Mid Channel Bar,fuzzy,steelhead,spawner,62.370000000000005,0,0,0.078,0.078,0.001,NA,NA,NA
-1596,"NA",fuzzy,steelhead,spawner,2.27,0,0,0.078,0.078,0,NA,NA,NA
+1596,NA,fuzzy,steelhead,spawner,2.27,0,0,0.078,0.078,0,NA,NA,NA
 1596,Pocket Pool,fuzzy,steelhead,spawner,22.18,0,0,0.104,0.139,0.065,NA,NA,NA
 1596,Pool,fuzzy,steelhead,spawner,600.15,39.439,2,0.226,0.214,0.127,NA,NA,NA
 1596,Riffle,fuzzy,steelhead,spawner,459.28000000000003,20.49,1,0.197,0.186,0.106,NA,NA,NA
@@ -478,7 +478,7 @@ visit.id,GU,model,species,lifestage,area.delft,hab.area.suitable,pred.fish,med,m
 1596,Glide-Run,fuzzy,chinook,juvenile,2657.801,513.631,601,0.229,0.254,0.174,NA,NA,NA
 1596,Margin Attached Bar,fuzzy,chinook,juvenile,189.214,25.741,11,0.078,0.198,0.163,NA,NA,NA
 1596,Mid Channel Bar,fuzzy,chinook,juvenile,62.370000000000005,8.969999999999999,0,0.307,0.261,0.14,NA,NA,NA
-1596,"NA",fuzzy,chinook,juvenile,2.27,0.06,0,0.078,0.156,0.105,NA,NA,NA
+1596,NA,fuzzy,chinook,juvenile,2.27,0.06,0,0.078,0.156,0.105,NA,NA,NA
 1596,Pocket Pool,fuzzy,chinook,juvenile,22.18,0.57,0,0.294,0.277,0.1,NA,NA,NA
 1596,Pool,fuzzy,chinook,juvenile,600.15,127.80999999999999,130,0.162,0.233,0.177,NA,NA,NA
 1596,Riffle,fuzzy,chinook,juvenile,459.28000000000003,86.98,62,0.244,0.254,0.149,NA,NA,NA
@@ -692,7 +692,7 @@ visit.id,GU,model,species,lifestage,area.delft,hab.area.suitable,pred.fish,med,m
 1954,Glide-Run,nrei,steelhead,juvenile,314.545,NA,NA,NA,NA,NA,NA,NA,NA
 1954,Margin Attached Bar,nrei,steelhead,juvenile,133.793,NA,NA,NA,NA,NA,NA,NA,NA
 1954,Mid Channel Bar,nrei,steelhead,juvenile,69.4,NA,NA,NA,NA,NA,NA,NA,NA
-1954,"NA",nrei,steelhead,juvenile,5.611000000000001,NA,NA,NA,NA,NA,NA,NA,NA
+1954,NA,nrei,steelhead,juvenile,5.611000000000001,NA,NA,NA,NA,NA,NA,NA,NA
 1954,Pocket Pool,nrei,steelhead,juvenile,28.03,NA,NA,NA,NA,NA,NA,NA,NA
 1954,Pond,nrei,steelhead,juvenile,10.26,NA,NA,NA,NA,NA,NA,NA,NA
 1954,Pool,nrei,steelhead,juvenile,331.06,NA,NA,NA,NA,NA,NA,NA,NA
@@ -704,7 +704,7 @@ visit.id,GU,model,species,lifestage,area.delft,hab.area.suitable,pred.fish,med,m
 1954,Glide-Run,fuzzy,chinook,spawner,314.545,10.450000000000001,0,0.078,0.103,0.087,NA,NA,NA
 1954,Margin Attached Bar,fuzzy,chinook,spawner,133.793,0.43,0,0.078,0.083,0.034,NA,NA,NA
 1954,Mid Channel Bar,fuzzy,chinook,spawner,69.4,0,0,0.078,0.079,0.014,NA,NA,NA
-1954,"NA",fuzzy,chinook,spawner,5.611000000000001,0,0,0.078,0.078,0,NA,NA,NA
+1954,NA,fuzzy,chinook,spawner,5.611000000000001,0,0,0.078,0.078,0,NA,NA,NA
 1954,Pocket Pool,fuzzy,chinook,spawner,28.03,1.08,0,0.078,0.095,0.081,NA,NA,NA
 1954,Pond,fuzzy,chinook,spawner,10.26,0,0,0.078,0.078,0,NA,NA,NA
 1954,Pool,fuzzy,chinook,spawner,331.06,8.18,0,0.078,0.096,0.076,NA,NA,NA
@@ -716,7 +716,7 @@ visit.id,GU,model,species,lifestage,area.delft,hab.area.suitable,pred.fish,med,m
 1954,Glide-Run,fuzzy,steelhead,spawner,314.545,10.450000000000001,0,0.078,0.103,0.087,NA,NA,NA
 1954,Margin Attached Bar,fuzzy,steelhead,spawner,133.793,0.43,0,0.078,0.083,0.034,NA,NA,NA
 1954,Mid Channel Bar,fuzzy,steelhead,spawner,69.4,0,0,0.078,0.079,0.014,NA,NA,NA
-1954,"NA",fuzzy,steelhead,spawner,5.611000000000001,0,0,0.078,0.078,0,NA,NA,NA
+1954,NA,fuzzy,steelhead,spawner,5.611000000000001,0,0,0.078,0.078,0,NA,NA,NA
 1954,Pocket Pool,fuzzy,steelhead,spawner,28.03,1.08,0,0.078,0.095,0.081,NA,NA,NA
 1954,Pond,fuzzy,steelhead,spawner,10.26,0,0,0.078,0.078,0,NA,NA,NA
 1954,Pool,fuzzy,steelhead,spawner,331.06,8.18,0,0.078,0.096,0.076,NA,NA,NA
@@ -728,7 +728,7 @@ visit.id,GU,model,species,lifestage,area.delft,hab.area.suitable,pred.fish,med,m
 1954,Glide-Run,fuzzy,chinook,juvenile,314.545,217.381,274,0.661,0.533,0.291,NA,NA,NA
 1954,Margin Attached Bar,fuzzy,chinook,juvenile,133.793,64.419,5,0.356,0.365,0.275,NA,NA,NA
 1954,Mid Channel Bar,fuzzy,chinook,juvenile,69.4,21.949,0,0.078,0.261,0.241,NA,NA,NA
-1954,"NA",fuzzy,chinook,juvenile,5.611000000000001,2.3099999999999996,0,0.078,0.326,0.278,NA,NA,NA
+1954,NA,fuzzy,chinook,juvenile,5.611000000000001,2.3099999999999996,0,0.078,0.326,0.278,NA,NA,NA
 1954,Pocket Pool,fuzzy,chinook,juvenile,28.03,25.24,68,0.88,0.734,0.241,NA,NA,NA
 1954,Pond,fuzzy,chinook,juvenile,10.26,10.26,3,0.681,0.697,0.066,NA,NA,NA
 1954,Pool,fuzzy,chinook,juvenile,331.06,325.41,621,0.753,0.768,0.129,NA,NA,NA
@@ -741,7 +741,7 @@ visit.id,GU,model,species,lifestage,area.delft,hab.area.suitable,pred.fish,med,m
 1967,Glide-Run,nrei,steelhead,juvenile,274.528,214.57600000000002,99,61.106,42.084,57.441,NA,NA,NA
 1967,Margin Attached Bar,nrei,steelhead,juvenile,73.69,5.051,2,-16.68,-10.362,44.074,NA,NA,NA
 1967,Mid Channel Bar,nrei,steelhead,juvenile,11.46,2.4,1,1.559,-12.941,92.235,NA,NA,NA
-1967,"NA",nrei,steelhead,juvenile,0.91,0.7,0,50.672,44.397,33.966,NA,NA,NA
+1967,NA,nrei,steelhead,juvenile,0.91,0.7,0,50.672,44.397,33.966,NA,NA,NA
 1967,Pocket Pool,nrei,steelhead,juvenile,6.27,4.09,2,52.374,7.099,88.528,NA,NA,NA
 1967,Pool,nrei,steelhead,juvenile,155.05,141.69,74,79.869,66.45,33.467,NA,NA,NA
 1967,Riffle,nrei,steelhead,juvenile,44.52,32.53,15,45.754,18.306,80.006,NA,NA,NA
@@ -752,7 +752,7 @@ visit.id,GU,model,species,lifestage,area.delft,hab.area.suitable,pred.fish,med,m
 1967,Glide-Run,fuzzy,chinook,spawner,274.528,129.418,3,0.375,0.351,0.253,NA,NA,NA
 1967,Margin Attached Bar,fuzzy,chinook,spawner,73.69,1.6099999999999999,0,0.078,0.109,0.1,NA,NA,NA
 1967,Mid Channel Bar,fuzzy,chinook,spawner,11.46,0,0,0.078,0.084,0.027,NA,NA,NA
-1967,"NA",fuzzy,chinook,spawner,0.91,0,0,0.078,0.086,0.03,NA,NA,NA
+1967,NA,fuzzy,chinook,spawner,0.91,0,0,0.078,0.086,0.03,NA,NA,NA
 1967,Pocket Pool,fuzzy,chinook,spawner,6.27,3.24,0,0.451,0.343,0.25,NA,NA,NA
 1967,Pool,fuzzy,chinook,spawner,155.05,35.949999999999996,0,0.078,0.203,0.203,NA,NA,NA
 1967,Riffle,fuzzy,chinook,spawner,44.52,13.43,1,0.078,0.263,0.232,NA,NA,NA
@@ -763,7 +763,7 @@ visit.id,GU,model,species,lifestage,area.delft,hab.area.suitable,pred.fish,med,m
 1967,Glide-Run,fuzzy,steelhead,spawner,274.528,129.418,5,0.375,0.351,0.253,NA,NA,NA
 1967,Margin Attached Bar,fuzzy,steelhead,spawner,73.69,1.6099999999999999,0,0.078,0.109,0.1,NA,NA,NA
 1967,Mid Channel Bar,fuzzy,steelhead,spawner,11.46,0,0,0.078,0.084,0.027,NA,NA,NA
-1967,"NA",fuzzy,steelhead,spawner,0.91,0,0,0.078,0.086,0.03,NA,NA,NA
+1967,NA,fuzzy,steelhead,spawner,0.91,0,0,0.078,0.086,0.03,NA,NA,NA
 1967,Pocket Pool,fuzzy,steelhead,spawner,6.27,3.24,0,0.451,0.343,0.25,NA,NA,NA
 1967,Pool,fuzzy,steelhead,spawner,155.05,35.949999999999996,0,0.078,0.203,0.203,NA,NA,NA
 1967,Riffle,fuzzy,steelhead,spawner,44.52,13.43,1,0.078,0.263,0.232,NA,NA,NA
@@ -774,55 +774,11 @@ visit.id,GU,model,species,lifestage,area.delft,hab.area.suitable,pred.fish,med,m
 1967,Glide-Run,fuzzy,chinook,juvenile,274.528,174.268,165,0.527,0.496,0.258,NA,NA,NA
 1967,Margin Attached Bar,fuzzy,chinook,juvenile,73.69,17.572,0,0.078,0.31,0.266,NA,NA,NA
 1967,Mid Channel Bar,fuzzy,chinook,juvenile,11.46,2.92,3,0.535,0.453,0.306,NA,NA,NA
-1967,"NA",fuzzy,chinook,juvenile,0.91,0.7,1,0.708,0.636,0.217,NA,NA,NA
+1967,NA,fuzzy,chinook,juvenile,0.91,0.7,1,0.708,0.636,0.217,NA,NA,NA
 1967,Pocket Pool,fuzzy,chinook,juvenile,6.27,2.7399999999999998,4,0.183,0.348,0.296,NA,NA,NA
 1967,Pool,fuzzy,chinook,juvenile,155.05,143.26,272,0.726,0.697,0.179,NA,NA,NA
 1967,Riffle,fuzzy,chinook,juvenile,44.52,16.72,2,0.318,0.34,0.22,NA,NA,NA
 1967,Transition,fuzzy,chinook,juvenile,132.321,81.331,64,0.56,0.491,0.28,NA,NA,NA
-197,Bank,nrei,steelhead,juvenile,37.79,2.56,0,-19.421,-17.714,28.83,NA,NA,NA
-197,Cascade,nrei,steelhead,juvenile,362.81,198.375,123,18.247,0.447,109.505,NA,NA,NA
-197,Glide-Run,nrei,steelhead,juvenile,10.417,8.04,5,52.733,42.342,30.103,NA,NA,NA
-197,Margin Attached Bar,nrei,steelhead,juvenile,29.650000000000002,7.180000000000001,3,-4.407,-5.964,44.251,NA,NA,NA
-197,Mid Channel Bar,nrei,steelhead,juvenile,32.85,5.63,1,-9.583,-7.981,21.401,NA,NA,NA
-197,"NA",nrei,steelhead,juvenile,0.02,0,0,-36.917,-36.917,NA,NA,NA,NA
-197,Pocket Pool,nrei,steelhead,juvenile,11.21,10.59,9,61.783,46.947,49.825,NA,NA,NA
-197,Pool,nrei,steelhead,juvenile,56.03,45.9,31,65.547,51.12,50.944,NA,NA,NA
-197,Rapid,nrei,steelhead,juvenile,44.313,39.79,12,55.388,47.212,25.22,NA,NA,NA
-197,Riffle,nrei,steelhead,juvenile,8.91,8.1,6,60.814,50.922,32.456,NA,NA,NA
-197,Transition,nrei,steelhead,juvenile,119.64,52.815,31,7.855,-1.261,72.417,NA,NA,NA
-197,Bank,fuzzy,chinook,spawner,37.79,1.21,0,0.23,0.216,0.097,NA,NA,NA
-197,Cascade,fuzzy,chinook,spawner,362.81,34.61,0,0.265,0.28,0.076,NA,NA,NA
-197,Glide-Run,fuzzy,chinook,spawner,10.417,8.18,0,0.545,0.468,0.158,NA,NA,NA
-197,Margin Attached Bar,fuzzy,chinook,spawner,29.650000000000002,3.76,0,0.232,0.284,0.142,NA,NA,NA
-197,Mid Channel Bar,fuzzy,chinook,spawner,32.85,0.15000000000000002,0,0.23,0.242,0.031,NA,NA,NA
-197,"NA",fuzzy,chinook,spawner,0.02,NA,NA,NA,NA,NA,NA,NA,NA
-197,Pocket Pool,fuzzy,chinook,spawner,11.21,0.71,0,0.3,0.304,0.055,NA,NA,NA
-197,Pool,fuzzy,chinook,spawner,56.03,17.61,1,0.3,0.339,0.139,NA,NA,NA
-197,Rapid,fuzzy,chinook,spawner,44.313,26.869999999999997,0,0.424,0.435,0.105,NA,NA,NA
-197,Riffle,fuzzy,chinook,spawner,8.91,1.29,0,0.3,0.313,0.062,NA,NA,NA
-197,Transition,fuzzy,chinook,spawner,119.64,17.02,1,0.251,0.291,0.108,NA,NA,NA
-197,Bank,fuzzy,steelhead,spawner,37.79,1.26,0,0.078,0.115,0.103,NA,NA,NA
-197,Cascade,fuzzy,steelhead,spawner,362.81,35.89,0,0.078,0.142,0.129,NA,NA,NA
-197,Glide-Run,fuzzy,steelhead,spawner,10.417,8.18,0,0.545,0.468,0.158,NA,NA,NA
-197,Margin Attached Bar,fuzzy,steelhead,spawner,29.650000000000002,3.98,0,0.078,0.17,0.19,NA,NA,NA
-197,Mid Channel Bar,fuzzy,steelhead,spawner,32.85,0.11,0,0.078,0.098,0.068,NA,NA,NA
-197,"NA",fuzzy,steelhead,spawner,0.02,NA,0,NA,NA,NA,NA,NA,NA
-197,Pocket Pool,fuzzy,steelhead,spawner,11.21,0.71,0,0.078,0.106,0.094,NA,NA,NA
-197,Pool,fuzzy,steelhead,spawner,56.03,11.55,0,0.078,0.231,0.198,NA,NA,NA
-197,Rapid,fuzzy,steelhead,spawner,44.313,27.919999999999998,0,0.446,0.435,0.112,NA,NA,NA
-197,Riffle,fuzzy,steelhead,spawner,8.91,1.28,0,0.078,0.17,0.146,NA,NA,NA
-197,Transition,fuzzy,steelhead,spawner,119.64,17.21,0,0.078,0.178,0.164,NA,NA,NA
-197,Bank,fuzzy,chinook,juvenile,37.79,6.2700000000000005,9,0.078,0.251,0.223,NA,NA,NA
-197,Cascade,fuzzy,chinook,juvenile,362.81,148.424,41,0.368,0.337,0.179,NA,NA,NA
-197,Glide-Run,fuzzy,chinook,juvenile,10.417,6.93,17,0.564,0.474,0.195,NA,NA,NA
-197,Margin Attached Bar,fuzzy,chinook,juvenile,29.650000000000002,3.9600000000000004,3,0.119,0.221,0.178,NA,NA,NA
-197,Mid Channel Bar,fuzzy,chinook,juvenile,32.85,3.5700000000000003,0,0.078,0.19,0.148,NA,NA,NA
-197,"NA",fuzzy,chinook,juvenile,0.02,NA,NA,NA,NA,NA,NA,NA,NA
-197,Pocket Pool,fuzzy,chinook,juvenile,11.21,9.83,10,0.57,0.544,0.104,NA,NA,NA
-197,Pool,fuzzy,chinook,juvenile,56.03,54.22,98,0.595,0.632,0.157,NA,NA,NA
-197,Rapid,fuzzy,chinook,juvenile,44.313,38.07,79,0.589,0.549,0.129,NA,NA,NA
-197,Riffle,fuzzy,chinook,juvenile,8.91,6.84,2,0.495,0.475,0.122,NA,NA,NA
-197,Transition,fuzzy,chinook,juvenile,119.64,40.346,32,0.317,0.317,0.206,NA,NA,NA
 1971,Bank,nrei,steelhead,juvenile,39.989,0.01,0,-33.189,-34.542,25.926,NA,NA,NA
 1971,Barface,nrei,steelhead,juvenile,2.13,0,0,-33.309,-33.364,3.589,NA,NA,NA
 1971,Chute,nrei,steelhead,juvenile,8.59,7.56,3,53.965,48.217,26.941,NA,NA,NA
@@ -1243,42 +1199,6 @@ visit.id,GU,model,species,lifestage,area.delft,hab.area.suitable,pred.fish,med,m
 2065,Rapid,fuzzy,chinook,juvenile,151.57,32.72,12,0.23,0.247,0.166,NA,NA,NA
 2065,Riffle,fuzzy,chinook,juvenile,92.62,57.94,25,0.437,0.42,0.131,NA,NA,NA
 2065,Transition,fuzzy,chinook,juvenile,221.687,28.878,7,0.078,0.187,0.157,NA,NA,NA
-2133,Bank,nrei,steelhead,juvenile,15.9,0.13,0,-30.326,-27.759,10.882,NA,NA,NA
-2133,Glide-Run,nrei,steelhead,juvenile,58.907000000000004,2.61,3,-16.859,-20.035,24.628,NA,NA,NA
-2133,Margin Attached Bar,nrei,steelhead,juvenile,7.83,0,0,-34.745,-34.042,2.478,NA,NA,NA
-2133,Mid Channel Bar,nrei,steelhead,juvenile,0.04,NA,NA,NA,NA,NA,NA,NA,NA
-2133,Pocket Pool,nrei,steelhead,juvenile,3.63,1.29,2,3.306,-2.05,16.566,NA,NA,NA
-2133,Pool,nrei,steelhead,juvenile,63.089999999999996,17.83,15,2.017,2.051,14.562,NA,NA,NA
-2133,Rapid,nrei,steelhead,juvenile,9.59,0.13,0,-15.007,-17.17,14.115,NA,NA,NA
-2133,Riffle,nrei,steelhead,juvenile,40.86,0.98,2,-18.289,-18.57,13.743,NA,NA,NA
-2133,Transition,nrei,steelhead,juvenile,59.243,0.07,0,-24.705,-25.617,19.661,NA,NA,NA
-2133,Bank,fuzzy,chinook,spawner,15.9,0.2,0,0.078,0.105,0.081,NA,NA,NA
-2133,Glide-Run,fuzzy,chinook,spawner,58.907000000000004,12.09,0,0.174,0.224,0.158,NA,NA,NA
-2133,Margin Attached Bar,fuzzy,chinook,spawner,7.83,0,0,0.078,0.079,0.017,NA,NA,NA
-2133,Mid Channel Bar,fuzzy,chinook,spawner,0.04,NA,0,NA,NA,NA,NA,NA,NA
-2133,Pocket Pool,fuzzy,chinook,spawner,3.63,2.66,0,0.453,0.434,0.145,NA,NA,NA
-2133,Pool,fuzzy,chinook,spawner,63.089999999999996,27.72,0,0.385,0.368,0.17,NA,NA,NA
-2133,Rapid,fuzzy,chinook,spawner,9.59,2.74,0,0.122,0.24,0.194,NA,NA,NA
-2133,Riffle,fuzzy,chinook,spawner,40.86,3.2199999999999998,0,0.078,0.16,0.121,NA,NA,NA
-2133,Transition,fuzzy,chinook,spawner,59.243,1.34,0,0.078,0.132,0.093,NA,NA,NA
-2133,Bank,fuzzy,steelhead,spawner,15.9,0.2,0,0.078,0.102,0.08,NA,NA,NA
-2133,Glide-Run,fuzzy,steelhead,spawner,58.907000000000004,12.09,0,0.099,0.218,0.162,NA,NA,NA
-2133,Margin Attached Bar,fuzzy,steelhead,spawner,7.83,0,0,0.078,0.079,0.015,NA,NA,NA
-2133,Mid Channel Bar,fuzzy,steelhead,spawner,0.04,NA,0,NA,NA,NA,NA,NA,NA
-2133,Pocket Pool,fuzzy,steelhead,spawner,3.63,2.7,0,0.464,0.437,0.147,NA,NA,NA
-2133,Pool,fuzzy,steelhead,spawner,63.089999999999996,27.72,0,0.385,0.368,0.17,NA,NA,NA
-2133,Rapid,fuzzy,steelhead,spawner,9.59,2.74,0,0.122,0.24,0.194,NA,NA,NA
-2133,Riffle,fuzzy,steelhead,spawner,40.86,3.2199999999999998,0,0.078,0.138,0.123,NA,NA,NA
-2133,Transition,fuzzy,steelhead,spawner,59.243,1.34,0,0.078,0.125,0.092,NA,NA,NA
-2133,Bank,fuzzy,chinook,juvenile,15.9,2.29,3,0.078,0.223,0.215,NA,NA,NA
-2133,Glide-Run,fuzzy,chinook,juvenile,58.907000000000004,21.18,3,0.197,0.295,0.232,NA,NA,NA
-2133,Margin Attached Bar,fuzzy,chinook,juvenile,7.83,0.13,0,0.078,0.106,0.089,NA,NA,NA
-2133,Mid Channel Bar,fuzzy,chinook,juvenile,0.04,NA,NA,NA,NA,NA,NA,NA,NA
-2133,Pocket Pool,fuzzy,chinook,juvenile,3.63,3.32,2,0.634,0.593,0.117,NA,NA,NA
-2133,Pool,fuzzy,chinook,juvenile,63.089999999999996,57.04,100,0.684,0.652,0.145,NA,NA,NA
-2133,Rapid,fuzzy,chinook,juvenile,9.59,3.92,0,0.228,0.295,0.222,NA,NA,NA
-2133,Riffle,fuzzy,chinook,juvenile,40.86,4.57,2,0.078,0.158,0.169,NA,NA,NA
-2133,Transition,fuzzy,chinook,juvenile,59.243,13.51,1,0.078,0.227,0.217,NA,NA,NA
 2140,Bank,nrei,steelhead,juvenile,210.28,10.17,8,-17.622,-7.797,29.333,NA,NA,NA
 2140,Glide-Run,nrei,steelhead,juvenile,1339.532,246.79500000000002,191,10.213,9.018,38.325,NA,NA,NA
 2140,Margin Attached Bar,nrei,steelhead,juvenile,247.729,0.165,0,-25.413,-23.09,11.614,NA,NA,NA
@@ -1568,7 +1488,7 @@ visit.id,GU,model,species,lifestage,area.delft,hab.area.suitable,pred.fish,med,m
 2271,Cascade,nrei,steelhead,juvenile,113.001,3.26,17,-74.663,-150.143,203.795,NA,NA,NA
 2271,Margin Attached Bar,nrei,steelhead,juvenile,8.790000000000001,0,0,-34.207,-36.155,18.86,NA,NA,NA
 2271,Mid Channel Bar,nrei,steelhead,juvenile,10.86,0.64,1,-20.812,-42.302,75.859,NA,NA,NA
-2271,"NA",nrei,steelhead,juvenile,0.76,0.02,1,-44.487,-88.195,85.582,NA,NA,NA
+2271,NA,nrei,steelhead,juvenile,0.76,0.02,1,-44.487,-88.195,85.582,NA,NA,NA
 2271,Pocket Pool,nrei,steelhead,juvenile,5.890000000000001,2.59,5,-6.182,-67.832,155.742,NA,NA,NA
 2271,Rapid,nrei,steelhead,juvenile,97.516,6.482,16,-45.031,-92.616,113.848,NA,NA,NA
 2271,Riffle,nrei,steelhead,juvenile,0.95,0,0,-36.908,-35.206,2.575,NA,NA,NA
@@ -1578,7 +1498,7 @@ visit.id,GU,model,species,lifestage,area.delft,hab.area.suitable,pred.fish,med,m
 2271,Cascade,fuzzy,chinook,spawner,113.001,6.36,0,0.16,0.185,0.122,NA,NA,NA
 2271,Margin Attached Bar,fuzzy,chinook,spawner,8.790000000000001,0,0,0.078,0.087,0.039,NA,NA,NA
 2271,Mid Channel Bar,fuzzy,chinook,spawner,10.86,0.8099999999999999,0,0.078,0.149,0.145,NA,NA,NA
-2271,"NA",fuzzy,chinook,spawner,0.76,0.2,0,0.296,0.283,0.166,NA,NA,NA
+2271,NA,fuzzy,chinook,spawner,0.76,0.2,0,0.296,0.283,0.166,NA,NA,NA
 2271,Pocket Pool,fuzzy,chinook,spawner,5.890000000000001,4,0,0.599,0.545,0.195,NA,NA,NA
 2271,Rapid,fuzzy,chinook,spawner,97.516,9.649,0,0.093,0.186,0.146,NA,NA,NA
 2271,Riffle,fuzzy,chinook,spawner,0.95,0,0,0.078,0.078,0,NA,NA,NA
@@ -1588,7 +1508,7 @@ visit.id,GU,model,species,lifestage,area.delft,hab.area.suitable,pred.fish,med,m
 2271,Cascade,fuzzy,steelhead,spawner,113.001,6.63,0,0.078,0.164,0.123,NA,NA,NA
 2271,Margin Attached Bar,fuzzy,steelhead,spawner,8.790000000000001,0,0,0.078,0.081,0.025,NA,NA,NA
 2271,Mid Channel Bar,fuzzy,steelhead,spawner,10.86,0.8099999999999999,0,0.078,0.147,0.145,NA,NA,NA
-2271,"NA",fuzzy,steelhead,spawner,0.76,0.2,0,0.296,0.283,0.166,NA,NA,NA
+2271,NA,fuzzy,steelhead,spawner,0.76,0.2,0,0.296,0.283,0.166,NA,NA,NA
 2271,Pocket Pool,fuzzy,steelhead,spawner,5.890000000000001,4,0,0.599,0.544,0.195,NA,NA,NA
 2271,Rapid,fuzzy,steelhead,spawner,97.516,9.669,0,0.078,0.184,0.147,NA,NA,NA
 2271,Riffle,fuzzy,steelhead,spawner,0.95,0,0,0.078,0.078,0,NA,NA,NA
@@ -1598,43 +1518,11 @@ visit.id,GU,model,species,lifestage,area.delft,hab.area.suitable,pred.fish,med,m
 2271,Cascade,fuzzy,chinook,juvenile,113.001,2.29,0,0.078,0.107,0.082,NA,NA,NA
 2271,Margin Attached Bar,fuzzy,chinook,juvenile,8.790000000000001,0.01,0,0.078,0.08,0.021,NA,NA,NA
 2271,Mid Channel Bar,fuzzy,chinook,juvenile,10.86,0.24,2,0.078,0.123,0.12,NA,NA,NA
-2271,"NA",fuzzy,chinook,juvenile,0.76,0.02,0,0.084,0.148,0.107,NA,NA,NA
+2271,NA,fuzzy,chinook,juvenile,0.76,0.02,0,0.084,0.148,0.107,NA,NA,NA
 2271,Pocket Pool,fuzzy,chinook,juvenile,5.890000000000001,1.91,1,0.178,0.317,0.274,NA,NA,NA
 2271,Rapid,fuzzy,chinook,juvenile,97.516,3.924,1,0.078,0.121,0.106,NA,NA,NA
 2271,Riffle,fuzzy,chinook,juvenile,0.95,0,0,0.078,0.091,0.056,NA,NA,NA
 2271,Transition,fuzzy,chinook,juvenile,68.744,2.676,5,0.078,0.117,0.115,NA,NA,NA
-2338,Bank,nrei,steelhead,juvenile,11.039,0,0,-32.761,-32.023,7.505,NA,NA,NA
-2338,Glide-Run,nrei,steelhead,juvenile,111.71,27.95,12,-5.433,-5.328,19.069,NA,NA,NA
-2338,Margin Attached Bar,nrei,steelhead,juvenile,4.18,0,0,-33.995,-37.123,14.038,NA,NA,NA
-2338,Pocket Pool,nrei,steelhead,juvenile,10.84,10.48,10,28.984,28.29,12.906,NA,NA,NA
-2338,Pool,nrei,steelhead,juvenile,37.15,29.7,19,25.092,24.135,22.852,NA,NA,NA
-2338,Rapid,nrei,steelhead,juvenile,27.11,4.61,4,-14.999,-16.596,29.485,NA,NA,NA
-2338,Riffle,nrei,steelhead,juvenile,20.369999999999997,6.57,2,-3.985,-4.993,17.846,NA,NA,NA
-2338,Transition,nrei,steelhead,juvenile,76.791,4.12,0,-23.377,-20.753,23.354,NA,NA,NA
-2338,Bank,fuzzy,chinook,spawner,11.039,0,0,0.078,0.087,0.032,NA,NA,NA
-2338,Glide-Run,fuzzy,chinook,spawner,111.71,18.009999999999998,0,0.078,0.201,0.157,NA,NA,NA
-2338,Margin Attached Bar,fuzzy,chinook,spawner,4.18,0,0,0.078,0.08,0.016,NA,NA,NA
-2338,Pocket Pool,fuzzy,chinook,spawner,10.84,9.39,0,0.531,0.512,0.167,NA,NA,NA
-2338,Pool,fuzzy,chinook,spawner,37.15,7.89,0,0.078,0.241,0.209,NA,NA,NA
-2338,Rapid,fuzzy,chinook,spawner,27.11,2.45,0,0.078,0.162,0.13,NA,NA,NA
-2338,Riffle,fuzzy,chinook,spawner,20.369999999999997,4.64,0,0.203,0.262,0.164,NA,NA,NA
-2338,Transition,fuzzy,chinook,spawner,76.791,0.79,0,0.078,0.105,0.071,NA,NA,NA
-2338,Bank,fuzzy,steelhead,spawner,11.039,0,0,0.078,0.079,0.009,NA,NA,NA
-2338,Glide-Run,fuzzy,steelhead,spawner,111.71,18.75,0,0.078,0.199,0.162,NA,NA,NA
-2338,Margin Attached Bar,fuzzy,steelhead,spawner,4.18,0,0,0.078,0.08,0.016,NA,NA,NA
-2338,Pocket Pool,fuzzy,steelhead,spawner,10.84,9.39,0,0.54,0.514,0.167,NA,NA,NA
-2338,Pool,fuzzy,steelhead,spawner,37.15,7.89,0,0.078,0.241,0.209,NA,NA,NA
-2338,Rapid,fuzzy,steelhead,spawner,27.11,2.45,0,0.078,0.162,0.13,NA,NA,NA
-2338,Riffle,fuzzy,steelhead,spawner,20.369999999999997,5.02,0,0.087,0.235,0.186,NA,NA,NA
-2338,Transition,fuzzy,steelhead,spawner,76.791,0.79,0,0.078,0.1,0.069,NA,NA,NA
-2338,Bank,fuzzy,chinook,juvenile,11.039,0.44,0,0.078,0.13,0.144,NA,NA,NA
-2338,Glide-Run,fuzzy,chinook,juvenile,111.71,22.24,9,0.148,0.233,0.189,NA,NA,NA
-2338,Margin Attached Bar,fuzzy,chinook,juvenile,4.18,0.03,0,0.078,0.098,0.066,NA,NA,NA
-2338,Pocket Pool,fuzzy,chinook,juvenile,10.84,9.7,6,0.529,0.56,0.152,NA,NA,NA
-2338,Pool,fuzzy,chinook,juvenile,37.15,36.94,75,0.749,0.742,0.105,NA,NA,NA
-2338,Rapid,fuzzy,chinook,juvenile,27.11,1.58,0,0.078,0.151,0.119,NA,NA,NA
-2338,Riffle,fuzzy,chinook,juvenile,20.369999999999997,6.52,2,0.269,0.297,0.215,NA,NA,NA
-2338,Transition,fuzzy,chinook,juvenile,76.791,10.870000000000001,0,0.078,0.176,0.177,NA,NA,NA
 2435,Bank,nrei,steelhead,juvenile,14.11,0,0,-35.438,-34.186,3.571,NA,NA,NA
 2435,Barface,nrei,steelhead,juvenile,0.1,0,0,-36.987,-36.987,NA,NA,NA,NA
 2435,Glide-Run,nrei,steelhead,juvenile,239.75799999999998,13.82,13,-18.408,-17.377,12.83,NA,NA,NA
@@ -1716,7 +1604,7 @@ visit.id,GU,model,species,lifestage,area.delft,hab.area.suitable,pred.fish,med,m
 2447,Glide-Run,nrei,steelhead,juvenile,3566.854,1859.643,1616,-67.138,-103.307,171.541,NA,NA,NA
 2447,Margin Attached Bar,nrei,steelhead,juvenile,747.651,360.448,163,55.187,38.405,53.598,NA,NA,NA
 2447,Mid Channel Bar,nrei,steelhead,juvenile,271.271,92.936,41,6.959,10.207,33.888,NA,NA,NA
-2447,"NA",nrei,steelhead,juvenile,5.14,1.9,0,11.641,13.489,30.641,NA,NA,NA
+2447,NA,nrei,steelhead,juvenile,5.14,1.9,0,11.641,13.489,30.641,NA,NA,NA
 2447,Pocket Pool,nrei,steelhead,juvenile,35.56,14.870000000000001,8,-263.901,-165.434,191.812,NA,NA,NA
 2447,Pool,nrei,steelhead,juvenile,1395.08,687.453,927,-66.744,-89.124,160.826,NA,NA,NA
 2447,Riffle,nrei,steelhead,juvenile,979.41,599.483,394,34.057,-36.532,125.791,NA,NA,NA
@@ -1726,7 +1614,7 @@ visit.id,GU,model,species,lifestage,area.delft,hab.area.suitable,pred.fish,med,m
 2447,Glide-Run,fuzzy,chinook,spawner,3566.854,2050.847,19,0.478,0.452,0.134,NA,NA,NA
 2447,Margin Attached Bar,fuzzy,chinook,spawner,747.651,250.83,13,0.391,0.379,0.203,NA,NA,NA
 2447,Mid Channel Bar,fuzzy,chinook,spawner,271.271,50.81,1,0.293,0.331,0.146,NA,NA,NA
-2447,"NA",fuzzy,chinook,spawner,5.14,1.72,0,0.422,0.429,0.037,NA,NA,NA
+2447,NA,fuzzy,chinook,spawner,5.14,1.72,0,0.422,0.429,0.037,NA,NA,NA
 2447,Pocket Pool,fuzzy,chinook,spawner,35.56,5.41,0,0.3,0.312,0.069,NA,NA,NA
 2447,Pool,fuzzy,chinook,spawner,1395.08,900.8589999999999,36,0.51,0.503,0.163,NA,NA,NA
 2447,Riffle,fuzzy,chinook,spawner,979.41,518.27,8,0.473,0.436,0.158,NA,NA,NA
@@ -1736,7 +1624,7 @@ visit.id,GU,model,species,lifestage,area.delft,hab.area.suitable,pred.fish,med,m
 2447,Glide-Run,fuzzy,steelhead,spawner,3566.854,2006.758,29,0.461,0.425,0.159,NA,NA,NA
 2447,Margin Attached Bar,fuzzy,steelhead,spawner,747.651,250.28,16,0.39,0.364,0.218,NA,NA,NA
 2447,Mid Channel Bar,fuzzy,steelhead,spawner,271.271,50.86,1,0.246,0.28,0.187,NA,NA,NA
-2447,"NA",fuzzy,steelhead,spawner,5.14,1.72,0,0.422,0.429,0.037,NA,NA,NA
+2447,NA,fuzzy,steelhead,spawner,5.14,1.72,0,0.422,0.429,0.037,NA,NA,NA
 2447,Pocket Pool,fuzzy,steelhead,spawner,35.56,5.41,0,0.254,0.227,0.142,NA,NA,NA
 2447,Pool,fuzzy,steelhead,spawner,1395.08,900.8589999999999,45,0.51,0.498,0.169,NA,NA,NA
 2447,Riffle,fuzzy,steelhead,spawner,979.41,511.44,15,0.438,0.383,0.212,NA,NA,NA
@@ -1746,7 +1634,7 @@ visit.id,GU,model,species,lifestage,area.delft,hab.area.suitable,pred.fish,med,m
 2447,Glide-Run,fuzzy,chinook,juvenile,3566.854,1065.819,725,0.177,0.263,0.207,NA,NA,NA
 2447,Margin Attached Bar,fuzzy,chinook,juvenile,747.651,336.702,620,0.529,0.474,0.26,NA,NA,NA
 2447,Mid Channel Bar,fuzzy,chinook,juvenile,271.271,120.741,102,0.442,0.443,0.171,NA,NA,NA
-2447,"NA",fuzzy,chinook,juvenile,5.14,2.06,11,0.721,0.742,0.061,NA,NA,NA
+2447,NA,fuzzy,chinook,juvenile,5.14,2.06,11,0.721,0.742,0.061,NA,NA,NA
 2447,Pocket Pool,fuzzy,chinook,juvenile,35.56,19.77,0,0.467,0.347,0.23,NA,NA,NA
 2447,Pool,fuzzy,chinook,juvenile,1395.08,264.14,235,0.087,0.226,0.2,NA,NA,NA
 2447,Riffle,fuzzy,chinook,juvenile,979.41,356.319,80,0.331,0.319,0.16,NA,NA,NA
@@ -2368,7 +2256,7 @@ visit.id,GU,model,species,lifestage,area.delft,hab.area.suitable,pred.fish,med,m
 323,Glide-Run,nrei,steelhead,juvenile,179.11,29.209,29,-278.387,-284.935,195.348,NA,NA,NA
 323,Margin Attached Bar,nrei,steelhead,juvenile,21.449,0.31,1,-28.202,-42.666,66.428,NA,NA,NA
 323,Mid Channel Bar,nrei,steelhead,juvenile,1.66,0,0,-30.178,-71.222,76.452,NA,NA,NA
-323,"NA",nrei,steelhead,juvenile,0.47,0,0,-36.912,-33.259,5.341,NA,NA,NA
+323,NA,nrei,steelhead,juvenile,0.47,0,0,-36.912,-33.259,5.341,NA,NA,NA
 323,Pocket Pool,nrei,steelhead,juvenile,25.08,0.33999999999999997,0,-402.741,-599.7,606.994,NA,NA,NA
 323,Rapid,nrei,steelhead,juvenile,366.049,57.910000000000004,51,-346.518,-400.631,326.617,NA,NA,NA
 323,Riffle,nrei,steelhead,juvenile,11.89,0.03,0,-464,-479.22,172.18,NA,NA,NA
@@ -2378,7 +2266,7 @@ visit.id,GU,model,species,lifestage,area.delft,hab.area.suitable,pred.fish,med,m
 323,Glide-Run,fuzzy,chinook,spawner,179.11,0,0,0.3,0.298,0.01,0.3,0.298,0.01
 323,Margin Attached Bar,fuzzy,chinook,spawner,21.449,0,0,0.23,0.238,0.019,0.23,0.238,0.019
 323,Mid Channel Bar,fuzzy,chinook,spawner,1.66,0,0,0.23,0.238,0.019,0.23,0.238,0.019
-323,"NA",fuzzy,chinook,spawner,0.47,0,0,0.23,0.23,0,0.23,0.23,0
+323,NA,fuzzy,chinook,spawner,0.47,0,0,0.23,0.23,0,0.23,0.23,0
 323,Pocket Pool,fuzzy,chinook,spawner,25.08,0,0,0.3,0.3,0,0.3,0.3,0
 323,Rapid,fuzzy,chinook,spawner,366.049,0,0,0.3,0.293,0.019,0.3,0.293,0.019
 323,Riffle,fuzzy,chinook,spawner,11.89,0,0,0.3,0.3,0,0.3,0.3,0
@@ -2388,7 +2276,7 @@ visit.id,GU,model,species,lifestage,area.delft,hab.area.suitable,pred.fish,med,m
 323,Glide-Run,fuzzy,steelhead,spawner,179.11,0,0,0.23,0.198,0.059,0.23,0.198,0.059
 323,Margin Attached Bar,fuzzy,steelhead,spawner,21.449,0,0,0.078,0.089,0.037,0.078,0.089,0.037
 323,Mid Channel Bar,fuzzy,steelhead,spawner,1.66,0,0,0.078,0.089,0.036,0.078,0.089,0.036
-323,"NA",fuzzy,steelhead,spawner,0.47,0,0,0.078,0.078,0,0.078,0.078,0
+323,NA,fuzzy,steelhead,spawner,0.47,0,0,0.078,0.078,0,0.078,0.078,0
 323,Pocket Pool,fuzzy,steelhead,spawner,25.08,0,0,0.23,0.228,0.017,0.23,0.228,0.017
 323,Rapid,fuzzy,steelhead,spawner,366.049,0,0,0.23,0.191,0.064,0.23,0.191,0.064
 323,Riffle,fuzzy,steelhead,spawner,11.89,0,0,0.23,0.23,0.008,0.23,0.23,0.008
@@ -2398,7 +2286,7 @@ visit.id,GU,model,species,lifestage,area.delft,hab.area.suitable,pred.fish,med,m
 323,Glide-Run,fuzzy,chinook,juvenile,179.11,19.945,19,0.078,0.161,0.143,NA,NA,NA
 323,Margin Attached Bar,fuzzy,chinook,juvenile,21.449,0.47,0,0.078,0.13,0.113,NA,NA,NA
 323,Mid Channel Bar,fuzzy,chinook,juvenile,1.66,0.04,0,0.078,0.116,0.1,NA,NA,NA
-323,"NA",fuzzy,chinook,juvenile,0.47,0,0,0.078,0.078,0,NA,NA,NA
+323,NA,fuzzy,chinook,juvenile,0.47,0,0,0.078,0.078,0,NA,NA,NA
 323,Pocket Pool,fuzzy,chinook,juvenile,25.08,0.06999999999999999,0,0.078,0.087,0.042,NA,NA,NA
 323,Rapid,fuzzy,chinook,juvenile,366.049,35.65,32,0.078,0.156,0.138,NA,NA,NA
 323,Riffle,fuzzy,chinook,juvenile,11.89,0.01,0,0.078,0.08,0.019,NA,NA,NA
@@ -2447,7 +2335,7 @@ visit.id,GU,model,species,lifestage,area.delft,hab.area.suitable,pred.fish,med,m
 3297,Glide-Run,nrei,steelhead,juvenile,5258.206999999999,2792.378,1582,29.345,-45.758,187.341,NA,NA,NA
 3297,Margin Attached Bar,nrei,steelhead,juvenile,433.839,36.05,14,-20.337,-13.233,28.724,NA,NA,NA
 3297,Mid Channel Bar,nrei,steelhead,juvenile,374.762,58.058,27,-8.622,2.83,41.916,NA,NA,NA
-3297,"NA",nrei,steelhead,juvenile,1.86,0,0,-33.688,-33.688,4.739,NA,NA,NA
+3297,NA,nrei,steelhead,juvenile,1.86,0,0,-33.688,-33.688,4.739,NA,NA,NA
 3297,Pocket Pool,nrei,steelhead,juvenile,110.17999999999999,43.838,32,-32.351,-73.355,146.627,NA,NA,NA
 3297,Pool,nrei,steelhead,juvenile,1531.142,1140.52,847,43.092,13.902,92.231,NA,NA,NA
 3297,Rapid,nrei,steelhead,juvenile,365.381,61.027,43,-24.178,-38.458,226.609,NA,NA,NA
@@ -2457,7 +2345,7 @@ visit.id,GU,model,species,lifestage,area.delft,hab.area.suitable,pred.fish,med,m
 3297,Glide-Run,fuzzy,chinook,spawner,5258.206999999999,1264.768,29,0.3,0.33,0.153,NA,NA,NA
 3297,Margin Attached Bar,fuzzy,chinook,spawner,433.839,4.62,0,0.23,0.208,0.085,NA,NA,NA
 3297,Mid Channel Bar,fuzzy,chinook,spawner,374.762,27.183,0,0.23,0.242,0.123,NA,NA,NA
-3297,"NA",fuzzy,chinook,spawner,1.86,0,0,0.23,0.23,0,NA,NA,NA
+3297,NA,fuzzy,chinook,spawner,1.86,0,0,0.23,0.23,0,NA,NA,NA
 3297,Pocket Pool,fuzzy,chinook,spawner,110.17999999999999,11.78,0,0.3,0.306,0.117,NA,NA,NA
 3297,Pool,fuzzy,chinook,spawner,1531.142,350.5,9,0.3,0.333,0.144,NA,NA,NA
 3297,Rapid,fuzzy,chinook,spawner,365.381,0,0,0.078,0.145,0.078,NA,NA,NA
@@ -2467,7 +2355,7 @@ visit.id,GU,model,species,lifestage,area.delft,hab.area.suitable,pred.fish,med,m
 3297,Glide-Run,fuzzy,steelhead,spawner,5258.206999999999,1137.377,38,0.23,0.251,0.195,NA,NA,NA
 3297,Margin Attached Bar,fuzzy,steelhead,spawner,433.839,5.689,0,0.078,0.101,0.078,NA,NA,NA
 3297,Mid Channel Bar,fuzzy,steelhead,spawner,374.762,31.913,0,0.078,0.154,0.152,NA,NA,NA
-3297,"NA",fuzzy,steelhead,spawner,1.86,0,0,0.078,0.078,0,NA,NA,NA
+3297,NA,fuzzy,steelhead,spawner,1.86,0,0,0.078,0.078,0,NA,NA,NA
 3297,Pocket Pool,fuzzy,steelhead,spawner,110.17999999999999,9.74,0,0.224,0.208,0.16,NA,NA,NA
 3297,Pool,fuzzy,steelhead,spawner,1531.142,341.21,12,0.078,0.211,0.207,NA,NA,NA
 3297,Rapid,fuzzy,steelhead,spawner,365.381,0,0,0.078,0.078,0,NA,NA,NA
@@ -2477,7 +2365,7 @@ visit.id,GU,model,species,lifestage,area.delft,hab.area.suitable,pred.fish,med,m
 3297,Glide-Run,fuzzy,chinook,juvenile,5258.206999999999,2435.716,1461,0.39,0.355,0.22,NA,NA,NA
 3297,Margin Attached Bar,fuzzy,chinook,juvenile,433.839,72.149,14,0.186,0.273,0.216,NA,NA,NA
 3297,Mid Channel Bar,fuzzy,chinook,juvenile,374.762,93.794,59,0.078,0.244,0.216,NA,NA,NA
-3297,"NA",fuzzy,chinook,juvenile,1.86,0,0,0.078,0.098,0.038,NA,NA,NA
+3297,NA,fuzzy,chinook,juvenile,1.86,0,0,0.078,0.098,0.038,NA,NA,NA
 3297,Pocket Pool,fuzzy,chinook,juvenile,110.17999999999999,30.62,38,0.27,0.304,0.239,NA,NA,NA
 3297,Pool,fuzzy,chinook,juvenile,1531.142,1058.041,2048,0.51,0.495,0.197,NA,NA,NA
 3297,Rapid,fuzzy,chinook,juvenile,365.381,154.619,587,0.917,0.746,0.251,NA,NA,NA
@@ -2523,7 +2411,7 @@ visit.id,GU,model,species,lifestage,area.delft,hab.area.suitable,pred.fish,med,m
 3413,Glide-Run,nrei,steelhead,juvenile,251.22,168.04000000000002,77,33.283,22.991,48.142,NA,NA,NA
 3413,Margin Attached Bar,nrei,steelhead,juvenile,8.31,0,0,-28.744,-25.286,10.812,NA,NA,NA
 3413,Mid Channel Bar,nrei,steelhead,juvenile,0.09,NA,NA,NA,NA,NA,NA,NA,NA
-3413,"NA",nrei,steelhead,juvenile,0.06,NA,NA,NA,NA,NA,NA,NA,NA
+3413,NA,nrei,steelhead,juvenile,0.06,NA,NA,NA,NA,NA,NA,NA,NA
 3413,Pocket Pool,nrei,steelhead,juvenile,6.35,6.28,5,63.114,62.192,13.547,NA,NA,NA
 3413,Pool,nrei,steelhead,juvenile,54.75,53.44,31,70.805,65.234,22.29,NA,NA,NA
 3413,Rapid,nrei,steelhead,juvenile,16.27,5.74,8,0.91,-29.445,110.87,NA,NA,NA
@@ -2533,7 +2421,7 @@ visit.id,GU,model,species,lifestage,area.delft,hab.area.suitable,pred.fish,med,m
 3413,Glide-Run,fuzzy,chinook,spawner,251.22,NA,NA,NA,NA,NA,NA,NA,NA
 3413,Margin Attached Bar,fuzzy,chinook,spawner,8.31,NA,NA,NA,NA,NA,NA,NA,NA
 3413,Mid Channel Bar,fuzzy,chinook,spawner,0.09,NA,NA,NA,NA,NA,NA,NA,NA
-3413,"NA",fuzzy,chinook,spawner,0.06,NA,NA,NA,NA,NA,NA,NA,NA
+3413,NA,fuzzy,chinook,spawner,0.06,NA,NA,NA,NA,NA,NA,NA,NA
 3413,Pocket Pool,fuzzy,chinook,spawner,6.35,NA,NA,NA,NA,NA,NA,NA,NA
 3413,Pool,fuzzy,chinook,spawner,54.75,NA,NA,NA,NA,NA,NA,NA,NA
 3413,Rapid,fuzzy,chinook,spawner,16.27,NA,NA,NA,NA,NA,NA,NA,NA
@@ -2543,7 +2431,7 @@ visit.id,GU,model,species,lifestage,area.delft,hab.area.suitable,pred.fish,med,m
 3413,Glide-Run,fuzzy,steelhead,spawner,251.22,NA,NA,NA,NA,NA,NA,NA,NA
 3413,Margin Attached Bar,fuzzy,steelhead,spawner,8.31,NA,NA,NA,NA,NA,NA,NA,NA
 3413,Mid Channel Bar,fuzzy,steelhead,spawner,0.09,NA,NA,NA,NA,NA,NA,NA,NA
-3413,"NA",fuzzy,steelhead,spawner,0.06,NA,NA,NA,NA,NA,NA,NA,NA
+3413,NA,fuzzy,steelhead,spawner,0.06,NA,NA,NA,NA,NA,NA,NA,NA
 3413,Pocket Pool,fuzzy,steelhead,spawner,6.35,NA,NA,NA,NA,NA,NA,NA,NA
 3413,Pool,fuzzy,steelhead,spawner,54.75,NA,NA,NA,NA,NA,NA,NA,NA
 3413,Rapid,fuzzy,steelhead,spawner,16.27,NA,NA,NA,NA,NA,NA,NA,NA
@@ -2553,7 +2441,7 @@ visit.id,GU,model,species,lifestage,area.delft,hab.area.suitable,pred.fish,med,m
 3413,Glide-Run,fuzzy,chinook,juvenile,251.22,NA,NA,NA,NA,NA,NA,NA,NA
 3413,Margin Attached Bar,fuzzy,chinook,juvenile,8.31,NA,NA,NA,NA,NA,NA,NA,NA
 3413,Mid Channel Bar,fuzzy,chinook,juvenile,0.09,NA,NA,NA,NA,NA,NA,NA,NA
-3413,"NA",fuzzy,chinook,juvenile,0.06,NA,NA,NA,NA,NA,NA,NA,NA
+3413,NA,fuzzy,chinook,juvenile,0.06,NA,NA,NA,NA,NA,NA,NA,NA
 3413,Pocket Pool,fuzzy,chinook,juvenile,6.35,NA,NA,NA,NA,NA,NA,NA,NA
 3413,Pool,fuzzy,chinook,juvenile,54.75,NA,NA,NA,NA,NA,NA,NA,NA
 3413,Rapid,fuzzy,chinook,juvenile,16.27,NA,NA,NA,NA,NA,NA,NA,NA
@@ -2838,7 +2726,7 @@ visit.id,GU,model,species,lifestage,area.delft,hab.area.suitable,pred.fish,med,m
 3618,Glide-Run,nrei,steelhead,juvenile,1038.11,NA,NA,NA,NA,NA,NA,NA,NA
 3618,Margin Attached Bar,nrei,steelhead,juvenile,314.492,NA,NA,NA,NA,NA,NA,NA,NA
 3618,Mid Channel Bar,nrei,steelhead,juvenile,192.672,NA,NA,NA,NA,NA,NA,NA,NA
-3618,"NA",nrei,steelhead,juvenile,0.46,NA,NA,NA,NA,NA,NA,NA,NA
+3618,NA,nrei,steelhead,juvenile,0.46,NA,NA,NA,NA,NA,NA,NA,NA
 3618,Pocket Pool,nrei,steelhead,juvenile,52.11,NA,NA,NA,NA,NA,NA,NA,NA
 3618,Pool,nrei,steelhead,juvenile,531.5,NA,NA,NA,NA,NA,NA,NA,NA
 3618,Rapid,nrei,steelhead,juvenile,317.75,NA,NA,NA,NA,NA,NA,NA,NA
@@ -2849,7 +2737,7 @@ visit.id,GU,model,species,lifestage,area.delft,hab.area.suitable,pred.fish,med,m
 3618,Glide-Run,fuzzy,chinook,spawner,1038.11,59.327000000000005,1,0.078,0.114,0.125,NA,NA,NA
 3618,Margin Attached Bar,fuzzy,chinook,spawner,314.492,0,0,0.078,0.1,0.053,NA,NA,NA
 3618,Mid Channel Bar,fuzzy,chinook,spawner,192.672,0,0,0.078,0.078,0,NA,NA,NA
-3618,"NA",fuzzy,chinook,spawner,0.46,0,0,0.078,0.078,0,NA,NA,NA
+3618,NA,fuzzy,chinook,spawner,0.46,0,0,0.078,0.078,0,NA,NA,NA
 3618,Pocket Pool,fuzzy,chinook,spawner,52.11,7.01,0,0.078,0.154,0.189,NA,NA,NA
 3618,Pool,fuzzy,chinook,spawner,531.5,31.51,1,0.078,0.114,0.139,NA,NA,NA
 3618,Rapid,fuzzy,chinook,spawner,317.75,10.4,0,0.078,0.117,0.096,NA,NA,NA
@@ -2860,7 +2748,7 @@ visit.id,GU,model,species,lifestage,area.delft,hab.area.suitable,pred.fish,med,m
 3618,Glide-Run,fuzzy,steelhead,spawner,1038.11,59.327000000000005,1,0.078,0.113,0.125,NA,NA,NA
 3618,Margin Attached Bar,fuzzy,steelhead,spawner,314.492,0,0,0.078,0.079,0.017,NA,NA,NA
 3618,Mid Channel Bar,fuzzy,steelhead,spawner,192.672,0,0,0.078,0.078,0,NA,NA,NA
-3618,"NA",fuzzy,steelhead,spawner,0.46,0,0,0.078,0.078,0,NA,NA,NA
+3618,NA,fuzzy,steelhead,spawner,0.46,0,0,0.078,0.078,0,NA,NA,NA
 3618,Pocket Pool,fuzzy,steelhead,spawner,52.11,7.24,0,0.078,0.154,0.189,NA,NA,NA
 3618,Pool,fuzzy,steelhead,spawner,531.5,31.51,2,0.078,0.114,0.139,NA,NA,NA
 3618,Rapid,fuzzy,steelhead,spawner,317.75,14.33,0,0.078,0.105,0.093,NA,NA,NA
@@ -2871,48 +2759,12 @@ visit.id,GU,model,species,lifestage,area.delft,hab.area.suitable,pred.fish,med,m
 3618,Glide-Run,fuzzy,chinook,juvenile,1038.11,894.667,846,0.708,0.675,0.247,NA,NA,NA
 3618,Margin Attached Bar,fuzzy,chinook,juvenile,314.492,171.629,44,0.501,0.427,0.308,NA,NA,NA
 3618,Mid Channel Bar,fuzzy,chinook,juvenile,192.672,166.921,135,0.795,0.713,0.26,NA,NA,NA
-3618,"NA",fuzzy,chinook,juvenile,0.46,0.22,0,0.362,0.346,0.219,NA,NA,NA
+3618,NA,fuzzy,chinook,juvenile,0.46,0.22,0,0.362,0.346,0.219,NA,NA,NA
 3618,Pocket Pool,fuzzy,chinook,juvenile,52.11,50.25,100,0.908,0.768,0.185,NA,NA,NA
 3618,Pool,fuzzy,chinook,juvenile,531.5,531.5,1006,0.908,0.842,0.091,NA,NA,NA
 3618,Rapid,fuzzy,chinook,juvenile,317.75,276.36,946,0.917,0.774,0.274,NA,NA,NA
 3618,Riffle,fuzzy,chinook,juvenile,118.03,42.631,6,0.211,0.322,0.275,NA,NA,NA
 3618,Transition,fuzzy,chinook,juvenile,618.778,425.733,292,0.652,0.526,0.291,NA,NA,NA
-3620,Bank,nrei,steelhead,juvenile,83.47,0.37,0,-30.383,-27.601,10.652,NA,NA,NA
-3620,Barface,nrei,steelhead,juvenile,0.9,0,0,-29.748,-28.689,4.966,NA,NA,NA
-3620,Glide-Run,nrei,steelhead,juvenile,422.765,92.58,41,-7.001,-6.406,30.733,NA,NA,NA
-3620,Margin Attached Bar,nrei,steelhead,juvenile,47.17,0.5,0,-32.275,-23.849,19.749,NA,NA,NA
-3620,Mid Channel Bar,nrei,steelhead,juvenile,28.551000000000002,0,0,-33.294,-31.137,7.658,NA,NA,NA
-3620,Pocket Pool,nrei,steelhead,juvenile,17.48,9.17,9,12.665,8.366,30.453,NA,NA,NA
-3620,Pool,nrei,steelhead,juvenile,235.19,143.19,66,14.923,15.798,33.113,NA,NA,NA
-3620,Riffle,nrei,steelhead,juvenile,48.58,2.23,3,-24.659,-21.871,17.018,NA,NA,NA
-3620,Transition,nrei,steelhead,juvenile,183.52,13.52,6,-19.743,-14.47,27.164,NA,NA,NA
-3620,Bank,fuzzy,chinook,spawner,83.47,0.39999999999999997,0,0.078,0.096,0.066,NA,NA,NA
-3620,Barface,fuzzy,chinook,spawner,0.9,0,0,0.078,0.078,0,NA,NA,NA
-3620,Glide-Run,fuzzy,chinook,spawner,422.765,23.27,0,0.078,0.158,0.125,NA,NA,NA
-3620,Margin Attached Bar,fuzzy,chinook,spawner,47.17,1.13,0,0.078,0.136,0.139,NA,NA,NA
-3620,Mid Channel Bar,fuzzy,chinook,spawner,28.551000000000002,0.07,0,0.078,0.085,0.048,NA,NA,NA
-3620,Pocket Pool,fuzzy,chinook,spawner,17.48,2.9,0,0.085,0.275,0.222,NA,NA,NA
-3620,Pool,fuzzy,chinook,spawner,235.19,20.93,0,0.178,0.21,0.149,NA,NA,NA
-3620,Riffle,fuzzy,chinook,spawner,48.58,0.28,0,0.078,0.108,0.071,NA,NA,NA
-3620,Transition,fuzzy,chinook,spawner,183.52,4.6499999999999995,0,0.078,0.113,0.108,NA,NA,NA
-3620,Bank,fuzzy,steelhead,spawner,83.47,0.39999999999999997,0,0.078,0.096,0.066,NA,NA,NA
-3620,Barface,fuzzy,steelhead,spawner,0.9,0,0,0.078,0.078,0,NA,NA,NA
-3620,Glide-Run,fuzzy,steelhead,spawner,422.765,23.27,0,0.078,0.158,0.125,NA,NA,NA
-3620,Margin Attached Bar,fuzzy,steelhead,spawner,47.17,1.13,0,0.078,0.136,0.139,NA,NA,NA
-3620,Mid Channel Bar,fuzzy,steelhead,spawner,28.551000000000002,0.07,0,0.078,0.085,0.048,NA,NA,NA
-3620,Pocket Pool,fuzzy,steelhead,spawner,17.48,2.9,0,0.085,0.275,0.222,NA,NA,NA
-3620,Pool,fuzzy,steelhead,spawner,235.19,20.93,0,0.178,0.21,0.149,NA,NA,NA
-3620,Riffle,fuzzy,steelhead,spawner,48.58,0.28,0,0.078,0.108,0.071,NA,NA,NA
-3620,Transition,fuzzy,steelhead,spawner,183.52,4.6499999999999995,0,0.078,0.113,0.108,NA,NA,NA
-3620,Bank,fuzzy,chinook,juvenile,83.47,6.0600000000000005,0,0.078,0.243,0.226,NA,NA,NA
-3620,Barface,fuzzy,chinook,juvenile,0.9,0.06,0,0.078,0.143,0.13,NA,NA,NA
-3620,Glide-Run,fuzzy,chinook,juvenile,422.765,89.39,33,0.157,0.264,0.223,NA,NA,NA
-3620,Margin Attached Bar,fuzzy,chinook,juvenile,47.17,1.9,1,0.078,0.174,0.208,NA,NA,NA
-3620,Mid Channel Bar,fuzzy,chinook,juvenile,28.551000000000002,0.68,0,0.078,0.135,0.156,NA,NA,NA
-3620,Pocket Pool,fuzzy,chinook,juvenile,17.48,6.97,8,0.582,0.574,0.202,NA,NA,NA
-3620,Pool,fuzzy,chinook,juvenile,235.19,156.06,278,0.748,0.716,0.154,NA,NA,NA
-3620,Riffle,fuzzy,chinook,juvenile,48.58,1.73,0,0.078,0.127,0.107,NA,NA,NA
-3620,Transition,fuzzy,chinook,juvenile,183.52,31.08,6,0.078,0.242,0.234,NA,NA,NA
 3637,Bank,nrei,steelhead,juvenile,67.94,1.57,1,-25.503,-16.727,27.023,NA,NA,NA
 3637,Barface,nrei,steelhead,juvenile,0.54,0,0,-36.912,-34.979,3.043,NA,NA,NA
 3637,Glide-Run,nrei,steelhead,juvenile,444.29100000000005,225.918,137,5.882,3.75,32.263,NA,NA,NA
@@ -2954,7 +2806,7 @@ visit.id,GU,model,species,lifestage,area.delft,hab.area.suitable,pred.fish,med,m
 3701,Glide-Run,nrei,steelhead,juvenile,2928.338,1664.273,1085,32.03,-2.842,85.36,NA,NA,NA
 3701,Margin Attached Bar,nrei,steelhead,juvenile,527.41,70.65,22,-5.085,-1.163,27.956,NA,NA,NA
 3701,Mid Channel Bar,nrei,steelhead,juvenile,625.479,66.22,32,-16.027,-8.415,31.402,NA,NA,NA
-3701,"NA",nrei,steelhead,juvenile,6.12,1.59,0,-0.963,-0.391,25.742,NA,NA,NA
+3701,NA,nrei,steelhead,juvenile,6.12,1.59,0,-0.963,-0.391,25.742,NA,NA,NA
 3701,Pocket Pool,nrei,steelhead,juvenile,34.449999999999996,15.411999999999999,15,-36.896,-36.064,96.924,NA,NA,NA
 3701,Pond,nrei,steelhead,juvenile,15.25,1.22,0,-32.71,-27.102,18.628,NA,NA,NA
 3701,Pool,nrei,steelhead,juvenile,978.26,787.754,476,43.675,32.935,50.637,NA,NA,NA
@@ -2965,7 +2817,7 @@ visit.id,GU,model,species,lifestage,area.delft,hab.area.suitable,pred.fish,med,m
 3701,Glide-Run,fuzzy,chinook,spawner,2928.338,2118.73,36,0.506,0.481,0.166,NA,NA,NA
 3701,Margin Attached Bar,fuzzy,chinook,spawner,527.41,25.239,0,0.078,0.169,0.124,NA,NA,NA
 3701,Mid Channel Bar,fuzzy,chinook,spawner,625.479,56.72,1,0.078,0.19,0.188,NA,NA,NA
-3701,"NA",fuzzy,chinook,spawner,6.12,0,0,0.269,0.266,0.062,NA,NA,NA
+3701,NA,fuzzy,chinook,spawner,6.12,0,0,0.269,0.266,0.062,NA,NA,NA
 3701,Pocket Pool,fuzzy,chinook,spawner,34.449999999999996,14.91,0,0.479,0.461,0.123,NA,NA,NA
 3701,Pond,fuzzy,chinook,spawner,15.25,NA,NA,NA,NA,NA,NA,NA,NA
 3701,Pool,fuzzy,chinook,spawner,978.26,581.7,15,0.526,0.49,0.186,NA,NA,NA
@@ -2976,7 +2828,7 @@ visit.id,GU,model,species,lifestage,area.delft,hab.area.suitable,pred.fish,med,m
 3701,Glide-Run,fuzzy,steelhead,spawner,2928.338,2118.73,52,0.506,0.481,0.166,NA,NA,NA
 3701,Margin Attached Bar,fuzzy,steelhead,spawner,527.41,25.239,0,0.078,0.169,0.124,NA,NA,NA
 3701,Mid Channel Bar,fuzzy,steelhead,spawner,625.479,56.72,2,0.078,0.19,0.188,NA,NA,NA
-3701,"NA",fuzzy,steelhead,spawner,6.12,0,0,0.269,0.266,0.062,NA,NA,NA
+3701,NA,fuzzy,steelhead,spawner,6.12,0,0,0.269,0.266,0.062,NA,NA,NA
 3701,Pocket Pool,fuzzy,steelhead,spawner,34.449999999999996,14.91,0,0.479,0.461,0.123,NA,NA,NA
 3701,Pond,fuzzy,steelhead,spawner,15.25,NA,NA,NA,NA,NA,NA,NA,NA
 3701,Pool,fuzzy,steelhead,spawner,978.26,581.7,20,0.526,0.49,0.186,NA,NA,NA
@@ -2987,7 +2839,7 @@ visit.id,GU,model,species,lifestage,area.delft,hab.area.suitable,pred.fish,med,m
 3701,Glide-Run,fuzzy,chinook,juvenile,2928.338,802.299,308,0.251,0.277,0.188,NA,NA,NA
 3701,Margin Attached Bar,fuzzy,chinook,juvenile,527.41,91.979,52,0.078,0.227,0.207,NA,NA,NA
 3701,Mid Channel Bar,fuzzy,chinook,juvenile,625.479,66.01899999999999,92,0.078,0.204,0.206,NA,NA,NA
-3701,"NA",fuzzy,chinook,juvenile,6.12,4.09,4,0.683,0.666,0.121,NA,NA,NA
+3701,NA,fuzzy,chinook,juvenile,6.12,4.09,4,0.683,0.666,0.121,NA,NA,NA
 3701,Pocket Pool,fuzzy,chinook,juvenile,34.449999999999996,10.08,14,0.4,0.344,0.25,NA,NA,NA
 3701,Pond,fuzzy,chinook,juvenile,15.25,NA,NA,NA,NA,NA,NA,NA,NA
 3701,Pool,fuzzy,chinook,juvenile,978.26,428.09999999999997,717,0.438,0.449,0.257,NA,NA,NA
@@ -3278,7 +3130,7 @@ visit.id,GU,model,species,lifestage,area.delft,hab.area.suitable,pred.fish,med,m
 4086,Glide-Run,nrei,steelhead,juvenile,3621.17,2020.42,1092,65.807,43.449,63.62,NA,NA,NA
 4086,Margin Attached Bar,nrei,steelhead,juvenile,320.858,159.65800000000002,39,43.318,41.366,37.379,NA,NA,NA
 4086,Mid Channel Bar,nrei,steelhead,juvenile,476.92400000000004,14.34,7,-22.404,-17.303,34.903,NA,NA,NA
-4086,"NA",nrei,steelhead,juvenile,76.948,20.599,9,1.18,23.754,49.708,NA,NA,NA
+4086,NA,nrei,steelhead,juvenile,76.948,20.599,9,1.18,23.754,49.708,NA,NA,NA
 4086,Pocket Pool,nrei,steelhead,juvenile,32.47,29.95,32,78.6,70.849,28.107,NA,NA,NA
 4086,Pool,nrei,steelhead,juvenile,3107.927,2692.877,1727,74.262,53.161,59.128,NA,NA,NA
 4086,Riffle,nrei,steelhead,juvenile,2076.402,1229.421,691,44.586,5.624,96.854,NA,NA,NA
@@ -3288,7 +3140,7 @@ visit.id,GU,model,species,lifestage,area.delft,hab.area.suitable,pred.fish,med,m
 4086,Glide-Run,fuzzy,chinook,spawner,3621.17,1983.5900000000001,27,0.44,0.431,0.216,NA,NA,NA
 4086,Margin Attached Bar,fuzzy,chinook,spawner,320.858,153.867,0,0.464,0.446,0.192,NA,NA,NA
 4086,Mid Channel Bar,fuzzy,chinook,spawner,476.92400000000004,16.32,0,0.078,0.145,0.124,NA,NA,NA
-4086,"NA",fuzzy,chinook,spawner,76.948,12.72,0,0.078,0.207,0.185,NA,NA,NA
+4086,NA,fuzzy,chinook,spawner,76.948,12.72,0,0.078,0.207,0.185,NA,NA,NA
 4086,Pocket Pool,fuzzy,chinook,spawner,32.47,26.66,0,0.564,0.514,0.109,NA,NA,NA
 4086,Pool,fuzzy,chinook,spawner,3107.927,2037.483,50,0.494,0.501,0.181,NA,NA,NA
 4086,Riffle,fuzzy,chinook,spawner,2076.402,1634.451,46,0.604,0.563,0.189,NA,NA,NA
@@ -3298,7 +3150,7 @@ visit.id,GU,model,species,lifestage,area.delft,hab.area.suitable,pred.fish,med,m
 4086,Glide-Run,fuzzy,steelhead,spawner,3621.17,1983.5900000000001,38,0.44,0.41,0.239,NA,NA,NA
 4086,Margin Attached Bar,fuzzy,steelhead,spawner,320.858,153.867,1,0.464,0.446,0.192,NA,NA,NA
 4086,Mid Channel Bar,fuzzy,steelhead,spawner,476.92400000000004,16.32,0,0.078,0.132,0.122,NA,NA,NA
-4086,"NA",fuzzy,steelhead,spawner,76.948,12.72,0,0.078,0.207,0.185,NA,NA,NA
+4086,NA,fuzzy,steelhead,spawner,76.948,12.72,0,0.078,0.207,0.185,NA,NA,NA
 4086,Pocket Pool,fuzzy,steelhead,spawner,32.47,26.66,0,0.564,0.514,0.109,NA,NA,NA
 4086,Pool,fuzzy,steelhead,spawner,3107.927,2037.483,67,0.494,0.501,0.181,NA,NA,NA
 4086,Riffle,fuzzy,steelhead,spawner,2076.402,1634.451,68,0.604,0.562,0.192,NA,NA,NA
@@ -3308,7 +3160,7 @@ visit.id,GU,model,species,lifestage,area.delft,hab.area.suitable,pred.fish,med,m
 4086,Glide-Run,fuzzy,chinook,juvenile,3621.17,2192.852,2130,0.497,0.469,0.278,NA,NA,NA
 4086,Margin Attached Bar,fuzzy,chinook,juvenile,320.858,221.487,536,0.815,0.74,0.224,NA,NA,NA
 4086,Mid Channel Bar,fuzzy,chinook,juvenile,476.92400000000004,68.142,1,0.078,0.207,0.197,NA,NA,NA
-4086,"NA",fuzzy,chinook,juvenile,76.948,55.908,115,0.744,0.744,0.171,NA,NA,NA
+4086,NA,fuzzy,chinook,juvenile,76.948,55.908,115,0.744,0.744,0.171,NA,NA,NA
 4086,Pocket Pool,fuzzy,chinook,juvenile,32.47,15.830000000000002,6,0.277,0.397,0.259,NA,NA,NA
 4086,Pool,fuzzy,chinook,juvenile,3107.927,2200.109,2790,0.578,0.559,0.249,NA,NA,NA
 4086,Riffle,fuzzy,chinook,juvenile,2076.402,1019.4399999999999,420,0.401,0.395,0.232,NA,NA,NA
@@ -4337,3 +4189,151 @@ visit.id,GU,model,species,lifestage,area.delft,hab.area.suitable,pred.fish,med,m
 937,Rapid,fuzzy,chinook,juvenile,180.347,16.04,1,0.082,0.169,0.137,NA,NA,NA
 937,Riffle,fuzzy,chinook,juvenile,16.8,1.46,0,0.084,0.174,0.135,NA,NA,NA
 937,Transition,fuzzy,chinook,juvenile,93.792,5.52,1,0.078,0.128,0.13,NA,NA,NA
+197,Bank,nrei,steelhead,juvenile,37.79,2.56,0,-19.421,-17.714,28.83,NA,NA,NA
+197,Cascade,nrei,steelhead,juvenile,362.81,198.375,123,18.247,0.447,109.505,NA,NA,NA
+197,Glide-Run,nrei,steelhead,juvenile,10.417,8.04,5,52.733,42.342,30.103,NA,NA,NA
+197,Margin Attached Bar,nrei,steelhead,juvenile,29.650000000000002,7.180000000000001,3,-4.407,-5.964,44.251,NA,NA,NA
+197,Mid Channel Bar,nrei,steelhead,juvenile,32.85,5.63,1,-9.583,-7.981,21.401,NA,NA,NA
+197,NA,nrei,steelhead,juvenile,0.02,0,0,-36.917,-36.917,NA,NA,NA,NA
+197,Pocket Pool,nrei,steelhead,juvenile,11.21,10.59,9,61.783,46.947,49.825,NA,NA,NA
+197,Pool,nrei,steelhead,juvenile,56.03,45.9,31,65.547,51.12,50.944,NA,NA,NA
+197,Rapid,nrei,steelhead,juvenile,44.313,39.79,12,55.388,47.212,25.22,NA,NA,NA
+197,Riffle,nrei,steelhead,juvenile,8.91,8.1,6,60.814,50.922,32.456,NA,NA,NA
+197,Transition,nrei,steelhead,juvenile,119.64,52.815,31,7.855,-1.261,72.417,NA,NA,NA
+197,Bank,fuzzy,chinook,spawner,37.79,1.21,0,0.23,0.216,0.097,NA,NA,NA
+197,Cascade,fuzzy,chinook,spawner,362.81,34.61,0,0.265,0.28,0.076,NA,NA,NA
+197,Glide-Run,fuzzy,chinook,spawner,10.417,8.18,0,0.545,0.468,0.158,NA,NA,NA
+197,Margin Attached Bar,fuzzy,chinook,spawner,29.650000000000002,3.76,0,0.232,0.284,0.142,NA,NA,NA
+197,Mid Channel Bar,fuzzy,chinook,spawner,32.85,0.15000000000000002,0,0.23,0.242,0.031,NA,NA,NA
+197,NA,fuzzy,chinook,spawner,0.02,NA,NA,NA,NA,NA,NA,NA,NA
+197,Pocket Pool,fuzzy,chinook,spawner,11.21,0.71,0,0.3,0.304,0.055,NA,NA,NA
+197,Pool,fuzzy,chinook,spawner,56.03,17.61,1,0.3,0.339,0.139,NA,NA,NA
+197,Rapid,fuzzy,chinook,spawner,44.313,26.869999999999997,0,0.424,0.435,0.105,NA,NA,NA
+197,Riffle,fuzzy,chinook,spawner,8.91,1.29,0,0.3,0.313,0.062,NA,NA,NA
+197,Transition,fuzzy,chinook,spawner,119.64,17.02,1,0.251,0.291,0.108,NA,NA,NA
+197,Bank,fuzzy,steelhead,spawner,37.79,1.26,0,0.078,0.115,0.103,NA,NA,NA
+197,Cascade,fuzzy,steelhead,spawner,362.81,35.89,0,0.078,0.142,0.129,NA,NA,NA
+197,Glide-Run,fuzzy,steelhead,spawner,10.417,8.18,0,0.545,0.468,0.158,NA,NA,NA
+197,Margin Attached Bar,fuzzy,steelhead,spawner,29.650000000000002,3.98,0,0.078,0.17,0.19,NA,NA,NA
+197,Mid Channel Bar,fuzzy,steelhead,spawner,32.85,0.11,0,0.078,0.098,0.068,NA,NA,NA
+197,NA,fuzzy,steelhead,spawner,0.02,NA,NA,NA,NA,NA,NA,NA,NA
+197,Pocket Pool,fuzzy,steelhead,spawner,11.21,0.71,0,0.078,0.106,0.094,NA,NA,NA
+197,Pool,fuzzy,steelhead,spawner,56.03,11.55,1,0.078,0.231,0.198,NA,NA,NA
+197,Rapid,fuzzy,steelhead,spawner,44.313,27.919999999999998,0,0.446,0.435,0.112,NA,NA,NA
+197,Riffle,fuzzy,steelhead,spawner,8.91,1.28,0,0.078,0.17,0.146,NA,NA,NA
+197,Transition,fuzzy,steelhead,spawner,119.64,17.21,1,0.078,0.178,0.164,NA,NA,NA
+197,Bank,fuzzy,chinook,juvenile,37.79,6.2700000000000005,9,0.078,0.251,0.223,NA,NA,NA
+197,Cascade,fuzzy,chinook,juvenile,362.81,148.424,41,0.368,0.337,0.179,NA,NA,NA
+197,Glide-Run,fuzzy,chinook,juvenile,10.417,6.93,17,0.564,0.474,0.195,NA,NA,NA
+197,Margin Attached Bar,fuzzy,chinook,juvenile,29.650000000000002,3.9600000000000004,3,0.119,0.221,0.178,NA,NA,NA
+197,Mid Channel Bar,fuzzy,chinook,juvenile,32.85,3.5700000000000003,0,0.078,0.19,0.148,NA,NA,NA
+197,NA,fuzzy,chinook,juvenile,0.02,NA,NA,NA,NA,NA,NA,NA,NA
+197,Pocket Pool,fuzzy,chinook,juvenile,11.21,9.83,10,0.57,0.544,0.104,NA,NA,NA
+197,Pool,fuzzy,chinook,juvenile,56.03,54.22,98,0.595,0.632,0.157,NA,NA,NA
+197,Rapid,fuzzy,chinook,juvenile,44.313,38.07,79,0.589,0.549,0.129,NA,NA,NA
+197,Riffle,fuzzy,chinook,juvenile,8.91,6.84,2,0.495,0.475,0.122,NA,NA,NA
+197,Transition,fuzzy,chinook,juvenile,119.64,40.346,32,0.317,0.317,0.206,NA,NA,NA
+2133,Bank,nrei,steelhead,juvenile,15.9,0.13,0,-30.326,-27.759,10.882,NA,NA,NA
+2133,Glide-Run,nrei,steelhead,juvenile,58.907000000000004,2.61,3,-16.859,-20.035,24.628,NA,NA,NA
+2133,Margin Attached Bar,nrei,steelhead,juvenile,7.83,0,0,-34.745,-34.042,2.478,NA,NA,NA
+2133,Mid Channel Bar,nrei,steelhead,juvenile,0.04,NA,NA,NA,NA,NA,NA,NA,NA
+2133,Pocket Pool,nrei,steelhead,juvenile,3.63,1.29,2,3.306,-2.05,16.566,NA,NA,NA
+2133,Pool,nrei,steelhead,juvenile,63.089999999999996,17.83,15,2.017,2.051,14.562,NA,NA,NA
+2133,Rapid,nrei,steelhead,juvenile,9.59,0.13,0,-15.007,-17.17,14.115,NA,NA,NA
+2133,Riffle,nrei,steelhead,juvenile,40.86,0.98,2,-18.289,-18.57,13.743,NA,NA,NA
+2133,Transition,nrei,steelhead,juvenile,59.243,0.07,0,-24.705,-25.617,19.661,NA,NA,NA
+2133,Bank,fuzzy,chinook,spawner,15.9,0.2,0,0.078,0.105,0.081,NA,NA,NA
+2133,Glide-Run,fuzzy,chinook,spawner,58.907000000000004,12.09,0,0.174,0.224,0.158,NA,NA,NA
+2133,Margin Attached Bar,fuzzy,chinook,spawner,7.83,0,0,0.078,0.079,0.017,NA,NA,NA
+2133,Mid Channel Bar,fuzzy,chinook,spawner,0.04,NA,0,NA,NA,NA,NA,NA,NA
+2133,Pocket Pool,fuzzy,chinook,spawner,3.63,2.66,0,0.453,0.434,0.145,NA,NA,NA
+2133,Pool,fuzzy,chinook,spawner,63.089999999999996,27.72,0,0.385,0.368,0.17,NA,NA,NA
+2133,Rapid,fuzzy,chinook,spawner,9.59,2.74,0,0.122,0.24,0.194,NA,NA,NA
+2133,Riffle,fuzzy,chinook,spawner,40.86,3.2199999999999998,0,0.078,0.16,0.121,NA,NA,NA
+2133,Transition,fuzzy,chinook,spawner,59.243,1.34,0,0.078,0.132,0.093,NA,NA,NA
+2133,Bank,fuzzy,steelhead,spawner,15.9,0.2,0,0.078,0.102,0.08,NA,NA,NA
+2133,Glide-Run,fuzzy,steelhead,spawner,58.907000000000004,12.09,0,0.099,0.218,0.162,NA,NA,NA
+2133,Margin Attached Bar,fuzzy,steelhead,spawner,7.83,0,0,0.078,0.079,0.015,NA,NA,NA
+2133,Mid Channel Bar,fuzzy,steelhead,spawner,0.04,NA,NA,NA,NA,NA,NA,NA,NA
+2133,Pocket Pool,fuzzy,steelhead,spawner,3.63,2.7,0,0.464,0.437,0.147,NA,NA,NA
+2133,Pool,fuzzy,steelhead,spawner,63.089999999999996,27.72,1,0.385,0.368,0.17,NA,NA,NA
+2133,Rapid,fuzzy,steelhead,spawner,9.59,2.74,0,0.122,0.24,0.194,NA,NA,NA
+2133,Riffle,fuzzy,steelhead,spawner,40.86,3.2199999999999998,0,0.078,0.138,0.123,NA,NA,NA
+2133,Transition,fuzzy,steelhead,spawner,59.243,1.34,0,0.078,0.125,0.092,NA,NA,NA
+2133,Bank,fuzzy,chinook,juvenile,15.9,2.29,3,0.078,0.223,0.215,NA,NA,NA
+2133,Glide-Run,fuzzy,chinook,juvenile,58.907000000000004,21.18,3,0.197,0.295,0.232,NA,NA,NA
+2133,Margin Attached Bar,fuzzy,chinook,juvenile,7.83,0.13,0,0.078,0.106,0.089,NA,NA,NA
+2133,Mid Channel Bar,fuzzy,chinook,juvenile,0.04,NA,NA,NA,NA,NA,NA,NA,NA
+2133,Pocket Pool,fuzzy,chinook,juvenile,3.63,3.32,2,0.634,0.593,0.117,NA,NA,NA
+2133,Pool,fuzzy,chinook,juvenile,63.089999999999996,57.04,100,0.684,0.652,0.145,NA,NA,NA
+2133,Rapid,fuzzy,chinook,juvenile,9.59,3.92,0,0.228,0.295,0.222,NA,NA,NA
+2133,Riffle,fuzzy,chinook,juvenile,40.86,4.57,2,0.078,0.158,0.169,NA,NA,NA
+2133,Transition,fuzzy,chinook,juvenile,59.243,13.51,1,0.078,0.227,0.217,NA,NA,NA
+2338,Bank,nrei,steelhead,juvenile,11.039,0,0,-32.761,-32.023,7.505,NA,NA,NA
+2338,Glide-Run,nrei,steelhead,juvenile,111.71,27.95,12,-5.433,-5.328,19.069,NA,NA,NA
+2338,Margin Attached Bar,nrei,steelhead,juvenile,4.18,0,0,-33.995,-37.123,14.038,NA,NA,NA
+2338,Pocket Pool,nrei,steelhead,juvenile,10.84,10.48,10,28.984,28.29,12.906,NA,NA,NA
+2338,Pool,nrei,steelhead,juvenile,37.15,29.7,19,25.092,24.135,22.852,NA,NA,NA
+2338,Rapid,nrei,steelhead,juvenile,27.11,4.61,4,-14.999,-16.596,29.485,NA,NA,NA
+2338,Riffle,nrei,steelhead,juvenile,20.369999999999997,6.57,2,-3.985,-4.993,17.846,NA,NA,NA
+2338,Transition,nrei,steelhead,juvenile,76.791,4.12,0,-23.377,-20.753,23.354,NA,NA,NA
+2338,Bank,fuzzy,chinook,spawner,11.039,0,0,0.078,0.087,0.032,NA,NA,NA
+2338,Glide-Run,fuzzy,chinook,spawner,111.71,18.009999999999998,0,0.078,0.201,0.157,NA,NA,NA
+2338,Margin Attached Bar,fuzzy,chinook,spawner,4.18,0,0,0.078,0.08,0.016,NA,NA,NA
+2338,Pocket Pool,fuzzy,chinook,spawner,10.84,9.39,0,0.531,0.512,0.167,NA,NA,NA
+2338,Pool,fuzzy,chinook,spawner,37.15,7.89,0,0.078,0.241,0.209,NA,NA,NA
+2338,Rapid,fuzzy,chinook,spawner,27.11,2.45,0,0.078,0.162,0.13,NA,NA,NA
+2338,Riffle,fuzzy,chinook,spawner,20.369999999999997,4.64,0,0.203,0.262,0.164,NA,NA,NA
+2338,Transition,fuzzy,chinook,spawner,76.791,0.79,0,0.078,0.105,0.071,NA,NA,NA
+2338,Bank,fuzzy,steelhead,spawner,11.039,0,0,0.078,0.079,0.009,NA,NA,NA
+2338,Glide-Run,fuzzy,steelhead,spawner,111.71,18.75,0,0.078,0.199,0.162,NA,NA,NA
+2338,Margin Attached Bar,fuzzy,steelhead,spawner,4.18,0,0,0.078,0.08,0.016,NA,NA,NA
+2338,Pocket Pool,fuzzy,steelhead,spawner,10.84,9.39,1,0.54,0.514,0.167,NA,NA,NA
+2338,Pool,fuzzy,steelhead,spawner,37.15,7.89,0,0.078,0.241,0.209,NA,NA,NA
+2338,Rapid,fuzzy,steelhead,spawner,27.11,2.45,0,0.078,0.162,0.13,NA,NA,NA
+2338,Riffle,fuzzy,steelhead,spawner,20.369999999999997,5.02,0,0.087,0.235,0.186,NA,NA,NA
+2338,Transition,fuzzy,steelhead,spawner,76.791,0.79,0,0.078,0.1,0.069,NA,NA,NA
+2338,Bank,fuzzy,chinook,juvenile,11.039,0.44,0,0.078,0.13,0.144,NA,NA,NA
+2338,Glide-Run,fuzzy,chinook,juvenile,111.71,22.24,9,0.148,0.233,0.189,NA,NA,NA
+2338,Margin Attached Bar,fuzzy,chinook,juvenile,4.18,0.03,0,0.078,0.098,0.066,NA,NA,NA
+2338,Pocket Pool,fuzzy,chinook,juvenile,10.84,9.7,6,0.529,0.56,0.152,NA,NA,NA
+2338,Pool,fuzzy,chinook,juvenile,37.15,36.94,75,0.749,0.742,0.105,NA,NA,NA
+2338,Rapid,fuzzy,chinook,juvenile,27.11,1.58,0,0.078,0.151,0.119,NA,NA,NA
+2338,Riffle,fuzzy,chinook,juvenile,20.369999999999997,6.52,2,0.269,0.297,0.215,NA,NA,NA
+2338,Transition,fuzzy,chinook,juvenile,76.791,10.870000000000001,0,0.078,0.176,0.177,NA,NA,NA
+3620,Bank,nrei,steelhead,juvenile,83.47,0.37,0,-30.383,-27.601,10.652,NA,NA,NA
+3620,Barface,nrei,steelhead,juvenile,0.9,0,0,-29.748,-28.689,4.966,NA,NA,NA
+3620,Glide-Run,nrei,steelhead,juvenile,422.765,92.58,41,-7.001,-6.406,30.733,NA,NA,NA
+3620,Margin Attached Bar,nrei,steelhead,juvenile,47.17,0.5,0,-32.275,-23.849,19.749,NA,NA,NA
+3620,Mid Channel Bar,nrei,steelhead,juvenile,28.551000000000002,0,0,-33.294,-31.137,7.658,NA,NA,NA
+3620,Pocket Pool,nrei,steelhead,juvenile,17.48,9.17,9,12.665,8.366,30.453,NA,NA,NA
+3620,Pool,nrei,steelhead,juvenile,235.19,143.19,66,14.923,15.798,33.113,NA,NA,NA
+3620,Riffle,nrei,steelhead,juvenile,48.58,2.23,3,-24.659,-21.871,17.018,NA,NA,NA
+3620,Transition,nrei,steelhead,juvenile,183.52,13.52,6,-19.743,-14.47,27.164,NA,NA,NA
+3620,Bank,fuzzy,chinook,spawner,83.47,0.39999999999999997,0,0.078,0.096,0.066,NA,NA,NA
+3620,Barface,fuzzy,chinook,spawner,0.9,0,0,0.078,0.078,0,NA,NA,NA
+3620,Glide-Run,fuzzy,chinook,spawner,422.765,23.27,0,0.078,0.158,0.125,NA,NA,NA
+3620,Margin Attached Bar,fuzzy,chinook,spawner,47.17,1.13,0,0.078,0.136,0.139,NA,NA,NA
+3620,Mid Channel Bar,fuzzy,chinook,spawner,28.551000000000002,0.07,0,0.078,0.085,0.048,NA,NA,NA
+3620,Pocket Pool,fuzzy,chinook,spawner,17.48,2.9,0,0.085,0.275,0.222,NA,NA,NA
+3620,Pool,fuzzy,chinook,spawner,235.19,20.93,0,0.178,0.21,0.149,NA,NA,NA
+3620,Riffle,fuzzy,chinook,spawner,48.58,0.28,0,0.078,0.108,0.071,NA,NA,NA
+3620,Transition,fuzzy,chinook,spawner,183.52,4.6499999999999995,0,0.078,0.113,0.108,NA,NA,NA
+3620,Bank,fuzzy,steelhead,spawner,83.47,0.39999999999999997,0,0.078,0.096,0.066,NA,NA,NA
+3620,Barface,fuzzy,steelhead,spawner,0.9,0,0,0.078,0.078,0,NA,NA,NA
+3620,Glide-Run,fuzzy,steelhead,spawner,422.765,23.27,1,0.078,0.158,0.125,NA,NA,NA
+3620,Margin Attached Bar,fuzzy,steelhead,spawner,47.17,1.13,0,0.078,0.136,0.139,NA,NA,NA
+3620,Mid Channel Bar,fuzzy,steelhead,spawner,28.551000000000002,0.07,0,0.078,0.085,0.048,NA,NA,NA
+3620,Pocket Pool,fuzzy,steelhead,spawner,17.48,2.9,0,0.085,0.275,0.222,NA,NA,NA
+3620,Pool,fuzzy,steelhead,spawner,235.19,20.93,0,0.178,0.21,0.149,NA,NA,NA
+3620,Riffle,fuzzy,steelhead,spawner,48.58,0.28,0,0.078,0.108,0.071,NA,NA,NA
+3620,Transition,fuzzy,steelhead,spawner,183.52,4.6499999999999995,0,0.078,0.113,0.108,NA,NA,NA
+3620,Bank,fuzzy,chinook,juvenile,83.47,6.0600000000000005,0,0.078,0.243,0.226,NA,NA,NA
+3620,Barface,fuzzy,chinook,juvenile,0.9,0.06,0,0.078,0.143,0.13,NA,NA,NA
+3620,Glide-Run,fuzzy,chinook,juvenile,422.765,89.39,33,0.157,0.264,0.223,NA,NA,NA
+3620,Margin Attached Bar,fuzzy,chinook,juvenile,47.17,1.9,1,0.078,0.174,0.208,NA,NA,NA
+3620,Mid Channel Bar,fuzzy,chinook,juvenile,28.551000000000002,0.68,0,0.078,0.135,0.156,NA,NA,NA
+3620,Pocket Pool,fuzzy,chinook,juvenile,17.48,6.97,8,0.582,0.574,0.202,NA,NA,NA
+3620,Pool,fuzzy,chinook,juvenile,235.19,156.06,278,0.748,0.716,0.154,NA,NA,NA
+3620,Riffle,fuzzy,chinook,juvenile,48.58,1.73,0,0.078,0.127,0.107,NA,NA,NA
+3620,Transition,fuzzy,chinook,juvenile,183.52,31.08,6,0.078,0.242,0.234,NA,NA,NA
