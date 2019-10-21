@@ -47,14 +47,14 @@ response.unit.fn = function(gu.type){
     as.data.frame()
 
   # run reach calculate response function for each pariwise combination of species x lifestage x model
-  model.df %>% by_row(calc.response.unit, unit.fish.metrics = unit.fish.metrics)
+  model.df %>% by_row(calc.response.unit, unit.fish.metrics = unit.fish.metrics, gu.type = gu.type)
   
 }
 
 
 # caclulate unit response function ------------------------------------------------------------------------
 
-calc.response.unit = function(model.df, unit.fish.metrics){
+calc.response.unit = function(model.df, unit.fish.metrics, gu.type){
   
   in.species = model.df$species
   in.lifestage = model.df$lifestage
