@@ -25,7 +25,8 @@ data = read_csv(file.path(repo.dir, "TrainingData/GUTUpscale_ReachCharacteristic
 #--*----**----------------------------------------------------------------------
 # Wandering Reach Types (WA)
 
-# ------ Wandering-poor ------ 
+# Wandering-poor ------ 
+
 WApoor = data %>%
   filter(
 	Confinement != "CV"
@@ -39,7 +40,8 @@ WApoor = data %>%
 
 View(WApoor)
 
-# ------ Wandering-moderate ------ 
+# Wandering-moderate ------ 
+
 WAmoderate = data %>%
   filter(
     Confinement != "CV"
@@ -53,7 +55,8 @@ WAmoderate = data %>%
 
 View(WAmoderate)
 
-# ------ Wandering-good ------ 
+# Wandering-good ------ 
+
 WAgood = data %>%
   filter(
     Confinement != "CV"
@@ -66,9 +69,9 @@ WAgood = data %>%
   mutate(RS = "WA", Condition = "good")
 
 View(WAgood)
-nrow(WAgood)
 
-# ------ Wandering-intact ------ 
+# Wandering-intact ------ 
+
 WAintact = data %>%
   filter(
     Confinement != "CV"
@@ -83,7 +86,8 @@ View(WAintact)
 #--*----**----------------------------------------------------------------------
 # Planform Controlled Reach Types (PC)
 
-# ------ Planform Controlled-poor ------
+# Planform Controlled-poor ------
+
 PCpoor = data %>%
   filter(
     Confinement != "CV"
@@ -97,7 +101,8 @@ PCpoor = data %>%
 
 View(PCpoor)
 
-# ------ Planform Controlled-moderate ------
+# Planform Controlled-moderate ------
+
 PCmoderate = data %>%
   filter(
     Confinement != "CV"
@@ -111,7 +116,8 @@ PCmoderate = data %>%
 
 View(PCmoderate)
 
-# ------ Planform Controlled-good ------
+# Planform Controlled-good ------
+
 PCgood = data %>%
   filter(
     Confinement != "CV"
@@ -125,7 +131,8 @@ PCgood = data %>%
 
 View(PCgood)
 
-# ------ Planform Controlled-intact ------
+# Planform Controlled-intact ------
+
 PCintact = data%>%
   filter(
     Confinement != "CV"
@@ -143,7 +150,8 @@ View(PCintact)
 #--*----**----------------------------------------------------------------------
 # Margin Controlled Reach Types (MC)
 
-# ------ Margin Controlled-poor ------ 
+# Margin Controlled-poor ------ 
+
 MCpoor = data %>%
   filter(
     Confinement == "PCV"
@@ -157,7 +165,8 @@ MCpoor = data %>%
 
 View(MCpoor)
 
-# ------ Margin Controlled-moderate ------ 
+# Margin Controlled-moderate ------ 
+
 MCmoderate = data %>%
   filter(
     Confinement == "PCV"
@@ -171,7 +180,8 @@ MCmoderate = data %>%
 
 View(MCmoderate)
 
-# ------ Margin Controlled-good ------ 
+# Margin Controlled-good ------ 
+
 MCgood = data %>%
   filter(
     Confinement == "PCV"
@@ -185,7 +195,8 @@ MCgood = data %>%
 
 View(MCgood)
 
-# ------ Margin Controlled-intact ------ 
+# Margin Controlled-intact ------ 
+
 MCintact = data %>%
   filter(
     Confinement == "PCV"
@@ -203,7 +214,8 @@ View(MCintact)
 #--*----**----------------------------------------------------------------------
 # Confined Cascade Reach Types (CC)
 
-# ------ Confined Cascade-good ------ 
+# Confined Cascade-good ------ 
+
 CCgood = data %>%
   filter(
     Confinement == "CV"
@@ -217,7 +229,8 @@ CCgood = data %>%
 
 View(CCgood)
 
-# ------ Confined Cascade-intact ------ 
+# Confined Cascade-intact ------ 
+
 CCintact = data %>%
   filter(
     Confinement == "CV"
@@ -235,7 +248,8 @@ View(CCintact)
 #--*----**----------------------------------------------------------------------
 # Confined Floodplain Reach Types (CF)
 
-# ------ Confined Floodplain-poor ------ 
+# poor condition ------ 
+
 CFpoor = data %>%
   filter(
     Confinement == "CV"
@@ -249,7 +263,8 @@ CFpoor = data %>%
 
 View(CFpoor)
 
-# ------ Confined Floodplain-moderate ------ 
+# moderate  condition ------ 
+
 CFmoderate = data %>%
   filter(
     Confinement == "CV"
@@ -263,7 +278,8 @@ CFmoderate = data %>%
 
 View(CFmoderate)
 
-# ------ Confined Floodplain-good ------ 
+# good condition ------ 
+
 CFgood = data %>%
   filter(
     Confinement == "CV"
@@ -277,7 +293,8 @@ CFgood = data %>%
 
 View(CFgood)
 
-# ------ Confined Floodplain-intact ------ 
+# intact condition ------ 
+
 CFintact = data %>%
   filter(
     Confinement == "CV"
@@ -295,7 +312,8 @@ View(CFintact)
 #--*----**----------------------------------------------------------------------
 # Confined Bedrock Reach Types (CB)
 
-# ------ Confined Bedrock-poor ------ 
+# poor condition ------ 
+
 CBpoor = data %>%
   filter(
     Confinement == "CV"
@@ -309,7 +327,8 @@ CBpoor = data %>%
 
 View(CBpoor)
 
-# ------ Confined Bedrock-moderate ------ 
+# moderate condition ------ 
+
 CBmoderate = data %>%
   filter(
     Confinement == "CV"
@@ -323,7 +342,8 @@ CBmoderate = data %>%
 
 View(CBmoderate)
 
-# ------ Confined Bedrock-good ------ 
+# good condition ------ 
+
 CBgood = data %>%
   filter(
     Confinement == "CV"
@@ -337,7 +357,8 @@ CBgood = data %>%
 
 View(CBgood)
 
-# ------ Confined Bedrock-intact ------ 
+# intact condition ------ 
+
 CBintact = data %>%
   filter(
     Confinement == "CV"
@@ -355,7 +376,8 @@ View(CBintact)
 #--*----**----------------------------------------------------------------------
 # Alluvial Fan Reach Types (AF)
 
-# ------ Alluvial Fan-poor ------ 
+# poor condition ------ 
+
 AFpoor = data %>%
   filter(
     Confinement == "UCV"
@@ -367,7 +389,8 @@ AFpoor = data %>%
 
 View(AFpoor)
 
-# ------ Alluvial Fan-moderate ------ 
+# moderate condition ------ 
+
 AFmoderate = data %>%
   filter(
     Confinement == "UCV"
@@ -381,7 +404,8 @@ AFmoderate = data %>%
 
 View(AFmoderate)
 
-# ------ Alluvial Fan-good ------ 
+# good condition ------ 
+
 AFgood = data %>%
   filter(
     Confinement == "UCV"
@@ -395,7 +419,8 @@ AFgood = data %>%
 
 View(AFgood)
 
-# ------ Alluvial Fan-intact ------ 
+# intact condition ------ 
+
 AFintact = data %>%
   filter(
     Confinement == "UCV"
