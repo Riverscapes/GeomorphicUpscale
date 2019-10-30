@@ -13,16 +13,16 @@
 # Set required paths ---------------------------
 
 # User defined project directory path (where outputs will be created)
-proj.dir = "C:/Anabranch/UpperSalmon/wrk_Data/temp/GeomorphicUpscale-master/AsotinExample"
+proj.dir = "C:/etal/LocalCode/GeomorphicUpscale/AsotinExample"
 
 # Specify directory path to the downloaded Git repository
-repo.dir = "C:/Anabranch/UpperSalmon/wrk_Data/temp/GeomorphicUpscale-master"
+repo.dir = "C:/etal/LocalCode/GeomorphicUpscale"
 
 # Load required packages ---------------------------
 library(tidyverse)
 
 # read in data--------------------
-data.in = read_csv(file.path(repo.dir, "Database\\Database_ReachCharacteristics.csv"))
+data.in = read_csv(file.path(repo.dir, "Database\\GUTUpscale_Database_ReachCharacteristics.csv"))
 head(data.in) # print first few rows of look-up table
 
 # Make selections for each river style and type --------------------
@@ -35,11 +35,11 @@ head(data.in) # print first few rows of look-up table
 # Before makeing individual selections for diferent river styles, you can eliminate certain type streams from the entire pool of database streams
 
 sandystreams = data.in %>%
-  filter(Sndf > 50)
+  filter(SubEstSandFines > 50)
 sandystreams #this search will eliminate four reaches visits 820,1971,2288,3975
 
 data = data.in %>%
-  filter(Sndf < 50)
+  filter(SubEstSandFines < 50)
 
 # Example selection options.  You won't use all available selection options, just the geo indicators that 
 # give you the best subset for your river style type. Comment out any that you don't have data for or don't want to use. This might be iterative 
@@ -51,12 +51,12 @@ data = data.in %>%
 
 # Fan Controlled-poor (FC poor) -----------------------------------------------------
 FCpoor = data.in %>%
-  filter(((Gradient < 3.5 & Gradient >= 1))
+  filter(((Grad < 3.5 & Grad >= 1))
          & Confinement != "UCV" 
          & Threads == "Single" 
          & Bedform == "Plane-Bed"
-         & Sinuosity < 1.1 
-         & (LWfreq < 30 | is.na(LWfreq)))%>%
+         & Sin < 1.1 
+         & (LWFreq_Wet < 30 | is.na(LWFreq_Wet)))%>%
   mutate(RS = "FC", Condition = "poor")
 
 FCpoor
@@ -67,12 +67,12 @@ nrow(FCpoor)
 # Fan Controlled-moderate (FC moderate)-----------------------------------------------------
 
 FCmoderate = data %>%
-  filter(((Gradient < 3.5 & Gradient>=1))
+  filter(((Grad < 3.5 & Grad>=1))
          & Confinement != "UCV" 
          & Threads == "Single" 
          & (Bedform == "Plane-Bed"| Bedform == "Pool-Riffle")  
-         & (Sinuosity < 1.3 & Sinuosity > 1.04) 
-         & (LWfreq < 60  | is.na(LWfreq)))%>%
+         & (Sin < 1.3 & Sin > 1.04) 
+         & (LWFreq_Wet < 60  | is.na(LWFreq_Wet)))%>%
   mutate(RS = "FC", Condition = "moderate")
 
 FCmoderate
@@ -81,12 +81,12 @@ nrow(FCmoderate)
 
 # Fan Controlled-good (FC good) -----------------------------------------------------
 FCgood = data %>%
-  filter(((Gradient < 3.5 & Gradient >= 1))
+  filter(((Grad < 3.5 & Grad >= 1))
          & Confinement != "UCV" 
          & Threads != "Multi" 
          & Bedform != "Plane-Bed"
-         & (Sinuosity < 1.5 & Sinuosity > 1.1) 
-         & (LWfreq > 10 | is.na(LWfreq)))%>%
+         & (Sin < 1.5 & Sin > 1.1) 
+         & (LWFreq_Wet > 10 | is.na(LWFreq_Wet)))%>%
   mutate(RS = "FC", Condition = "good")
 
 FCgood
@@ -98,12 +98,12 @@ nrow(FCgood)
 
 AFpoor = data %>%
   filter(
-    Gradient < 3  
+    Grad < 3  
     & Confinement != "CV"  
     & Threads == "Single" 
     & Bedform == "Plane-Bed" 
-    & Sinuosity < 1.2
-    & (LWfreq < 30 | is.na(LWfreq))) %>%
+    & Sin < 1.2
+    & (LWFreq_Wet < 30 | is.na(LWFreq_Wet))) %>%
   mutate(RS = "AF", Condition = "poor")
 
 AFpoor
@@ -115,12 +115,12 @@ nrow(AFpoor)
 
 AFmoderate = data %>%
   filter(
-    Gradient < 3 
+    Grad < 3 
     & Confinement != "CV"  
     & (Threads == "Single" | Threads == "Transitional")
     & Bedform == "Plane-Bed" 
-    & Sinuosity < 1.3
-    & ((LWfreq < 60 & LWfreq > 10)| is.na(LWfreq))) %>%
+    & Sin < 1.3
+    & ((LWFreq_Wet < 60 & LWFreq_Wet > 10)| is.na(LWFreq_Wet))) %>%
   mutate(RS = "AF", Condition = "moderate")
 
 AFmoderate
@@ -132,13 +132,13 @@ nrow(AFmoderate)
 
 AFgood = data %>%
   filter(
-    Gradient < 3 
+    Grad < 3 
     & (Threads=="Single" | Threads=="Transitional" | Threads=="Multi")
     # & (Braid < 5)
     & (Bedform=="Plane-Bed" | Bedform=="Pool-Riffle")
-    & (Sinuosity<1.5 & Sinuosity >1.1)
+    & (Sin<1.5 & Sin >1.1)
     & Confinement!="CV" 
-    & (LWfreq > 20| is.na(LWfreq))) %>%
+    & (LWFreq_Wet > 20| is.na(LWFreq_Wet))) %>%
   mutate(RS = "AF", Condition = "good")
 
 AFgood
@@ -149,12 +149,12 @@ nrow(AFgood)
 # Planform Controlled-poor (PC poor) -----------------------------------------------------
 PCpoor = data %>%
   filter(
-    Gradient < 2.5  
+    Grad < 2.5  
     & Confinement != "CV"
     & Threads == "Single" 
     & Bedform == "Plane-Bed" 
-    & Sinuosity < 1.1 
-    & (LWfreq < 30 | is.na(LWfreq))) %>%
+    & Sin < 1.1 
+    & (LWFreq_Wet < 30 | is.na(LWFreq_Wet))) %>%
   mutate(RS = "PC", Condition = "poor")
 
 PCpoor
@@ -166,12 +166,12 @@ nrow(PCpoor)
 
 PCmoderate = data %>%
   filter(
-    Gradient < 2.5 
+    Grad < 2.5 
     & Confinement != "CV" 
     & (Threads == "Single" | Threads == "Transitional")
     & (Bedform == "Plane-Bed"| Bedform == "Pool-Riffle")  
-    & (Sinuosity > 1.1 & Sinuosity < 1.5) 
-    & ((LWfreq > 10 & LWfreq < 60) | is.na(LWfreq))) %>%
+    & (Sin > 1.1 & Sin < 1.5) 
+    & ((LWFreq_Wet > 10 & LWFreq_Wet < 60) | is.na(LWFreq_Wet))) %>%
   mutate(RS = "PC", Condition = "moderate")
 
 PCmoderate
@@ -183,12 +183,12 @@ nrow(PCmoderate)
 
 PCgood = data%>%
   filter(
-    Gradient < 2.5 
+    Grad < 2.5 
     & Confinement != "CV"
     & (Threads == "Single" | Threads=="Transitional"| Threads=="Multi")
     & Bedform == "Pool-Riffle"
-    & (Sinuosity < 1.5 & Sinuosity > 1.1) 
-    &((LWfreq > 20) | is.na(LWfreq))) %>%
+    & (Sin < 1.5 & Sin > 1.1) 
+    &((LWFreq_Wet > 20) | is.na(LWFreq_Wet))) %>%
   mutate(RS = "PC", Condition = "good")
 
 PCgood
@@ -200,12 +200,12 @@ nrow(PCgood)
 
 WApoor = data %>%
   filter(
-    Gradient < 2  
+    Grad < 2  
     & Confinement != "CV"
     & Threads == "Single"
     & Bedform == "Plane-Bed" 
-    & Sinuosity < 1.2
-    & (LWfreq < 30 | is.na(LWfreq))) %>%
+    & Sin < 1.2
+    & (LWFreq_Wet < 30 | is.na(LWFreq_Wet))) %>%
   mutate(RS = "WA", Condition = "poor")
 
 WApoor
@@ -217,12 +217,12 @@ nrow(WApoor)
 
 WAmoderate = data %>%
   filter(
-    Gradient < 2 
+    Grad < 2 
     & Confinement != "CV" 
     & (Threads == "Single" | Threads == "Transitional")
     & (Bedform == "Pool-Riffle" | Bedform == "Plane-Bed") 
-    & (Sinuosity > 1.2 & Sinuosity < 1.3) 
-    & ((LWfreq < 60) | is.na(LWfreq))) %>%
+    & (Sin > 1.2 & Sin < 1.3) 
+    & ((LWFreq_Wet < 60) | is.na(LWFreq_Wet))) %>%
   mutate(RS= "WA" , Condition = "moderate")
 
 WAmoderate
@@ -234,12 +234,12 @@ nrow(WAmoderate)
 
 WAgood = data %>%
   filter(
-    Gradient < 2 
+    Grad < 2 
     & Confinement != "CV" 
     & Threads != "Single" 
     & Bedform != "Plane-Bed"
-    & (Sinuosity > 1.1 & Sinuosity < 1.5)
-    & ((LWfreq > 20) | is.na(LWfreq))) %>%
+    & (Sin > 1.1 & Sin < 1.5)
+    & ((LWFreq_Wet > 20) | is.na(LWFreq_Wet))) %>%
   mutate(RS = "WA", Condition = "good")
 
 WAgood
@@ -251,12 +251,12 @@ nrow(WAgood)
 
 CVpoor = data %>%
   filter(
-    (Gradient > 2 & Gradient < 6)
+    (Grad > 2 & Grad < 6)
     & Confinement == "CV" 
     & Threads == "Single" 
     & (Bedform == "Plane-Bed"| Bedform == "Rapid") 
-    & Sinuosity < 1.1
-    & ((LWfreq < 30) | is.na(LWfreq))) %>%
+    & Sin < 1.1
+    & ((LWFreq_Wet < 30) | is.na(LWFreq_Wet))) %>%
   mutate(RS = "CV", Condition = "poor")
 
 CVpoor
@@ -268,12 +268,12 @@ nrow(CVpoor)
 
 CVmoderate = data %>%
   filter(
-    (Gradient > 2 & Gradient < 6)
+    (Grad > 2 & Grad < 6)
     & Confinement == "CV" 
     & Threads == "Single" 
     & Bedform != "Plane-Bed" 
-    & Sinuosity < 1.1 
-    & ((LWfreq < 60) | is.na(LWfreq))) %>%
+    & Sin < 1.1 
+    & ((LWFreq_Wet < 60) | is.na(LWFreq_Wet))) %>%
   mutate(RS = "CV", Condition = "moderate")
 
 CVmoderate
@@ -285,12 +285,12 @@ nrow(CVmoderate)
 
 CVgood = data %>%
   filter(
-    (Gradient > 2 & Gradient < 6)
+    (Grad > 2 & Grad < 6)
     & Threads != "Multi" 
     & Bedform != "Plane-Bed" 
-    & Sinuosity < 1.2 
+    & Sin < 1.2 
     & Confinement == "CV" 
-    & ((LWfreq > 10) | is.na(LWfreq))) %>%
+    & ((LWFreq_Wet > 10) | is.na(LWFreq_Wet))) %>%
   mutate(RS = "CV", Condition = "good")
 
 CVgood
