@@ -1,18 +1,6 @@
 #Upcales reponse by unit and river style to a network
 
-#Natalie Kramer (n.kramer.anderson@gmail.com)
-#Last Updated Aug 13 2019
 
-#Documentation available on 
-#https://natalie-kramer.github.io/GeomorphicUpscale/
-
-# To Do ------------------------------------------------------------
-
-# NK: 
-
-# get rid of condition character warnings during join in upscale part.
-
-# upscale geomorphic variables (maybe in different script?) ex.# units to reach upscale.  Also Percent of each unit type.
 
 # Dependencies ------------------------------------------------------------
 
@@ -46,7 +34,7 @@ if(!file.exists(upscale.dir)){dir.create(upscale.dir, recursive = TRUE)}
 unlink(file.path(upscale.dir, "*"), recursive = TRUE)
 
 
-# Reads in and restructures data----------------------------------------------------
+# Read in and restructure data----------------------------------------------------
 
 # Read in response variable by response.pool variable
 
@@ -112,8 +100,8 @@ upscale.fn = function(cond.col){
       select(!!seg.id.col, RS, !!cond.col, !!length.col, !!width.col)  
     names(upscale.network) = c(seg.id.col, "RS", "Condition", "reach.length", "reach.width")
     upscale.network = upscale.network %>% 
-      left_join(braid.c, by = c(RS, Condition)) %>%
-      mutate(reach.area = reach.length * reach.area * C, 
+      left_join(braid.c, by = c("RS", "Condition")) %>%
+      mutate(reach.area = reach.length * reach.width * C, 
              area.method = "estimated")
   }else{
     upscale.network = network %>% 
