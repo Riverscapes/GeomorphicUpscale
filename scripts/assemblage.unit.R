@@ -1,15 +1,24 @@
-# Estimates Empirical assemblages of geomorphic units as percent of bankful area of each unit type for
-# reach selections from RSselection.R. 
-
-
-# Dependencies ------------------------------------------------------------
-
-library(tidyverse)
-
-source(file.path(repo.dir, "scripts/plot.colors.R"))
-source(file.path(repo.dir, "scripts/functions.R"))
-
-
+#' Geomorphic Unit Assemblage
+#'
+#' @description Produces summary statistics and boxplots of unit-level geomorphic metrics for Tier 2 form units
+#' and Tier 3 geomorphic units.  Data are summarized using 3 different groupings: All' (all data, un-grouped), 
+#' 'RS' (by Reach Type), 'RSCond' (by Reach Type and Condition).  Also calculates assemblages of geomorphic units as 
+#' ratio of unit area to bankfull area for each unit type. 
+#' 
+#' @note Calls make.outputs.unit function and assemblage.proportions function from functions.R script.
+#' Outputs are written to 'Outputs/Assemblage/UnitForm/Unit' for Tier 2 form units and to 'Outputs/Assemblage/GU/Unit' 
+#' for Tier 3 geomorphic units.
+#'  
+#' @param gu.type Geomorphic unit type passed as character.  Function expects either "UnitForm" or "GU".
+#'
+#' @export stats.csv Summary statistics csv file
+#' @export Boxplots.* Boxplots of unit-level geomorphic units in both pdf and png format
+#' @export assemblage.csv Area ratios for each unit type
+#' @export assemblage.* Barplots of are ratios for each unit type in both pdf and png format 
+#'
+#' @examples
+#' unit.assemblage.fn(gu.type = "UnitForm")
+#' unit.assemblage.fn(gu.type = "GU")
 unit.assemblage.fn = function(gu.type){
   
   print(str_c('Calculating geomorphic unit assemblage for', gu.type, sep = " "))
@@ -21,7 +30,7 @@ unit.assemblage.fn = function(gu.type){
   if(!file.exists(assemblage.dir)){dir.create(assemblage.dir, recursive = TRUE)}
   
   # set path to repo gut metric tables
-  metrics.dir = file.path(repo.dir, "Database/Metrics")
+  metrics.dir = file.path(repo.dir, "TrainingData/Metrics")
   
   # specify gut output layer and corresponding metric table to draw data from based on gu.type parameter
   if(gu.type == "GU"){

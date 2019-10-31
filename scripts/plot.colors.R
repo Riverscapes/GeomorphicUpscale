@@ -1,8 +1,17 @@
+#' Plot colors and factor order
+#' 
+#' @description Plotting color and factor level order for geomorphic unit type and condition variables
+
+
+# Tier 2 unit shape ---------------------------
+
 shape.fill = c('Concavity' = '#004DA8', 
               'Planar' = '#E6E600', 
               'Convexity' = '#A80000')
 
 shape.levels=c("Concavity", "Planar", "Convexity")
+
+# Tier 2 unit form ---------------------------
 
 form.fill = c('Bowl' = '#004DA8', 
               'Bowl Transition' = '#00A9E6', 
@@ -13,11 +22,10 @@ form.fill = c('Bowl' = '#004DA8',
               'Mound' = '#A80000', 
               'Wall' = '#000000')
 
-form.discrete.levels = c('Bowl', 'Trough', 'Plane', 'Saddle', 'Mound', 'Wall')
-
 form.levels = c('Bowl', 'Bowl Transition', 'Trough', 'Plane', 
                 'Mound Transition', 'Saddle', 'Mound', 'Wall')
 
+# Tier 2 geomorphic unit type ---------------------------
 
 gu.fill = c('Bank' = '#000000', 
             'Barface' = "#730000",
@@ -39,6 +47,7 @@ gu.levels = c("Pocket Pool","Pool", "Pond",
          "Cascade", "Rapid", "Chute" ,
          "Glide-Run", "Transition", "Bank")
 
+# Reach type condition variants ---------------------------
 
 condition.fill = c('poor' = '#ff0000', 
                    'moderate' = '#ffff00', 

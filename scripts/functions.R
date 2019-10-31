@@ -1,5 +1,17 @@
-# summarizes data by value field
-# note: tibble should be grouped before hand if you want the summary by group
+#' Supporting functions
+#' 
+#' @description Set of supporting functions called by other scripts
+
+
+#' summarize.f
+#' 
+#' Generic summary statistics function
+#'
+#' @param data Input tibble. Tibble should be grouped prior to calling function if want summary by group 
+#' @param value Value column to summarize
+#'
+#' @return Tibble with value count, mean, standard deviation, standard error, median, minumum, maximum and sum total
+#'
 summarize.f = function(data, value){
   
   data.summary = data %>%
@@ -16,8 +28,17 @@ summarize.f = function(data, value){
 }
 
 
-# function for grouped summaries
-# in.data must be in long format with value, variable, RS, Condition, unit.type and ROI fields
+#' make.summary
+#' 
+#' Groups input data according to 'pool.by' parameter and passes grouped dataframe to summarize.f function.
+#'
+#' @param in.data Input tibble.  Must be in long format with value, variable, RS, Condition, unit.type and ROI fields
+#' @param pool.by How data should be grouped.  Options: 'RS', 'RSCond', 'All'
+#' @param out.dir Path to output directory where summary statistics csv will be saved
+#'
+#' @return Tibble with summary statistics
+#' @export stats.csv Summary statistics csv file written to output directory
+#'
 make.summary = function(in.data, pool.by, out.dir){
   
   #pool results by group specified
@@ -45,10 +66,20 @@ make.summary = function(in.data, pool.by, out.dir){
   return(out.data)
 }
 
-# function that includes make.summary and summarize.f. writes summary and plots
-# To do----------------------------------------------
-# omit na prior to plotting so we don't get so many warning messages
 
+#' make.outputs
+#'
+#' Generic function that calls make.summary and summarize.f functions to calculate summary statistcs and create bar and boxplots
+#'
+#' @param in.data Input tibble.  Must be in long format with value, variable, RS, Condition, unit.type and ROI fields
+#' @param pool.by How data should be grouped.  Options: 'RS', 'RSCond', 'All'
+#' @param out.dir Output directory path where csv and plots are written to
+#' @param RSlevels RS factor levels to set plotting order.  Inherited from UpscaleWrapper.R
+#' @param my.facet Column used for plot facets.  Default set to "variable"
+#'
+#' @return Tibble with summary statistics
+#' @export Boxplots.* Boxplots in both pdf and png format saved to output directory
+#' 
 make.outputs = function(in.data, pool.by, out.dir, RSlevels, my.facet = "variable"){
   
   if(!is.na(pool.by)){
@@ -104,10 +135,21 @@ make.outputs = function(in.data, pool.by, out.dir, RSlevels, my.facet = "variabl
 }
 
 
-#very similar to make.outputs, just boxplots filled by Unit types rather than condition dependent upon set.levels.colors()
-#to do----------------------------------------------------------
-#make xlabels vertical rather than horizontal so I can read them
-#2 levels of facet wrapping for conditin and RS- separate x axis somehow so it is easier to read and understand.
+#' make.outputs.unit
+#' 
+#' Generic function that calls make.summary and summarize.f functions to calculate summary statistcs and create bar and boxplots
+#' Similar to make.outputs function but is stuctured to include unit type (e.g., GU - geomorphic unit) in summary and plots
+#'
+#' @param in.data Input tibble.
+#' @param pool.by How data should be grouped.  Options: 'RS', 'RSCond', 'All'
+#' @param gu.type Geomorphic unit type passed as character.  Function expects either "UnitForm" or "GU".
+#' @param out.dir Output directory path where csv and plots are written to 
+#' @param my.facet Column used for plot facets.  Default set to "variable"
+#' @param RSlevels RS factor levels to set plotting order.  Inherited from UpscaleWrapper.R
+#'
+#' @return Tibble with summary statistics
+#' @export Boxplots.* Boxplots in both pdf and png format saved to output directory
+#'
 make.outputs.unit = function(in.data, pool.by, gu.type, out.dir, my.facet = "variable", RSlevels){
   
   # set output subdirectory name based on 'pool.by' argument
@@ -153,34 +195,40 @@ make.outputs.unit = function(in.data, pool.by, gu.type, out.dir, my.facet = "var
       facet_grid(reformulate("RS", my.facet), scales = "free") +
       theme(axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1))
   }
-  
-#does it even make sense to plot condition for different units since the condition is really about the reach...  
 
  if(pool.by == "RSCond"){
    in.data = in.data %>% mutate(Condition = factor(Condition, levels = condition.levels))
     p1 = ggplot(in.data, aes(x = factor(unit.type), y = value, fill = Condition)) + 
       geom_boxplot() +
       scale_fill_manual(values = condition.fill) +
-      facet_grid(reformulate("RS", my.facet), scales = "free") +
+      facet_grid(reformulate("RS", my.facet), scales = "free", space = "fixed") +
       theme(axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1))
-
   }
   
-  out.name = file.path(sub.out.dir ,"Boxplots")
+  out.name = file.path(sub.out.dir, "Boxplots")
 
-  ggsave(paste(out.name, ".pdf", sep=""), plot = p1, width =15, height = 15 )
+  ggsave(paste(out.name, ".pdf", sep=""), plot = p1, width = 15, height = 15 )
   ggsave(paste(out.name, ".png", sep=""), plot = p1, width = 15, height = 15)
   
   out.data = make.summary(in.data, pool.by, sub.out.dir)
+  
   return(out.data)
 }
 
-# estimating assemblage estimates from average proportions ----------------------------------------------
 
-# function that makes renormalized assemlages and plots them 
-# assemblages based on area.ratio from gut unit metrics, where
-#   area.ratio = sum(areas for unit type i) / sum(areas for all unit types)
-# note: here natalie is using the average area.ratio from pool.by results
+#' assemblage.proportions
+#' 
+#' @description Calculates geomorphic unit assemblage based on 'area.ratio' from GUT Unit metrics table
+#' where area.ratio = sum(areas for unit type i) / sum(areas for all unit types).  Called by assemblage.unit script.
+#'
+#' @param my.stats Input tibble
+#' @param pool.by How data should be grouped.  Options: 'RS', 'RSCond', 'All'
+#' @param out.dir Output directory path where csv and plots are written to
+#' @param my.ROI Region of interest.  Default set to "bankfull"
+#' @param gu.type Geomorphic unit type passed as character.  Function expects either "UnitForm" or "GU". 
+#'
+#' @export assemblage.csv  CSV file with proportions for each unit type written to output directory
+#'
 assemblage.proportions = function(my.stats, pool.by, out.dir, my.ROI = "bankfull", gu.type = gu.type){
   
   # set output subdirectory name based on 'pool.by' argument
@@ -237,7 +285,20 @@ assemblage.proportions = function(my.stats, pool.by, out.dir, my.ROI = "bankfull
   
 }
 
-# function to plot assemblage. Used within assemblage.proportions function
+
+#' assemblage.plot
+#' 
+#' @description Function to creat unit type (e.g., GU - geomorphic unit) bar plots. Called by assemblage.proportions function.
+#'
+#' @param assemblage.data Tibble of assemblage area ratios.  Passed from assemblage.proportions function 
+#' @param pool.by How data should be grouped.  Options: 'RS', 'RSCond', 'All'
+#' @param start.col Start of unit type columns. Passed from assemblage.proportions function. Used to convert assemblage tibble from wide format to long format.
+#' @param end.col End of unit type columns. Passed from assemblage.proportions function. Used to convert assemblage tibble from wide format to long format.
+#' @param out.dir Output directory path where csv and plots are written to
+#' @param gu.type Geomorphic unit type passed as character.  Function expects either "UnitForm" or "GU".
+#'
+#' @export assemblage.* Assemblage barplots (using average area ratio) in both pdf and png format saved to output directory
+#' 
 assemblage.plot = function(assemblage.data, pool.by, start.col, end.col, out.dir, gu.type){
   
   #Read in and manipulate data for plotting

@@ -1,39 +1,20 @@
-
-#This script takes the OUtput from GUT and summarizes responses by reach
-
-#This script smmarizes geomorphic assemblages by reach
-
-#Natalie Kramer (n.kramer.anderson@gmail.com)
-#Last Updated July 13 2019
-
-#Documentation available on 
-#https://natalie-kramer.github.io/GeomorphicUpscale/
-
-
-# To Do -------------------------------------------------------------------
-
-# As JM if fish count per unit lenght should use thalweg of main channl or sum of all channels (NK had set to just main)
-
-# NKS old to dos
-# Do response by size by RS and no pooling?, currently just RSCond---if folders are flip flopped, this makes it easier...
-# I need to add the lineear model results for response by size
-# flip flop RSCond folders with response types so that it mirrors the other outputs in long format for unit responses.
-
-# eliminate species and model from directory structure and instead include as field in output table?  Maybe append to this table
-# when run for different species or just run for all species and model types on the fly-- not make a user variable...?
-
-# Dependencies ------------------------------------------------------------
-
-library(tidyverse)
-library(purrrlyr)
-
-source(file.path(repo.dir, "scripts/plot.colors.R"))
-source(file.path(repo.dir, "scripts/functions.R"))
+#' Fish response by reach
+#' 
+#' @description Calculates summary of fish habitat models (fuzzy and NREI) by reach for each species and lifestage in the training dataset.  
+#' Summary includes: 
+#'    - model predicted fish count (for juveniles) or redd count (for spawners) written to 'pred.fish' folder
+#'    - predicted fish or redd density (per meter) written to 'pred.fish.m' folder
+#'    - predicted fish or redd density (per square meter) written to 'pred.fish.m2' folder 
+#' Summary statistics include average, standard deviation, standard error, median, minimum, maximum, and sum total fish or redds
+#' Data are summarized using 3 different groupings: All' (all data, un-grouped), RS' (by Reach Type), 'RSCond' (by Reach Type and Condition)
+#' 
+#' @note Outputs are written to 'Outputs/Reponse/Species/Lifestage/Reach' (e.g., 'Outputs/Reponse/Chinook/Juvenile/Reach')
+#' 
 
 # set directories and paths ------------------------------------------------------------------------
 
 # set path to repo gut metric tables
-metrics.dir = file.path(repo.dir, "Database/Metrics")
+metrics.dir = file.path(repo.dir, "TrainingData/Metrics")
 
 # read in site metric fish data
 site.fish.metrics = read_csv(file.path(metrics.dir, "Site_Fish_Metrics.csv"))
@@ -41,17 +22,37 @@ site.fish.metrics = read_csv(file.path(metrics.dir, "Site_Fish_Metrics.csv"))
 # check visit id column name and change if necessary to match selections 
 if('visit.id' %in% names(site.fish.metrics)){site.fish.metrics = site.fish.metrics %>% rename(VisitID = visit.id)}
 
-
 # get pairwise combinations of model (layer), species, and lifestage ---------------------------------------
-
 model.df = site.fish.metrics %>%
   distinct(layer, species, lifestage) %>%
   filter(!is.na(species)) %>%
   as.data.frame()
 
 
-# caclulate reach response function ------------------------------------------------------------------------
-
+#' calc.response.reach
+#'
+#' @description For pairwise combinations of each species x lifestage x model in reach-level fish metrics trainings data 
+#' (i.e., Site_Fish_Metrics.csv), calculates fish or redds per meter (based on main thalewg length) and fish or redds
+#' per square meter (for bankfull ROI uses bankfull area, for hydro ROI uses Delft3D modeled area).  Passes data to
+#' make.outputs function to calculate summary statistics and create boxplots.
+#'
+#' @note Calls make.outputs function from functions.R script
+#' 
+#' @param model.df Tibble of pairwise combinations of each species x lifestage x model
+#'
+#' @export stats.csv Summary statistics of fish counts and densities csv file
+#' @export Boxplots.* Boxplots of reach-level fish counts and densities in both pdf and png format
+#' @export Response.csv Training data reach characteristics table with columns added for:
+#'                      - model type (fuzzy, nrei)
+#'                      - species (chinook, steelhead)
+#'                      - lifestage (juvenile, spawner)
+#'                      - ROI (hydro, bankfull)
+#'                      - length.m (thalweg length)
+#'                      - area.m2 (see above description)
+#'                      - pred.n (redds or fish count)
+#'                      - pred.m (redds or fish per meter)
+#'                      - pred.m2 (redds or fish per square meter)
+#'
 calc.response.reach = function(model.df){
   
   in.species = model.df$species
@@ -71,7 +72,6 @@ calc.response.reach = function(model.df){
   # filter site level resonse to model, species and lifestage specified
   site.fish = site.fish.metrics %>% 
     filter(layer == in.model & species == in.species & lifestage == in.lifestage & var == "pred.fish")
-  
   
   # make site summaries for different response and ROI -----------------------
   
@@ -175,36 +175,14 @@ calc.response.reach = function(model.df){
   # make summaries
   make.all.outputs()
   
-  
-  # make site summaries of count response by reach size  -----------------------
-  # note - here natalie was only outputing the response for fish count for hydro area
-  #        i expanded to include densities for both roi hydro (i.e., modeled wetted) and bankfull 
-  
+
   # join selections and site response
   selections.site.response = selections %>%
     mutate(model = in.model, species = in.species, lifestage = in.lifestage) %>%
-    inner_join(pred, by = "VisitID") %>%
-    mutate(volume = area.m2 * DpthBf_Avg)
+    inner_join(pred, by = "VisitID") 
   
   # write to file
   write_csv(selections.site.response, file.path(response.dir, "Response.csv"), col_names = TRUE)
-  
-  # sets order for RS factor levels
-  if(!all(is.na(RSlevels))){selections.site.response$RS = factor(selections.site.response$RS, levels = RSlevels)}
-  
-  # create base plot
-  # TO DO: add regression output summaries
-  p = ggplot(selections.site.response %>% filter(ROI == "hydro"), aes(y = pred.n, color = Condition)) +
-    scale_colour_manual(values = condition.fill) +
-    facet_grid(Condition ~ RS, scales = "fixed")
-  
-  #plot
-  (p + geom_point(aes(x = BfWdth_Avg), alpha = 0.8)) %>% ggsave(filename = file.path(response.dir,"by.width.bankfull.m.png"), width = 15, height = 5)
-  (p + geom_point(aes(x = DpthBf_Avg), alpha = 0.8)) %>% ggsave(filename = file.path(response.dir,"by.depth.bankfull.m.png"), width = 15, height = 5)
-  (p + geom_point(aes(x = length.m), alpha = 0.8)) %>% ggsave(filename = file.path(response.dir,"by.length.hydro.m.png"), width = 15, height = 5)
-  (p + geom_point(aes(x = volume), alpha = 0.8)) %>% ggsave(filename = file.path(response.dir,"by.volume.as.hydroarea.bfdepth.m3.png"), width = 15, height = 5)
-  (p + geom_point(aes(x = BfBraid), alpha = 0.8)) %>% ggsave(filename = file.path(response.dir,"by.braid.index.champ.png"), width = 15, height = 5)
-  (p + geom_point(aes(x = area.m2), alpha = 0.8)) %>% ggsave(filename = file.path(response.dir,"by.area.hydro.m2.png"), width = 15, height = 5)
   
 }
   

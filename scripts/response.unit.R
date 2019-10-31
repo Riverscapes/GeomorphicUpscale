@@ -1,22 +1,23 @@
-
-#This script takes the OUtput from GUT and summarizes responses by Unit
-
-
-# To Do -------------------------------------------------------------------
-
-# Nk todo
-#eliminate species and model from directory structure and instead include as field in output table?  Maybe append to this table
-#when run for different species or just run for all species and model types on the fly-- not make a user variable...?
-
-# Dependencies ------------------------------------------------------------
-
-require(tidyverse)
-library(purrrlyr)
-
-source(file.path(repo.dir, "scripts/plot.colors.R"))
-source(file.path(repo.dir, "scripts/functions.R"))
+#' Fish response by unit
+#' 
+#' @description Calculates summary of fish habitat models (fuzzy and NREI) by Tier 2 unit form and Tier 3 geomorphic unit for each
+#' species and lifestage in the training dataset.  Summary includes model predicted fish count (for juveniles) or 
+#' redd count (for spawners), predicted fish or redd density (per square meter) and summary statistics of fish habitat model values
+#' for the reach and within the suitable area portion of the reach.  Data are summarized using 3 different groupings: 
+#' All' (all data, un-grouped), RS' (by Reach Type), 'RSCond' (by Reach Type and Condition)
+#' 
+#' @note Outputs are written to 'Outputs/Reponse/Species/Lifestage/Unit/UnitType' (e.g., 'Outputs/Reponse/Chinook/Juvenile/Unit/GU')
 
 
+#' response.unit.fn
+#'
+#' @description Reads in unit fish metrics training data (e.g., Unit_Fish_Metrics_Tier3_InChannel_GU_All.csv).
+#' Gets pairwise combinations of each species x lifestage x model and passes each row to calc.response.unit function.
+#'
+#' @note Calls calc.response.unit function
+#'
+#' @param gu.type Geomorphic unit type passed as character.  Function expects either "UnitForm" or "GU".
+#' 
 response.unit.fn = function(gu.type){
 
   print(str_c('Calculating fish response by geomorphic unit for', gu.type, sep = " "))
@@ -24,7 +25,7 @@ response.unit.fn = function(gu.type){
   # set directories and paths ------------------------------------------------------------------------
   
   # set path to repo gut metric tables
-  metrics.dir = file.path(repo.dir, "Database/Metrics")
+  metrics.dir = file.path(repo.dir, "TrainingData/Metrics")
   
   # read in unit metric fish data (for predicted fish per unit)
   # specify gut output layer and corresponding metric table to draw data from based on gu.type parameter
@@ -35,12 +36,10 @@ response.unit.fn = function(gu.type){
     unit.fish.metrics = read_csv(file.path(metrics.dir, "Unit_Fish_Metrics_Tier2_InChannel_All.csv")) %>%
       filter(!is.na(UnitForm))}
   
-  
   # check visit id column name and change if necessary to match selections 
   if('visit.id' %in% names(unit.fish.metrics)){unit.fish.metrics = unit.fish.metrics %>% rename(VisitID = visit.id)}
   
   # get pairwise combinations of model (layer), species, and lifestage -----------------------------------
-  
   model.df = unit.fish.metrics %>%
     distinct(model, species, lifestage) %>%
     filter(!is.na(species)) %>%
@@ -52,8 +51,20 @@ response.unit.fn = function(gu.type){
 }
 
 
-# caclulate unit response function ------------------------------------------------------------------------
-
+#' calc.response.unit
+#'
+#' @description Filters unit fish metrics training data to specific species x lifestage x model.  Calculates
+#' fish or redd density and passes subsetted tibble to make.outputs.unit function.
+#' 
+#' @note Parameters passed from response.unit.fn function.  Calls make.outputs.unit from functions.R script.
+#'
+#' @param model.df Individual row from tibble of each pariwise combination of species x lifestage x model
+#' @param unit.fish.metrics Unit fish metrics training data (e.g., Unit_Fish_Metrics_Tier3_InChannel_GU_All.csv).
+#' @param gu.type Geomorphic unit type passed as character.  Function expects either "UnitForm" or "GU".
+#'
+#' @export stats.csv Summary statistics csv file
+#' @export Boxplots.* Boxplots of unit-level fish metrics in both pdf and png format
+#' 
 calc.response.unit = function(model.df, unit.fish.metrics, gu.type){
   
   in.species = model.df$species
@@ -85,7 +96,6 @@ calc.response.unit = function(model.df, unit.fish.metrics, gu.type){
            suitable.area.ratio = round(hab.area.suitable / area.delft, 3),
            n.units = 1) %>%
     rename(unit.type = gu.type) 
-    # select(-hab.area.suitable)
   
   # convert to long form tibble 
   unit.fish.long = unit.fish %>%
@@ -96,7 +106,6 @@ calc.response.unit = function(model.df, unit.fish.metrics, gu.type){
   unit.response = selections %>% 
     select(RS, Condition, VisitID) %>%
     inner_join(unit.fish.long, by = 'VisitID') %>%
-    # filter(!is.na(value)) %>%
     mutate(ROI = "hydro",
            variable = factor(variable, levels = c('pred.fish', 'density.m2', 'n.units',
                                                   'area.delft', 'area.unit', 'hab.area.suitable', 'suitable.area.ratio', 

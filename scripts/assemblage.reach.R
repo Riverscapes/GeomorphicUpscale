@@ -1,12 +1,21 @@
-#This script smmarizes geomorphic assemblages by reach
-
-# Dependencies ------------------------------------------------------------
-
-library(tidyverse)
-
-source(file.path(repo.dir, "scripts/plot.colors.R"))
-source(file.path(repo.dir, "scripts/functions.R"))
-
+#' Reach Geomorphic Metrics
+#'
+#' @description Produces summary statistics and boxplots of reach-level geomorphic metrics for Tier 2 form units
+#' and Tier 3 geomorphic units.  Data are summarized using 3 different groupings: All' (all data, un-grouped), 
+#' 'RS' (by Reach Type), 'RSCond' (by Reach Type and Condition).  
+#' 
+#' @note Calls make.outputs function from functions.R script.
+#' Outputs are written to 'Outputs/Assemblage/UnitForm/Reach' for Tier 2 form units and to 'Outputs/Assemblage/GU/Reach' 
+#' for Tier 3 geomorphic units.
+#'         
+#' @param gu.type Geomorphic unit type passed as character.  Function expects either "UnitForm" or "GU".
+#'
+#' @export stats.csv Summary statistics csv file
+#' @export Boxplots.* Boxplots of reach-level geomorphic units in both pdf and png format
+#'
+#' @examples
+#' reach.assemblage.fn(gu.type = "UnitForm")
+#' reach.assemblage.fn(gu.type = "GU")
 reach.assemblage.fn = function(gu.type){
   
   # set directories  ------------------------------------------------------------------------
@@ -19,7 +28,7 @@ reach.assemblage.fn = function(gu.type){
   unlink(file.path(assemblage.dir, "*"), recursive = TRUE)
   
   # set path to repo gut metric tables
-  metrics.dir = file.path(repo.dir, "Database/Metrics")
+  metrics.dir = file.path(repo.dir, "TrainingData/Metrics")
   
   # specify gut output layer and corresponding metric table to draw data from based on gu.type parameter
   if(gu.type == "GU"){
