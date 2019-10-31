@@ -1,10 +1,16 @@
-# Summarizes geoindicators by RS selctions from database
-
-# Dependencies -------------------------------------------------------------------
-
-library(tidyverse)
-source(file.path(repo.dir, "scripts/plot.colors.R"))
-source(file.path(repo.dir, "scripts/functions.R"))
+#' Geoindicator summary
+#' 
+#' @description Calculates geonindicator summary for RS selections.  
+#' Geoindicators are filtered by user-defined vector in UpscaleWrapper.R script.
+#' Summary statistics include average, standard deviation, standard error, median, minimum, maximum, and sum for each numeric geoindicator
+#' Data are summarized using 3 different groupings: All' (all data, un-grouped), RS' (by Reach Type), 'RSCond' (by Reach Type and Condition)
+#' 
+#' @note Outputs are written to 'Outputs/Selections/Geoindicators'.  
+#'       Summaries and plots can only be created for numeric data.  Non-numeric data is filtered out prior to generating summary stats and boxplots.
+#'       
+#' @export stats.csv Summary statistics csv file
+#' @export Boxplots.* Boxplots of geoindicators in both pdf and png format
+#' 
 
 
 # set up data refs and output file structure  ------------------------------------------------------------------------
