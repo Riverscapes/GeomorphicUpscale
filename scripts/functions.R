@@ -5,7 +5,7 @@
 
 #' summarize.f
 #' 
-#' Generic summary statistics function
+#' @description Generic summary statistics function
 #'
 #' @param data Input tibble. Tibble should be grouped prior to calling function if want summary by group 
 #' @param value Value column to summarize
@@ -30,7 +30,7 @@ summarize.f = function(data, value){
 
 #' make.summary
 #' 
-#' Groups input data according to 'pool.by' parameter and passes grouped dataframe to summarize.f function.
+#' @description Groups input data according to 'pool.by' parameter and passes grouped dataframe to summarize.f function.
 #'
 #' @param in.data Input tibble.  Must be in long format with value, variable, RS, Condition, unit.type and ROI fields
 #' @param pool.by How data should be grouped.  Options: 'RS', 'RSCond', 'All'
@@ -69,7 +69,7 @@ make.summary = function(in.data, pool.by, out.dir){
 
 #' make.outputs
 #'
-#' Generic function that calls make.summary and summarize.f functions to calculate summary statistcs and create bar and boxplots
+#' @description Generic function that calls make.summary and summarize.f functions to calculate summary statistcs and create bar and boxplots
 #'
 #' @param in.data Input tibble.  Must be in long format with value, variable, RS, Condition, unit.type and ROI fields
 #' @param pool.by How data should be grouped.  Options: 'RS', 'RSCond', 'All'
@@ -137,7 +137,7 @@ make.outputs = function(in.data, pool.by, out.dir, RSlevels, my.facet = "variabl
 
 #' make.outputs.unit
 #' 
-#' Generic function that calls make.summary and summarize.f functions to calculate summary statistcs and create bar and boxplots
+#' @description Generic function that calls make.summary and summarize.f functions to calculate summary statistcs and create bar and boxplots
 #' Similar to make.outputs function but is stuctured to include unit type (e.g., GU - geomorphic unit) in summary and plots
 #'
 #' @param in.data Input tibble.
