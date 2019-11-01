@@ -18,6 +18,8 @@
 #' reach.assemblage.fn(gu.type = "GU")
 reach.assemblage.fn = function(gu.type){
   
+  print(str_c('Calculating reach-level geomorphic unit metric summary for', gu.type, sep = " "))
+  
   # set directories  ------------------------------------------------------------------------
   
   # set assemblage output directory
