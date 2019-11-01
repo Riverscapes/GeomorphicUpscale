@@ -59,6 +59,8 @@ calc.response.reach = function(model.df){
   in.lifestage = model.df$lifestage
   in.model = model.df$layer
   
+  print(str_c("Making site level fish response summaries and plots for", in.species, in.lifestage, sep = " "))
+  
   # set response output directory
   # note: str_to_sentence will convert first letter of species and lifestage to upper case
   response.dir = file.path(proj.dir, "Outputs/Response", str_to_sentence(in.species), str_to_sentence(in.lifestage), "Reach")
@@ -136,9 +138,6 @@ calc.response.reach = function(model.df){
     make.outputs(my.data, pool.by = "RS", out.dir, my.facet = "ROI", RSlevels)
     make.outputs(my.data, pool.by = "RSCond", out.dir, my.facet = "ROI", RSlevels)
   }
-  
-  print("Making site level fish response summaries and plots...")
-  
   
   # make output for predicted fish count -----------------------
   
