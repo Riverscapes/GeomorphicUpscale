@@ -18,44 +18,31 @@ This is a *.csv* with at least three columns ("RS", "Condition", "C").  RS is yo
 
 #### network.csv (see [example](https://github.com/Riverscapes/GeomorphicUpscale/blob/master/AsotinUpscale/Inputs/network.csv))  
 This is flat table which has a row for every stream segment on the basin network that you would like to upscale. At the minimum it should have these fields:
- -  *segmentID*:  ID that can be used to join ouputs back to spatial data layers for mapping "segmentID" is used as default in scripts.
+ -  *ReachID Field*:  A unique ID is required to join outputs back to spatial data layers for mapping "segmentID" is used as default in scripts.
  - *bf.width.m* : An estimate of bankfull width (meters) for each stream segment.  If multi threads this is the average width of one of the channels when at bankful discharge, not the entire floodplain or valley width. "bf.width.m" is used as default in scripts.
  - *length.m*: An estimate of stream segment length (meters). "length.m" is used as default in scripts.
  -  *RS* : mapped River Style segment.  code should match those in *braid.index.csv* and *selections.csv*. "RS" is used as default in scripts.
  -  *Condition0* : Mapped condition of reach. set to 'NA' if condition was not mapped. "Condition0" is used as default in scripts.
  - *ConditionScenario*: Optional restoration condition scenarios. One field for each scenario.  You can name them whatever you want.
 
-Except for the condition scenarios, these field names are used as defaults in scripts. So, it is easier to keep them names as above, but you can pass variables to allow for different field names.
+Except for the condition scenarios, these field names are used as defaults in scripts. So, it is easier to keep the names as above, but you can pass variables to allow for different field names.
 
 #### Local directory path to [GeomorphicUpscale](https://github.com/Riverscapes/GeomorphicUpscale) 
-The scripts call R code housed in the [scripts subfolder](https://github.com/Riverscapes/GeomorphicUpscale/tree/master/scripts) and the [Database subfolder](https://github.com/Riverscapes/GeomorphicUpscale/tree/master/Database). The database includes, for each site, a [table of geoindicators](https://github.com/Riverscapes/GeomorphicUpscale/tree/master/Database/Database_reachcharacteristics.csv), [geomorphic unit maps](https://github.com/Riverscapes/GeomorphicUpscale/Database/Maps.7z), and [summaries](https://github.com/Riverscapes/GeomorphicUpscale/tree/master/Database/Metrics) of [PyGUT mappings](http://gut.riverscapes.xyz/) of geomorphic landforms and fish modelling results for Steelhead and Chinook. Summaries were done at the reach scale as well as the geomorphic unit scale. The summaries summaries were generated using the [Supporting RTools associated with PyGUT](https://github.com/Riverscapes/pyGUT/tree/master/SupportingTools/RScripts/Development). We provide [documentation on the database]({{ site.baseurl }}/familiarize), which is helpful understand what is available for analysis within in the database.
+The scripts call R code housed in the [scripts subfolder](https://github.com/Riverscapes/GeomorphicUpscale/tree/master/scripts) and the [training data subfolder](https://github.com/Riverscapes/GeomorphicUpscale/tree/master/TrainingData). The training dataset includes, for each site, a [table of geoindicators](https://github.com/Riverscapes/GeomorphicUpscale/tree/master/TrainingData/GUTUpscale_ReachCharacteristics.csv), [geomorphic unit maps](https://github.com/Riverscapes/GeomorphicUpscale/TrainingData/Maps), and [summaries](https://github.com/Riverscapes/GeomorphicUpscale/tree/master/TrainingData/Metrics) of pyGUT geomorphic units and fish habitat model results for Steelhead and Chinook.  Summaries were calculated at the reach scale as well as the geomorphic unit scale using code that can be found [here](https://github.com/Riverscapes/pyGUT/tree/master/SupportingTools/RScripts). 
 
 ## Step 2: Define user variables
 
-### Needed for estimates of assemblages, fish and upscale
-- *layer*: Specifies which pyGUT output to analyze. Options: "Tier3_InChannel", "Tier2_InChannel_Transition" (see PyGUT documentation for more information explaining the difference between Tier2 and Tier3)
-- *makeplot*: specifies whether you want to scripts to also make summary plots on the fly. Options: "T", "F"
-- *plottype*: Specifies format of file extension for plots. If none, they won't be saved to a folder but will show up in the plotting console as the code runs. Options: ".tiff", ".png", ".pdf", "none"
-### Needed for estimates of fish and upscale
-- *model*: Specifies which response model to upscale. Options: "NREI", "HSI"
-- *species*: Specifies which fish species to upscale. Options: "steelhead", "chinook"
--  *lifestage*: Specifies lifestage to upsclae. Options: "juvenile", "adult"
-- *ROI*: Specifies you region of interest to summarize fish as bankfull (bf), hydro modelling extent, or suitable habitat (hab), or best habitat defined as best half of suitable habitat values (best). Options: "bf", "hydro", "hab", "best"
-- *responsevar*: Specifies your response variable to upscale as total count of fish (No.Fish), # Fish/ROI area in m2 (Density), % of BF area with fish bearing modelling values (Hab), Median Modelling Value (MedModelVal). Options: "No.Fish", "Density", "Hab", "MedModelVal"
-- *poolby*: Specifies how you want to average responses: over the entire dataset (none), pooling by river styles (RS) or pooling by each river style and condition varient (RSCond). Options: "none", "RS", "RScond"
 ### Needed for upscale
-- *upscalevar*: Options: "Capacity", "MedModelVal".  default="Capacity"
-- *method*: Options: "bfDensity", "habDensity" default="bfDensity"
-- *condcols*: vector of column headers for condition scenarios in network input file. Example: c("Condition1", "Condition2")
-- *validatenetwork*=T/F (default=F)
-
-You only need to specify the following variables if they differ from the defaults.
-
-- *segmentID*: column header name for reach segment ID in network input file. Default: "segmentID"
-- *lengthcol*: column header name for length of segment in m in network input file. Default: "length.m"
-- *widthcol*: column header name for estimates of bankful width in network input file. Default: "bf.width.m"
-- *condinit*: initial condition of reach segment in network input file. Default: "Condition0"
-- *RScol*: column header name for RiverStyle code in network input file. Should match river style codes provided in selections and braid.index files. Default: "RS"
+- *species*: Fish species to upscale. Options: "steelhead", "chinook"
+- *model*: Response model to upscale. Options: "nrei", "fuzzy"
+-  *lifestage*: Lifestage to upscale. Options: "juvenile", "spawner"
+- *gu.type*: Unit type to upscale.  Options: "UnitForm", "GU"
+- response.pool: Specifies how you want to average responses: over the entire dataset (none), pooling by river styles (RS) or pooling by each river style and condition varient (RSCond). Options: "none", "RS", "RScond"
+- *seg.id.col*: column header name for unique reach segment ID in network input file
+- *length.col*: column header name for length of segment in m in network input file
+- *width.col*: column header name for estimates of stream width in network input file
+- *area.col*: column header name for estimates of reach area in network input file (if set to NA upscale.response.R will estimate area using the braid.index input)
+- *cond.cols*: vector of column headers for condition scenarios in network input file. Example: c("Condition1", "Condition2")
 
 ## Step 3: Estimate assemblages an review output
 
@@ -64,27 +51,25 @@ Once your inputs and variables have been set and run, you can estimate assemblag
 
 Here are some example assemblage outputs for Tier 2 Transition and Tier 3 GUT outputs.
 
-[Tier 2data](https://github.com/Riverscapes/GeomorphicUpscale/tree/master/docs/assets/Tier2_assemblage.PNG)
+[Tier 2data](https://github.com/Riverscapes/GeomorphicUpscale/tree/master/docs/assets/images/Tier2_assemblage.PNG)
 
-[Tier 2chart](https://github.com/Riverscapes/GeomorphicUpscale/tree/master/docs/assets/Tier3_InChannel_Transition_assemblage.tiff)
+[Tier 2chart](https://github.com/Riverscapes/GeomorphicUpscale/tree/master/docs/assets/images/Tier3_InChannel_Transition_assemblage.tiff)
 
-[Tier 3data](https://github.com/Riverscapes/GeomorphicUpscale/tree/master/docs/assets/Tier3_assemblage.PNG)
+[Tier 3data](https://github.com/Riverscapes/GeomorphicUpscale/tree/master/docs/assets/images/Tier3_assemblage.PNG)
 
-[Tier 3chart](https://github.com/Riverscapes/GeomorphicUpscale/tree/master/docs/assets/Tier3_InChannel_assemblage.tiff)
+[Tier 3chart](https://github.com/Riverscapes/GeomorphicUpscale/tree/master/docs/assets/images/Tier3_InChannel_assemblage.tiff)
 
 
 ## Step 4: Estimate responses and review output
 
-Once your inputs and variables have been set and run, you can estimate responses by sourcing [*response.R*](https://github.com/Riverscapes/GeomorphicUpscale/tree/master/scripts/assemblage.R) in the [*UpscaleWrapper.R*](https://github.com/Riverscapes/GeomorphicUpscale/tree/master/UpscaleWrapper.R) . You can change up your variables and run many times to get different fish response results. Note, at this point, the response.R is not synced with new data formats and will not run.
+Once your inputs and variables have been set and run, you can estimate responses by sourcing [*response.R*](https://github.com/Riverscapes/GeomorphicUpscale/tree/master/scripts/assemblage.R) in the [*UpscaleWrapper.R*](https://github.com/Riverscapes/GeomorphicUpscale/tree/master/UpscaleWrapper.R) 
 
-Responses in the database available to upscale are fish capacity predictions as well as percent suitable habitat for NREI and HSI models of steelhead salmon.  The fish capacity predictions predict actual individual fish locations summarized as density of fish by geomorphic unit type. Percent suitable habitat is the percent of each geomorphic unit type in which the model showed fish could be present. Please refer to  the [Familiarize page]({{site.baseurl}}/1.Familiarizing) for further explanation of the response variables. These estimates can be summarized over all selected reaches or pooled by river reach type, reach type and condition. 
-
-If you would like to upscale a different variable, you need to provide a table similar to: ????  in which your response is related to each geomorphic unit type.  You can have your response differ between river reach and condition variants or stay the same across variants. your choice.
+Responses in the training dataset available to upscale are fish capacity predictions. The fish capacity predictions predict actual individual fish locations summarized as density of fish by geomorphic unit type. Please refer to  the [Familiarize page]({{site.baseurl}}/1.Familiarizing) for further explanation of the response variables. These estimates can be summarized over all selected reaches or pooled by river reach type and condition. 
 
 
 ## Step 5: Upscale to the network and review output 
 
-Once you have run both your estimates, you can get upscaled estimates by sourcing [*upscale.R*](https://github.com/Riverscapes/GeomorphicUpscale/tree/master/scripts/upscale.R) in the [*UpscaleWrapper.R*](https://github.com/Riverscapes/GeomorphicUpscale/tree/master/UpscaleWrapper.R) . Note, at this point, the upscale.R is not synced with new data formats and will not run.
+Once you have run both your estimates, you can get upscaled estimates by sourcing [*upscale.response.R*](https://github.com/Riverscapes/GeomorphicUpscale/tree/master/scripts/upscale.response.R) in the [*UpscaleWrapper.R*](https://github.com/Riverscapes/GeomorphicUpscale/tree/master/UpscaleWrapper.R) . 
 
 
 ## What's next?
