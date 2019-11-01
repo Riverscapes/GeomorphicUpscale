@@ -16,9 +16,9 @@
 #' @note Outputs are written to 'Outputs/Upscale/Species/Lifestage/Unit/UnitType' (e.g., 'Outputs/Upscale/Chinook/Juvenile/Unit/GU')
 #' 
 #' @export byReach.csv Fish or redd predicted n, standard error and density for each reach and condition scenario in the user supplied network
-#' @export byBasin.csv Fish or redd predicted n, standard error, reach lengths, widths, etc for each condition scenario
-#' @export byBasinRS.csv Fish or redd predicted n, standard error, reach lengths, widths, etc for each condition scenario and reach type
-#' @export byBasinRSCond.csv Fish or redd predicted n, standard error, reach lengths, widths, etc for each condition scenario, reach type, and condition variant.
+#' @export byScenario.csv Fish or redd predicted n, standard error, reach lengths, widths, etc for each condition scenario
+#' @export byRS.csv Fish or redd predicted n, standard error, reach lengths, widths, etc for each condition scenario and reach type
+#' @export byRSCond.csv Fish or redd predicted n, standard error, reach lengths, widths, etc for each condition scenario, reach type, and condition variant.
 #' 
 
 #' upscale.fn
@@ -35,17 +35,17 @@ upscale.fn = function(cond.col){
   if(any(is.na(area.col), str_length(area.col) == 0)){
     braid.c = braid.index %>% select(RS, Condition, C)
     upscale.network = network %>% 
-      select(!!seg.id.col, RS, !!cond.col, !!length.col, !!width.col)  
-    names(upscale.network) = c(seg.id.col, "RS", "Condition", "reach.length", "reach.width")
+      select(!!seg.id.col, !!basin.col, RS, !!cond.col, !!length.col, !!width.col)  
+    names(upscale.network) = c(seg.id.col, basin.col, "RS", "Condition", "reach.length", "reach.width")
     upscale.network = upscale.network %>% 
       left_join(braid.c, by = c("RS", "Condition")) %>%
       mutate(reach.area = reach.length * reach.width * C, 
              area.method = "estimated")
   }else{
     upscale.network = network %>% 
-      select(!!seg.id.col, RS, !!cond.col, !!length.col, !!width.col, !!area.col) %>%
+      select(!!seg.id.col, !!basin.col, RS, !!cond.col, !!length.col, !!width.col, !!area.col) %>%
       mutate(area.method = "given")
-    names(upscale.network) = c(seg.id.col, "RS", "Condition", "reach.length", "reach.width", "reach.area", "area.method")
+    names(upscale.network) = c(seg.id.col, basin.col, "RS", "Condition", "reach.length", "reach.width", "reach.area", "area.method")
   }
   
   # calculate reach.braid metric 
@@ -70,7 +70,7 @@ upscale.fn = function(cond.col){
     left_join(upscale.network %>% select(-RS, -Condition), by = seg.id.col) %>%
     mutate(Scenario = cond.col,
            pred.m2 = pred.n / reach.area) %>%
-    select(!!seg.id.col, RS, Condition, reach.length, reach.width, reach.area, area.method, reach.braid, everything())
+    select(!!seg.id.col, !!basin.col, RS, Condition, reach.length, reach.width, reach.area, area.method, reach.braid, everything())
   
   return(upscale.network.response.final)
 
@@ -84,8 +84,8 @@ upscale.fn = function(cond.col){
 #' @param grouped.data Grouped tibble
 
 reach.summary = function(grouped.data){
-  grouped.data %>% summarize(value = sum(value, na.rm = TRUE), 
-                             value.se = sqrt(sum(value.se**2, na.rm = TRUE)),
+  grouped.data %>% summarize(pred.n = sum(pred.n, na.rm = TRUE), 
+                             pred.n.se = sqrt(sum(pred.n.se**2, na.rm = TRUE)),
                              sum.area = sum(reach.area, na.rm = TRUE),
                              sum.length = sum(reach.length, na.rm = TRUE),
                              mean.width = mean(reach.width, na.rm = TRUE),
@@ -165,40 +165,58 @@ upscale.response = gu.assemblage %>%
   mutate(ROI = "bankfull")
 
 # run reach upscale function for each condition scenario
-reach.upscale = map_dfr(cond.cols, upscale.fn)
+upscale.reach = map_dfr(cond.cols, upscale.fn)
 
-# add additional fields
-reach.upscale = reach.upscale %>%
-  mutate(species = species,
+# round fish number to nearest integer and add additional fields
+upscale.reach = upscale.reach %>%
+  mutate(pred.n = ceiling(pred.n),
+         species = species,
          model = model,
          lifestage = lifestage,
          response.pool = response.pool,
-         gu.type = gu.type)
-
+         gu.type = gu.type) %>%
+  write_csv(file.path(upscale.dir, "byReach.csv"), col_names = TRUE)
+  
 # result summary by Scenario and RS and Condition
-basin.upscale.RSCond = reach.upscale %>% 
-  rename(value = pred.n, value.se = pred.n.se) %>%
-  mutate(variable = "pred.fish") %>%
-  group_by(Scenario, RS, Condition, area.method, model, species, lifestage, variable, response.pool, gu.type) %>% 
-  reach.summary()
+upscale.RSCond = upscale.reach %>% 
+  group_by(Scenario, RS, Condition, area.method, model, species, lifestage, response.pool, gu.type) %>% 
+  reach.summary() %>%
+  write_csv(file.path(upscale.dir, "byRSCond.csv"), col_names = TRUE)
 
-# result summary by Scenario and RS and Condition
-basin.upscale.RS = reach.upscale %>% 
-  rename(value = pred.n, value.se = pred.n.se) %>%
-  mutate(variable = "pred.fish") %>%
-  group_by(Scenario, RS, area.method, model, species, lifestage, variable, response.pool, gu.type) %>%
-  reach.summary()
+# result summary by Scenario and RS
+upscale.RS = upscale.reach %>% 
+  group_by(Scenario, RS, area.method, model, species, lifestage, response.pool, gu.type) %>%
+  reach.summary() %>%
+  write_csv(file.path(upscale.dir, "byRS.csv"), col_names = TRUE)
 
 # result summary by Scenario 
-basin.upscale = reach.upscale %>%
-  rename(value = pred.n, value.se = pred.n.se) %>%
-  mutate(variable = "pred.fish") %>%
-  group_by(Scenario, area.method, model, species, lifestage, variable, response.pool, gu.type) %>%
-  reach.summary()
+upscale.Scenario = upscale.reach %>%
+  group_by(Scenario, area.method, model, species, lifestage, response.pool, gu.type) %>%
+  reach.summary() %>%
+  write_csv(file.path(upscale.dir, "byScenario.csv"), col_names = TRUE)
 
-#write output to file
-write_csv(reach.upscale, file.path(upscale.dir, "byReach.csv"), col_names = TRUE)
-write_csv(basin.upscale, file.path(upscale.dir, "byBasin.csv"), col_names = TRUE)
-write_csv(basin.upscale.RS, file.path(upscale.dir, "byBasinRS.csv"), col_names = TRUE)
-write_csv(basin.upscale.RSCond, file.path(upscale.dir, "byBasinRSCond.csv"), col_names = TRUE)
+# if basin.col is not NA, create grouped results summaries
+if(!is.na(basin.col)){
+  
+  # result summary by Basin, Scenario and RS and Condition
+  upscale.basinRSCond = upscale.reach %>% 
+    group_by(!!sym(basin.col), Scenario, RS, Condition, area.method, model, species, lifestage, response.pool, gu.type) %>% 
+    reach.summary() %>%
+    write_csv(file.path(upscale.dir, "byBasinRSCond.csv"), col_names = TRUE)
+  
+  # result summary by Basin, Scenario and RS
+  upscale.basinRS = upscale.reach %>% 
+    group_by(!!sym(basin.col), Scenario, RS, area.method, model, species, lifestage, response.pool, gu.type) %>%
+    reach.summary() %>%
+    write_csv(file.path(upscale.dir, "byBasinRS.csv"), col_names = TRUE)
+  
+  # result summary by Basin, Scenario 
+  upscale.basinScenario = upscale.reach %>%
+    group_by(!!sym(basin.col), Scenario, area.method, model, species, lifestage, response.pool, gu.type) %>%
+    reach.summary() %>%
+    write_csv(file.path(upscale.dir, "byBasinScenario.csv"), col_names = TRUE)
+}
+
+
+
 
