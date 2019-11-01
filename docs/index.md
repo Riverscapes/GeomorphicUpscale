@@ -14,3 +14,7 @@ The basic geomorphic upscale workflow is:
 3. [Upscale]({{ site.baseurl }}/upscale) geomorphic assemblages and fish response using [UpscaleWrapper.R](https://github.com/Riverscapes/GeomorphicUpscale/blob/master/UpscaleWrapper.R)
 
 We document an [example]({{ site.baseurl }}/example) for the Asotin Basin for your reference.
+
+## Source Code
+
+The Geomorphic Upscale code consists of several R scripts.  The source code is available in the [Geomorphic Upscale repo](https://github.com/Riverscapes/GeomorphicUpscale) on GitHub.
