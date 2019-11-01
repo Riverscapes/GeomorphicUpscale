@@ -1,5 +1,9 @@
-#This script uses information within ReachSelectionCriteria.csv to select reaches within the GUT database
-#that match geomorphically to specified geomorphic indicator characteristics. 
+#' RSelection
+#' 
+#' @description Script to select analogue reaches within the training dataset that 
+#' represent reach type and condition variants in users stream network
+#' 
+#' @note Further documentation is available on GitHub: https://riverscapes.github.io/GeomorphicUpscale/ 
 
 
 # Set required paths --------------------------------------------------------

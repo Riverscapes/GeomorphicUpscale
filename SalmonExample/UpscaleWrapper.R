@@ -1,4 +1,9 @@
-# This script Runs the upscale with user defined inputs
+#' UpscaleWrapper
+#' 
+#' @description Script to upscale fish response using the user selected analogue reaches within the training dataset that 
+#' represent reach type and condition variants in users stream network
+#' 
+#' @note Further documentation is available on GitHub: https://riverscapes.github.io/GeomorphicUpscale/ 
 
 # Set required paths ---------------------------
 
