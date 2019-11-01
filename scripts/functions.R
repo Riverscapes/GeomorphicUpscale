@@ -109,7 +109,8 @@ make.outputs = function(in.data, pool.by, out.dir, RSlevels, my.facet = "variabl
     if(pool.by == "RSCond"){
       # set condition plotting order
       in.data = in.data %>% mutate(Condition = factor(Condition, levels = condition.levels))
-      p1 = ggplot(in.data, aes(x = factor(RS), y = value, fill = Condition)) +
+      data.sub = in.data %>% filter(!is.na(value))
+      p1 = ggplot(data.sub, aes(x = factor(RS), y = value, fill = Condition)) +
         geom_boxplot() +
         scale_fill_manual(values = condition.fill) +
         facet_wrap(reformulate(my.facet, "."), scales = "free_y")
@@ -180,7 +181,8 @@ make.outputs.unit = function(in.data, pool.by, gu.type, out.dir, my.facet = "var
   
   if(pool.by == "All"){
     data.sub = in.data %>% select(-RS,-Condition) %>% distinct()
-    p1 = ggplot(data.sub, aes(x = factor(unit.type), y = value, fill = unit.type)) + 
+    if('n.units' %in% data.sub$variable){data.sub = data.sub %>% filter(variable != 'n.units')}
+    p1 = ggplot(data.sub %>% filter(!is.na(value)), aes(x = factor(unit.type), y = value, fill = unit.type)) + 
       geom_boxplot() +
       scale_fill_manual(values = unit.colors) +
       facet_wrap(reformulate(".", my.facet), scales = "free_y") +
@@ -189,7 +191,8 @@ make.outputs.unit = function(in.data, pool.by, gu.type, out.dir, my.facet = "var
   
   if(pool.by == "RS"){
     data.sub = in.data %>% select(-Condition) %>% distinct()
-    p1 = ggplot(data.sub, aes(x = factor(unit.type), y = value, fill = unit.type)) + 
+    if('n.units' %in% data.sub$variable){data.sub = data.sub %>% filter(variable != 'n.units')}
+    p1 = ggplot(data.sub %>% filter(!is.na(value)), aes(x = factor(unit.type), y = value, fill = unit.type)) + 
       geom_boxplot() +
       scale_fill_manual(values = unit.colors) +
       facet_grid(reformulate("RS", my.facet), scales = "free") +
@@ -198,7 +201,9 @@ make.outputs.unit = function(in.data, pool.by, gu.type, out.dir, my.facet = "var
 
  if(pool.by == "RSCond"){
    in.data = in.data %>% mutate(Condition = factor(Condition, levels = condition.levels))
-    p1 = ggplot(in.data, aes(x = factor(unit.type), y = value, fill = Condition)) + 
+   data.sub = in.data
+   if('n.units' %in% data.sub$variable){data.sub = data.sub %>% filter(variable != 'n.units')}
+    p1 = ggplot(data.sub %>% filter(!is.na(value)), aes(x = factor(unit.type), y = value, fill = Condition)) + 
       geom_boxplot() +
       scale_fill_manual(values = condition.fill) +
       facet_grid(reformulate("RS", my.facet), scales = "free", space = "fixed") +
@@ -329,22 +334,22 @@ assemblage.plot = function(assemblage.data, pool.by, start.col, end.col, out.dir
   
   #makes assemblage plots
   if(pool.by == "All"){
-    p1 = ggplot(my.data, aes(x = ROI, y = value, fill = Unit)) +
+    p1 = ggplot(my.data %>% filter(!is.na(value)), aes(x = ROI, y = value, fill = Unit)) +
       geom_bar(stat = "identity", position = 'stack') +
       scale_fill_manual(values = unit.colors)
   }
   
   if(pool.by == "RS"){
-    p1 = ggplot(my.data, aes(x = RS, y = value, fill = Unit)) +
+    p1 = ggplot(my.data %>% filter(!is.na(value)), aes(x = RS, y = value, fill = Unit)) +
       geom_bar(stat = "identity", position = 'stack') +
       scale_fill_manual(values = unit.colors)
   }
   
   if(pool.by == "RSCond"){
-    p1 = ggplot(my.data, aes(x = Condition, y = value, fill = Unit)) +
+    p1 = ggplot(my.data %>% filter(!is.na(value)), aes(x = Condition, y = value, fill = Unit)) +
       geom_bar(stat = "identity", position = 'stack') +
       scale_fill_manual(values = unit.colors) +
-      facet_wrap( ~ RS, scales='free')
+      facet_wrap(~ RS, scales = 'free')
   }
   
   # save assemblage plots 
