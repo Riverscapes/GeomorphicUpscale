@@ -5,7 +5,7 @@
 # Set required paths --------------------------------------------------------
 
 # User defined project directory path
-proj.dir = "C:/Anabranch/UpperSalmon/wrk_Data/GUTUpscale/Run_01"
+proj.dir = "C:/Anabranch/UpperSalmon/wrk_Data/GUTUpscale/FinalRun"
 
 # Specify directory path to the downloaded Git repository
 repo.dir = "C:/etal/LocalCode/GeomorphicUpscale"

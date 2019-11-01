@@ -3,7 +3,7 @@
 # Set required paths ---------------------------
 
 # User defined project directory path
-proj.dir = "C:/Anabranch/UpperSalmon/wrk_Data/GUTUpscale/Run_01"
+proj.dir = "C:/Anabranch/UpperSalmon/wrk_Data/GUTUpscale/FinalRun"
 
 # Directory path to the downloaded Git Repo
 repo.dir = "C:/etal/LocalCode/GeomorphicUpscale"
@@ -66,7 +66,7 @@ seg.id.col = "RECNO"
 length.col = "LENGTH"        
 width.col = "WIDE_WW"       
 cond.cols = c("COND_HIST", "COND_EX", "COND_RP")
-area.col = "AREA_WW" # leave as NA if no area is specified per reach segment and it will be estimated but this requires braid index file
+area.col = "AREA_WW"
 basin.col = "HUC_08"
 
 if(!is.na(braid.index.file)){braid.index = read_csv(braid.index.file)}else{braid.index = NA}
