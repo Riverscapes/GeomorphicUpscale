@@ -17,4 +17,4 @@ We document an [example]({{ site.baseurl }}/example) for the Asotin Basin for yo
 
 ## Source Code
 
-The Geomorphic Upscale code consists of several R scripts.  The source code is available in the [Geomorphic Upscale repo](https://github.com/Riverscapes/GeomorphicUpscale) on GitHub.
+To run these scripts you need R [(*download R Studio*)](https://www.rstudio.com/products/rstudio/download/).   The source code is available in the [Geomorphic Upscale repo](https://github.com/Riverscapes/GeomorphicUpscale) on GitHub.   
