@@ -37,12 +37,13 @@ The scripts call R code housed in the [scripts subfolder](https://github.com/Riv
 - *model*: Response model to upscale. Options: "nrei", "fuzzy"
 -  *lifestage*: Lifestage to upscale. Options: "juvenile", "spawner"
 - *gu.type*: Unit type to upscale.  Options: "UnitForm", "GU"
-- response.pool: Specifies how you want to average responses: over the entire dataset (none), pooling by river styles (RS) or pooling by each river style and condition varient (RSCond). Options: "none", "RS", "RScond"
+- response.pool: Specifies how you want to average responses: over the entire dataset (All), pooling by river styles (RS) or pooling by each river style and condition variant (RSCond). Options: "All", "RS", "RSCond"
 - *seg.id.col*: column header name for unique reach segment ID in network input file
 - *length.col*: column header name for length of segment in m in network input file
 - *width.col*: column header name for estimates of stream width in network input file
 - *area.col*: column header name for estimates of reach area in network input file (if set to NA upscale.response.R will estimate area using the braid.index input)
 - *cond.cols*: vector of column headers for condition scenarios in network input file. Example: c("Condition1", "Condition2")
+- *basin.col*: column header name for unique basin id (e.g., "HUC_08")
 
 ## Step 3: Estimate assemblages an review output
 
