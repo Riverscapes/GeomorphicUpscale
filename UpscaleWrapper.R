@@ -1,89 +1,110 @@
-#This script Runs the upscale with user defined inputs
-#Natalie Kramer (n.kramer.anderson@gmail.com)
-#Last Updated JUne 4, 2019
+# This script Runs the upscale with user defined inputs
+# Natalie Kramer (n.kramer.anderson@gmail.com)
+# Last Updated JUne 4, 2019
 
-#documentation is provided here:
-# https://github.com/natalie-kramer/GeomorphicUpscale/edit/master/docs/upscaling.md
-
-###################################
-####User Defined Inputs############
-##################################
-
-#specify directory path to your project where you want your outputs to go.
-#Make a folder if it doesn't already existy
-PROJdir="E:\\AsotinUpscale" #filepath
-
-#Specify directory path to the downloaded Git Repo
-GUPdir="" #filepath
-
-#Read in selections created by RSselections.R
-selections.file=""  #filepath
-
-#Builds the project directory structure and re-organizes inputs
-source(paste(GUPdir, "\\scripts\\projbuild.R", sep=""))
-
-#user defined variables
-gu.type=""      #Options: UnitForm, GU #UnitShape not available at this time since I don't have maps of these in the database
-RSlevels=c("", "", "", "", "" ) #optional vector argument to set RS factor order in graphs and displays, leave as  NA if alphabetical is desired
-plottype=".pdf"   #Options: .tiff, .png, .pdf, "none"
-myscales="fixed" #Options: fixed or free x/y axis scales for tiled plot output
-
-#####################################
-####Generating Selection Output######
-#####################################
-
-#source the geoindicator summary script
-source(paste(GUPdir, "\\scripts\\selection.geoindicators.R", sep="")) 
-
-#soruce the code to copy and file the maps
-source(paste(GUPdir, "\\scripts\\selection.maps.R", sep="")) 
-
-#####################################
-####Generating Assemblage Output##### #plots are not printing????
-#####################################
-
-#source and run code to generate output per reach
-source(paste(GUPdir, "\\scripts\\assemblage.reach.R", sep=""))
-
-#source and run code to generate output per unit type
-source(paste(GUPdir, "\\scripts\\assemblage.unit.R", sep=""))
-
-#####################################
-#####Generating Response Output######
-#####################################
-
-#user defined variables
-model=""         	#Options: nrei, fuzzy, NA
-species=""         #Options: steelhead, chinook, NA  #I could hardcode this for now..., one less variable.
-
-#source and run code to generate output
-source(paste(GUPdir, "\\scripts\\response.reach.R", sep=""))
-
-#source and run code to generate output
-source(paste(GUPdir, "\\scripts\\response.unit.R", sep=""))
+# Documentation URL: https://github.com/natalie-kramer/GeomorphicUpscale/edit/master/docs/upscaling.md
 
 
-#####################################
-#####Generating Upscale Output#######
-#####################################
+# Set required paths ---------------------------
 
-braid.index.file="" #file path
-network.file="" #file path
-#Builds the project directory structure and re-organizes inputs
-source(paste(GUPdir, "\\scripts\\projbuild.R", sep=""))
+# User defined project directory path where outputs will be written
+proj.dir = "C:/etal/LocalCode/GeomorphicUpscale/AsotinExample"
 
-responsepool="byRScond" #Options: "byRScond", "byRS", "byAll"
-segIDcol="" #user supplied
-lengthcol="" #user supplied
-widthcol="" #user supplied.
-condcols=c("","", "", "") #user supplied, variable length
-areacols=NA #user supplied. leave as NA if no area is specified per reach segment and it will be estimated
+# Specify directory path to the downloaded Git Repo
+repo.dir = "C:/etal/LocalCode/GeomorphicUpscale"
 
-#source and run code to generate output for upscaling response variabales
-source(paste(GUPdir, "\\scripts\\upscale.response.R", sep=""))
+# Path to selections csv created by RSselections.R
+selections.file = "C:/etal/LocalCode/GeomorphicUpscale/AsotinExample/Inputs/selections.csv"
 
-#source and run code to generate output for upscaling gu variables (not written yet)
-#source(paste(GUPdir, "\\scripts\\upscale.assemblage.R", sep=""))
+# Path to network csv and braid index csv
+network.file = "C:/etal/LocalCode/GeomorphicUpscale/AsotinExample/Inputs/network.csv"
+braid.index.file = "C:/etal/LocalCode/GeomorphicUpscale/AsotinExample/Inputs/braid_index.csv"
+
+# User defined variables ---------------------------
+
+RSlevels = NA # optional vector argument to set RS factor order in graphs and displays, leave as  NA if alphabetical is desired
+geoindicators = c('BfBraid', 'LWFreq_Wet', 'SlowWater_Freq', 'ChnlUnit_Freq', 'Sin') # list of geoindicators to create plots for
 
 
-########################################
+# Dependencies -------------------------------------------------------------------
+
+library(tidyverse)
+
+# Read back in selections data in case it was cleared
+selections = read_csv(selections.file)
+
+# Builds the project directory structure and re-organizes inputs ---------------------------
+
+# source(file.path(repo.dir, "scripts/projbuild.R"))
+
+
+# Generate selection output ---------------------------
+
+# geoindicator summary script
+
+source(file.path(repo.dir, "scripts/selection.geoindicators.R")) 
+
+# turned this off for now - ask NK why she's calling this in both the RSelection and the UpscaleWrapper
+# # soruce the code to copy and file the maps
+# source(file.path(repo.dir, "scripts/selection.maps.R")) 
+
+
+# Generate assemblage output ---------------------------
+
+# output per reach
+source(file.path(repo.dir, "scripts/assemblage.reach.R"))
+
+# output per unit type
+source(file.path(repo.dir, "scripts/assemblage.unit.R"))
+
+
+# Generate response output ---------------------------
+
+# response by reach
+source(file.path(repo.dir, "scripts/response.reach.R"))
+
+# response by unit
+source(file.path(repo.dir, "scripts/response.unit.R"))
+
+
+# Generate upscale output ---------------------------
+
+gu.type = "GU" 
+response.pool = "byRSCond"     # Options: "byRScond", "byRS", "byAll"
+seg.id.col = "segmentID"        
+length.col = "length.m"        
+width.col = "bf.width.m"       
+cond.cols = c("Condition0", "Condition1", "Condition2", "Condition3")   #user supplied
+area.col = NA # leave as NA if no area is specified per reach segment and it will be estimated but this requires braid index file
+
+network = read_csv(network.file)
+if(!is.na(braid.index.file)){braid.index = read_csv(braid.index.file)}else{braid.index = NA}
+
+# run for chinook spawners
+species = "chinook"   
+model = "fuzzy"   
+lifestage = "spawner"
+source(file.path(repo.dir, "scripts/upscale.response.R"))
+source(file.path(repo.dir, "scripts/upscale.response.reach.R"))
+
+# run for chinook juveniles
+species = "chinook" 
+model = "fuzzy"    
+lifestage = "juvenile"
+source(file.path(repo.dir, "scripts/upscale.response.R"))
+source(file.path(repo.dir, "scripts/upscale.response.reach.R"))
+
+# run for steelhead spawners
+species = "steelhead"   
+model = "fuzzy"   
+lifestage = "spawner"
+source(file.path(repo.dir, "scripts/upscale.response.R"))
+source(file.path(repo.dir, "scripts/upscale.response.reach.R"))
+
+# run for steelhead juveniles
+species = "steelhead" 
+model = "nrei"    
+lifestage = "juvenile"
+source(file.path(repo.dir, "scripts/upscale.response.R"))
+source(file.path(repo.dir, "scripts/upscale.response.reach.R"))
+
